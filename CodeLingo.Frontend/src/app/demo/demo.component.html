@@ -1,0 +1,14 @@
+<div class="card" *ngIf="question as q">
+  <div class="card-header">
+    {{ q.programmingLanguageName }} - {{ q.hardnessLevelText }}
+  </div>
+  <div class="card-body">
+    <p class="card-text">{{ q.questionText }}</p>
+    <ol class="list-group list-group-numbered">
+      <li class="list-group-item">{{ q.option1 }}</li>
+      <li class="list-group-item">{{ q.option2 }}</li>
+      <li class="list-group-item">{{ q.option3 }}</li>
+      <li class="list-group-item">{{ q.option4 }}</li>
+    </ol>
+  </div>
+</div>
