@@ -2,7 +2,7 @@
 name: Backend Task
 about: Create a backend development task
 title: "[BACKEND] "
-labels: ["Back-end"]
+labels: Backend task
 assignees: ''
 ---
 
