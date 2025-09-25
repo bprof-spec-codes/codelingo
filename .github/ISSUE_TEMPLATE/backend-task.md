@@ -2,7 +2,7 @@
 name: Backend Task
 about: Create a backend development task
 title: "[BACKEND] "
-labels: ["type::backend", "area::api"]
+labels: ["Back-end"]
 assignees: ''
 ---
 
@@ -10,12 +10,6 @@ assignees: ''
 
 ## Description
 [Detailed description of the API endpoints, business logic, or data structures to implement]
-
-## Parent Feature
-[Link to parent feature issue]
-
-## Epic Label
-[One of: epic::user-management, epic::practice-mode, epic::progression, epic::admin, epic::design]
 
 ## API Requirements
 - [ ] Proper HTTP status codes returned
@@ -34,8 +28,6 @@ assignees: ''
 - [ ] API controllers/endpoints created
 - [ ] Request/response DTOs defined
 - [ ] Validation attributes added
-- [ ] Unit tests written
-- [ ] Integration tests written
 
 ## Database Changes
 - [ ] Entity models updated
@@ -51,13 +43,11 @@ assignees: ''
 - [ ] Input validation working correctly
 - [ ] Error handling implemented
 - [ ] Authentication/authorization working (if applicable)
-- [ ] Unit tests written and passing (>90% coverage)
 - [ ] Integration tests written and passing
 - [ ] Code follows C# coding standards
 - [ ] Code reviewed by backend lead
-- [ ] API documented (Swagger/OpenAPI)
+- [ ] API documented
 - [ ] Manual testing via Postman/Swagger completed
-- [ ] Performance testing completed (if applicable)
 
 ## API Endpoints
 - [ ] `GET /api/[endpoint]` - [Description]
