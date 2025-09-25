@@ -2,7 +2,6 @@
 name: Feature Request
 about: Create a new feature issue for development
 title: "[FEATURE] "
-labels: ["type::feature"]
 assignees: ''
 ---
 
