@@ -11,13 +11,6 @@ assignees: ''
 ## Description
 [Brief description of what this feature does and why it's needed]
 
-## Epic Label
-- [ ] epic::user-management
-- [ ] epic::practice-mode 
-- [ ] epic::progression
-- [ ] epic::admin
-- [ ] epic::design
-
 ## Requirements
 - [ ] [Specific requirement 1]
 - [ ] [Specific requirement 2]
