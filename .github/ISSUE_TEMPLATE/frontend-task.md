@@ -2,7 +2,7 @@
 name: Frontend Task
 about: Create a frontend development task
 title: "[FRONTEND] "
-labels: ["type::frontend", "area::ui"]
+labels: ["Front-end"]
 assignees: ''
 ---
 
@@ -26,7 +26,6 @@ assignees: ''
 - [ ] Error states handled
 
 ## Implementation Checklist
-- [ ] Component scaffolding created
 - [ ] Template HTML structure implemented
 - [ ] Component styling (CSS/SCSS) completed
 - [ ] Component logic (TypeScript) implemented
