@@ -2,7 +2,7 @@
 name: Planning/Design Task
 about: Create a planning or design task
 title: "[PLANNING] "
-labels: ["type::planning", "area::design"]
+labels: ["EPIC - Design"]
 assignees: ''
 ---
 
@@ -11,25 +11,12 @@ assignees: ''
 ## Description
 [Detailed description of what needs to be planned/designed]
 
-## Epic Label
-[One of: epic::user-management, epic::practice-mode, epic::progression, epic::admin, epic::design]
-
 ## Planning Requirements
 - [ ] Stakeholder input gathered
 - [ ] User research completed (if applicable)
 - [ ] Technical constraints identified
 - [ ] Performance requirements defined
 - [ ] Security requirements defined
-
-## Deliverables Checklist
-- [ ] Wireframes created
-- [ ] User flow documented
-- [ ] Component hierarchy designed
-- [ ] Data model designed
-- [ ] API contracts defined
-- [ ] Technical specification written
-- [ ] Dependencies identified
-- [ ] Risk assessment completed
 
 ## Definition of Done
 - [ ] All deliverables completed and reviewed
