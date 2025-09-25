@@ -2,7 +2,7 @@
 name: Frontend Task
 about: Create a frontend development task
 title: "[FRONTEND] "
-labels: ["Front-end"]
+labels: Frontend task
 assignees: ''
 ---
 
