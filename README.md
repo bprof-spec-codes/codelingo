@@ -4,6 +4,8 @@
 - [Code of Conduct](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/ÖLAB-2025-26-1/coc.md)
 - [Requirements](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/ÖLAB-2025-26-1/requirements.md)
 
+---
+
 ## 📌 Team
 | Name                        | Role                | GitHub Profile |
 |-----------------------------|---------------------|----------------|
