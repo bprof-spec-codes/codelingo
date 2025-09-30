@@ -130,3 +130,48 @@ Alap backlog és epicek készülnek, sprint előkészítés szerdán. Technikai 
 
 ## 10. Hivatkozások
 - https://szfmv2024-tavasz.github.io/handout/workflow.html
+
+---
+
+# Meeting Notes – Week 3, Meeting 1
+
+**Dátum:** 2025-09-28 (Vasárnap)  
+**Résztvevők:** Tisza Tamás, Szczuka Bendegúz András, Kóbori Bence, Tolnai Olivér, Homonnai Mihály, Zsebeházi Máté, Prohászka Ádám József
+
+---
+
+## 1. Fő témák és döntések
+- Ütemek vs. sprint: “Ütem” (phase) bevezetve; párhuzamosítható feladatcsoportok. Sprint 1 főleg Ütem 1–2 elemeire fókuszál.
+- Board és nézetek: Sprint nézetek és menthető filterek használata; issue template-ek (FE/BE/Planning) bevezetve; sub-issue kapcsolás (Add existing issue).
+- Label-ek (példák): Ütem, Architecture design, Backend task, Feature/Implementation Feature, Planning task, Priority (Critical/High/Medium), Visual design task, Epic-ek (Administration, Practice mode, Progression, User management).
+- Becslés (Scrum Poker): Fibonacci (1,2,3,5,8,13,21); “1” baseline: statikus Footer komponens (FE). Összetett issue-k pontjai a sub-issue-k összegéből.
+- API-kontraktusok: 14 db OpenAPI-alapú specifikáció készül; egységesen becsültük; helye: docs/api-reference.md. Minden kontraktusra 1 FE + 1 BE owner; Architect review.
+- Design System: Brand identity & principles, Color system & palette, Typography, Spacing & layout – külön dokumentálva (issue-k leírása megadja az elérési helyet).
+- Architektúra: Database/Entity modell és scoring/progression model design rögzítve; implementáció EF Core-ral, migrációkkal; több környezet (dev/test/prod) konfiguráció terv.
+- Nem scope Sprint 1: E-mail integráció (password reset/verification) kihagyva.
+- Git stratégia: Git Flow (main, develop, feature/…, bugfix/…); PR a develop-ba, min. 3 review (Architect + PO + 1 dev). Sprint végén develop → main.
+
+## 2. Sprint 1 (terv)
+- Látható eredmény: Landing page + App shell (Header/Footer, routing) az arculattal; Design System dokumentumok első verziója; API-kontraktusok; BE: Identity/DB alap + migrációk.
+- Practice Mode implementáció NEM cél Sprint 1-ben; User Management minimál lehetőségként mérlegelve, de nem kötelező.
+
+## 3. Kiosztás és együttműködés
+- Ön-kiosztás: Szerda estig mindenki vegyen fel feladatokat a Sprint 1 nézetből; több assignee megengedett.
+- API-kontraktusok: FE (Ádám/Máté) és BE (Misi/…) párokra szétosztva kb. fele-fele; Architect utólag review-zza.
+- Architect: “Design database architecture” owner (sub-issue-kkal BE-k bevonásával).
+
+## 4. Akciópontok (határidő: 2025-10-01, Szerda)
+- PO (Tamás): Mentett nézetek/label-ek finomítása; jegyzet + transcript linkelése; parent issue-k pontösszegének rögzítése (ha kell).
+- Architect (Bendegúz): DB architektúra felbontása; OpenAPI szerkezet minta; env/config baseline; PR template/branch policy publikálása.
+- FE (Bence, Olivér, Ádám): App shell (Header/Footer, routing), Landing skeleton; DS doksik (brand, színek, tipográfia, spacing) v1.
+- BE (Misi + társak): Identity/Entity model + migrációk; környezeti beállítások; API-kontraktusok BE-oldali input.
+- Mindenki: Repo klónozás, futtatás (Angular verzió a frontend/README-ben; .NET 8.0); Git Flow átolvasása; kérdések gyűjtése (PO felé).
+
+## 5. Kockázatok
+- Design System késése → inkonzisztens UI.  
+- Board túl granularitása → átláthatóság romlik (policy követése szükséges).  
+- Email integráció kihagyása → későbbi bővítésnél érinthet folyamatokat.
+
+## 6. Következő meeting
+- Szerda 19:00 – Sprint Planning/Refinement: maradék feladatok kiosztása, kapacitás alapján plusz témák bevonása; API/DS állapot review.
+
