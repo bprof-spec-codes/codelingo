@@ -7,6 +7,7 @@ To maintain visual identity, always preserve a minimum clear space around the lo
 | Navbar             | Full logo  | `$space-5` (24px) padding |
 | Landing page       | Full logo  | $space-8` (48px) margins  |
 | Footer / watermark | Monochrome | `$space-4` (16px)         |
+
 For the sizing it is recommended to use these width values:
 - Icon: 32 px, 64 px, 128 px
 - Logo: 64 px, 128 px 256 px
