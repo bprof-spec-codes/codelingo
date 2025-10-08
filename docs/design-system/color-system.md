@@ -16,12 +16,12 @@
 
 | Szín                                                      | HEX       | Name             |
 | --------------------------------------------------------- | --------- | ---------------- |
-| ![#1d4f87](https://singlecolorimage.com/get/1d4f87/40x20) | `#1d4f87` | color-accent-700 |
-| ![#2363a6](https://singlecolorimage.com/get/2363a6/40x20) | `#2363a6` | color-accent-600 |
-| ![#327dc3](https://singlecolorimage.com/get/327dc3/40x20) | `#327dc3` | color-accent-500 |
-| ![#589bd8](https://singlecolorimage.com/get/589bd8/40x20) | `#589bd8` | color-accent-400 |
-| ![#92bde7](https://singlecolorimage.com/get/92bde7/40x20) | `#92bde7` | color-accent-300 |
-| ![#c5dbf2](https://singlecolorimage.com/get/c5dbf2/40x20) | `#c5dbf2` | color-accent-200 |
+| ![#1d4f87](https://singlecolorimage.com/get/1d4f87/40x20) | `#1d4f87` | color-secondary-700 |
+| ![#2363a6](https://singlecolorimage.com/get/2363a6/40x20) | `#2363a6` | color-secondary-600 |
+| ![#327dc3](https://singlecolorimage.com/get/327dc3/40x20) | `#327dc3` | color-secondary-500 |
+| ![#589bd8](https://singlecolorimage.com/get/589bd8/40x20) | `#589bd8` | color-secondary-400 |
+| ![#92bde7](https://singlecolorimage.com/get/92bde7/40x20) | `#92bde7` | color-secondary-300 |
+| ![#c5dbf2](https://singlecolorimage.com/get/c5dbf2/40x20) | `#c5dbf2` | color-secondary-200 |
 
 ## Dark
 ![#181818](https://singlecolorimage.com/get/181818/40x20) :`#181818` is the main dark color
