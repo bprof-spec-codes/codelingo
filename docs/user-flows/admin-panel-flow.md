@@ -13,7 +13,6 @@ This document outlines the user workflows within the Admin Panel, covering:
 - Question Bank CRUD operations
 - Bulk import with validation feedback
 - Export functionality with filtering options
-- User Management (CRUD, permissions)
 
 ---
 
@@ -27,13 +26,10 @@ flowchart TD
 
     D --> E["Question Bank Management"]
     D --> F["Bulk Import / Export"]
-    D --> G["User Administration"]
 
     E --> E1["Create / Edit / Delete Questions"]
     F --> F1["Upload Import File + Validation"]
     F --> F2["Export with Filters + Download"]
-    G --> G1["Create / Edit / Delete Users"]
-    G --> G2["Manage Roles / Permissions"]
 
 ```
 
@@ -86,23 +82,4 @@ flowchart TD
     EX[Export Page] --> FILT[Set Filters]
     FILT --> GEN[Start Export]
     GEN --> DL[Download File]
-```
-
-### 3.3. User Administration
-
-- **List:** filter by name, email, or role
-- **CRUD operations:** create, edit, or delete existing users
-- **Permission management:** admin, user
-- **Errors:** duplicate email, missing required fields
-
-```mermaid
-flowchart TD
-    UA[User List] --> UB[Edit User]
-    UB --> UD[Delete User]
-
-    UB --> UE[Fill Out User Data]
-    UE --> UF{Validation Successful?}
-    UF -- no --> UG[Show Error Message]
-    UF -- yes --> UH[Save User via API]
-    UH --> UI[Refresh List]
 ```
