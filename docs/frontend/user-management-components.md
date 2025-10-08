@@ -16,41 +16,27 @@ This document outlines the Angular component architecture for user management fu
 
 ```mermaid
 graph LR
-App[AppComponent] --> UM_Routing[UserManagementRoutingModule]
+App[AppComponent] --> UM_Routing[Router]
 UM_Routing --> Login[LoginComponent]
 UM_Routing --> Register[RegistrationComponent]
 UM_Routing --> Profile[ProfileComponent]
 UM_Routing --> EditProfile[EditProfileComponent]
-Profile --> UserAvatar[UserAvatarComponent]
-Profile --> UserDetailsCard[UserDetailsCardComponent]
-EditProfile --> ProfileForm[ProfileFormComponent]
-Register --> RegistrationForm[RegistrationFormComponent]
-Login --> AuthForm[AuthFormComponent]
-AuthForm --> TextInput[TextInputComponent]
-AuthForm --> PasswordInput[PasswordInputComponent]
-ProfileForm --> AvatarUploader[AvatarUploaderComponent]
-ProfileForm --> AddressForm[AddressFormComponent]
 style App fill:#e1f5ff
 style UM_Routing fill:#fff3e0
 style Login fill:#f3e5f5
 style Register fill:#f3e5f5
 style Profile fill:#f3e5f5
 style EditProfile fill:#f3e5f5
-style AuthForm fill:#fff9c4
-style ProfileForm fill:#fff9c4
-style TextInput fill:#e8f5e9
-style PasswordInput fill:#e8f5e9
-style UserDetailsCard fill:#ffe0b2
 ```
 
 ### Components Categorization and Responsibilities
 
-| Category                  | Components                                                                                                                                                       | Responsibility                                                                                                                        |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| **Container (Smart)**     | `LoginComponent`, `RegistrationComponent`, `ProfileComponent`, `EditProfileComponent`                                                                            | Handle routing, call services (AuthApi, UserApi), manage high-level state, orchestrate flows (e.g., on success navigate to dashboard) |
-| **Feature**               | `AuthFormComponent`, `RegistrationFormComponent`, `ProfileFormComponent`                                                                                         | Compose reusable form fields, orchestrate validators, emit final payloads to parent                                                   |
-| **Presentational (Dumb)** | `TextInputComponent`, `PasswordInputComponent`, `CheckboxComponent`, `SelectComponent`, `FormErrorsComponent`, `UserDetailsCardComponent`, `UserAvatarComponent`, `AvatarUploaderComponent` | Display data, emit events, no business logic                                                                                          |
-| **Utility**               | `AuthService`, `AuthStateService`, `UserService`, `TokenService`, `ApiErrorInterceptor`, `AuthInterceptor`, `NotificationService`                                | API wrappers, token management, global error handling, notifications, auth guards                                                     |
+| Category                  | Components                                                                                                                        | Responsibility                                                                                                                        |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **Container (Smart)**     | `LoginComponent`, `RegistrationComponent`, `ProfileComponent`,`EditProfileComponent`                                              | Handle routing, call services (AuthApi, UserApi), manage high-level state, orchestrate flows (e.g., on success navigate to dashboard) |
+| **Feature**               | `AuthModule`, `UserModule`                                                                                                        | Handles authentication and user management features, including routes, guards, and services for secure user flow.                                                   |
+| **Presentational (Dumb)** | `LoginFormComponent`, `RegisterFormComponent`, `UserProfileCardComponent`, `EditableUserFormComponent`                            | Display data, emit events, no business logic                                                                                          |
+| **Utility**               | `AuthService`, `AuthStateService`, `UserService`, `TokenService`, `ApiErrorInterceptor`, `AuthInterceptor`, `NotificationService` | API wrappers, token management, global error handling, notifications, auth guards                                                     |
 
 ---
 
@@ -101,25 +87,13 @@ LoginError --> LoggedOut : Retry login
 
 ## Reusable Form Components and User Data Display
 
-### TextInputComponent / PasswordInputComponent
-
-- Encapsulates input fields with labels, validation feedback, and event emission.
-- Supports type-specific attributes (e.g., password show/hide toggle).
-
-### CheckboxComponent / SelectComponent
-
-- Standardized styling and accessibility.
-- Emits value changes to parent form.
-
-### FormErrorsComponent
-
-- Displays validation messages for a given FormControl.
-- Can show multiple messages contextually (sync and async errors).
-
-### UserDetailsCardComponent / UserAvatarComponent
-
-- Displays user profile information consistently.
-- Supports integration with `ProfileFormComponent` for editing workflows.
+| **Component Name**          | **Purpose**                                 | **Key Features**                                                                                   | **Used In**                               |
+| --------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `LoginFormComponent`        | Provides UI for user login.                 | Reactive form with email and password fields, error summary, loading spinner.                      | `LoginComponent`                          |
+| `RegisterFormComponent`     | Collects new user details for registration. | Includes name, email, password, confirm password fields with async email validation.               | `RegistrationComponent`                   |
+| `EditableUserFormComponent` | Allows updating profile data.               | Dynamic reactive form with patching support, inline validation, and change tracking.               | `EditProfileComponent`                    |
+| `FormErrorDisplayComponent` | Displays validation messages.               | Reusable across forms, supports dynamic error types (`required`, `email`, `minlength`, etc.).      | All form components                       |
+| `UserProfileCardComponent`  | Displays user info in card layout.          | Read-only display of avatar, username, email, and role. Responsive layout for different viewports. | `ProfileComponent`, `Dashboard`, `Header` |
 
 ---
 
@@ -128,13 +102,11 @@ LoginError --> LoggedOut : Retry login
 ```mermaid
 sequenceDiagram
 participant LoginComp as LoginComponent
-participant AuthForm as AuthFormComponent
 participant AuthSvc as AuthService
 participant TokenSvc as TokenService
 participant Backend as BackendAPI
 
-LoginComp ->> AuthForm: pass form submit event
-AuthForm ->> AuthSvc: submitLogin(credentials)
+LoginComp ->> AuthSvc: submitLogin(credentials)
 AuthSvc ->> Backend: send login request
 Backend -->> AuthSvc: return JWT + user data
 AuthSvc ->> TokenSvc: save JWT
