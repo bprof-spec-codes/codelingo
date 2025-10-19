@@ -2,6 +2,33 @@
 
 .landing-page {
     min-height: 100dvh;
-    background: linear-gradient(135deg, $dark 0%, $dark-950 50%, $secondary-700 100%);
+    background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
     color: $light;
+
+    .hero-section {
+        padding: $space-8 0;
+        min-height: 90dvh;
+        display: flex;
+        align-items: center;
+        
+        .hero-content{
+            .logo {
+                max-width: 16rem;
+                height: auto;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+                margin-bottom: $space-4;
+                color: $primary;
+            }
+
+            .hero-subtitle {
+                font-size: 1.25rem;
+                margin-bottom: $space-6;
+                color: $secondary-200;
+            }
+        }
+    }
+
 }

@@ -1,3 +1,32 @@
 <div class="landing-page">
-    
+    <!-- hero section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- left column with logo and buttons -->
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <!-- logo -->
+                        <img src="assets/brand/codelingo_logo_light.svg" alt="CodeLingo" class="logo mb-4">
+
+                        <!-- welcome text -->
+                        <h1 class="hero-title" *ngIf="!isLoggedIn">Master coding with CodeLingo</h1>
+                        <h1 class="hero-title" *ngIf="isLoggedIn">Welcome back, {{ username }}</h1>
+
+                        <p class="hero-subtitle" *ngIf="!isLoggedIn"> Learn, practice, and improve your coding skills with interactive challenges and instant feedback. </p>
+                        <p class="hero-subtitle" *ngIf="isLoggedIn">
+                            Continue your coding journey.<br>
+                            Current rank: {{ userRank }} </p>
+
+                        <!-- action buttons -->
+                    </div>
+                </div>
+                <!-- right column with code block  -->
+                 <div class="col-lg-6">
+                    
+                 </div>
+            </div>
+        </div>
+    </section>
+
 </div>

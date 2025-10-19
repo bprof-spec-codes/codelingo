@@ -13,7 +13,7 @@ export class LandingPageComponent implements OnInit {
   
   // Logged in user details TODO: Replace with actual user data
   username: string = 'JohnDoe';
-  rank: number = 42;
+  userRank: number = 42;
 
   features = [
     {
