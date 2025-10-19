@@ -1,0 +1,7 @@
+@import '../../styles.scss';
+
+.landing-page {
+    min-height: 100dvh;
+    background: linear-gradient(135deg, $dark 0%, $dark-950 50%, $secondary-700 100%);
+    color: $light;
+}
