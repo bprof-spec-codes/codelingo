@@ -160,12 +160,109 @@ classDiagram
 
 ```mermaid
 erDiagram
-    USER ||--o{ SESSION : owns
-    SESSION ||--o{ SESSION_QUESTION : includes
-    SESSION_QUESTION }o--|| QUESTION : represents
-    USER ||--|| PROGRESS : has
-    USER ||--o{ USER_ACHIEVEMENT : earns
-    USER_ACHIEVEMENT }o--|| ACHIEVEMENT : links
+    USER ||--o{ SESSION : "creates"
+    USER ||--|| PROGRESS : "has"
+    USER ||--o{ USER_ACHIEVEMENT : "earns"
+    
+    SESSION ||--o{ SESSION_QUESTION : "contains"
+    SESSION }o--|| USER : "belongs_to"
+    
+    QUESTION ||--o{ SESSION_QUESTION : "used_in"
+    QUESTION ||--o| MULTIPLE_CHOICE_QUESTION : "extends"
+    QUESTION ||--o| CODE_COMPLETION_QUESTION : "extends"
+    
+    SESSION_QUESTION }o--|| SESSION : "part_of"
+    SESSION_QUESTION }o--|| QUESTION : "references"
+    
+    ACHIEVEMENT ||--o{ USER_ACHIEVEMENT : "granted_as"
+    USER_ACHIEVEMENT }o--|| USER : "belongs_to"
+    USER_ACHIEVEMENT }o--|| ACHIEVEMENT : "represents"
+    
+    USER {
+        string id PK
+        string username UK
+        string passwordHash
+        datetime createdAt
+        datetime updatedAt
+        bool isActive
+    }
+    
+    QUESTION {
+        string id PK
+        enum type
+        string language
+        enum difficulty
+        string title
+        text questionText
+        text explanation
+        json tags
+        json metadata
+        datetime createdAt
+        datetime updatedAt
+        string createdBy FK
+        bool isActive
+    }
+    
+    MULTIPLE_CHOICE_QUESTION {
+        string questionId PK,FK
+        json options
+        json correctAnswerIds
+        bool allowMultipleSelection
+        bool shuffleOptions
+    }
+    
+    CODE_COMPLETION_QUESTION {
+        string questionId PK,FK
+        text starterCode
+        text correctAnswer
+        json hints
+        json constraints
+    }
+    
+    SESSION {
+        string id PK
+        string userId FK
+        string language
+        enum difficulty
+        int desiredCount
+        enum status
+        datetime createdAt
+        datetime updatedAt
+    }
+    
+    SESSION_QUESTION {
+        string id PK
+        string sessionId FK
+        string questionId FK
+        bool answered
+        bool correct
+        int pointsEarned
+        datetime answeredAt
+    }
+    
+    PROGRESS {
+        string userId PK,FK
+        int totalScore
+        int xp
+        int currentLevel
+        int streak
+        float accuracy
+        datetime lastSessionAt
+    }
+    
+    ACHIEVEMENT {
+        string id PK
+        string name
+        text description
+        int points
+    }
+    
+    USER_ACHIEVEMENT {
+        string id PK
+        string userId FK
+        string achievementId FK
+        datetime dateClaimed
+    }
 ```
 
 
