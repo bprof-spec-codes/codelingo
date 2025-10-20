@@ -91,4 +91,30 @@ console.log(fibonacci(10)); // 55</code></pre>
         </div>
     </section>
 
+    <!-- getting started section -->
+    <section class="getting-started-section" *ngIf="!isLoggedIn">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Ready to Start Your Coding Journey?</h2>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-4" *ngFor="let step of gettingStartedSteps">
+                    <div class="step-card">
+                        <div class="step-number">{{ step.number }}</div>
+                        <h4 class="step-title">{{ step.title }}</h4>
+                        <p class="step-description">{{ step.description }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-buttons text-center">
+                <button class="btn btn-primary btn-lg" (click)="signUp()">
+                    Sign in
+                </button>
+                <button class="btn btn-outline-primary btn-lg" (click)="tryCodeLingo()">
+                    Try CodeLingo
+                </button>
+            </div>
+        </div>
+    </section>
+
 </div>
