@@ -4,8 +4,7 @@
 // Import variables (this won't generate CSS, just makes variables available)
 @import 'variables';
 
-// Import Bootstrap with our custom theme
-@import "bootstrap/scss/bootstrap";
+
 
 // Global typography styles
 h1, .h1 { font-weight: $font-weight-extrabold; }
@@ -27,3 +26,6 @@ code, pre, .code {
   font-size: 1.5rem;
   line-height: 1.4;
 }
+
+// Import Bootstrap with our custom theme
+@import "bootstrap/scss/bootstrap";
