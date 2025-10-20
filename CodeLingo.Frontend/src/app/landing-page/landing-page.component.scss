@@ -120,4 +120,52 @@
     }
 
     // features
+    .features-section {
+        padding: $space-9 0;
+        background: #00000033;;
+
+        .feature-card {
+            background-color: #ffffff0d; 
+            border: 1px solid #dae2431a; //primary-400 with 10% opacity
+            border-radius: 12px;
+            padding: $space-5;
+            height: 100%;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-8px);
+                background: #ffffff14;
+                border-color: #dae2434d; // primary-400 with 30% opacity
+                box-shadow: 0 8px 24px #dae24326; // primary-400 with 15% opacity
+            }
+
+            .feature-icon {
+                width: 3.5rem;
+                height: 3.5rem;
+                background: linear-gradient(135deg,  $primary-400 0%, $primary-600 100%);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: $space-4;
+
+                i {
+                    font-size: 2rem;
+                    color: $dark-950;
+                }
+            }
+
+            .feature-title {
+                font-size: 1.25rem;
+                margin-bottom: $space-3;
+                color: $primary;
+            }
+
+            .feature-description {
+                color: $secondary-200;
+                line-height: 1.6;
+                margin: 0;
+            }
+        }
+    }
 }

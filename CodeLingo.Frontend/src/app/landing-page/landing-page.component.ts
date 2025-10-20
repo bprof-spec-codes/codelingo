@@ -27,13 +27,13 @@ export class LandingPageComponent implements OnInit {
       icon: 'bi-laptop'
     },
     {
-      title: 'Progressive Learning',
-      description: 'Start with basics and advance to complex concepts at your own pace.',
-      icon: 'bi-graph-up'
+      title: 'Track Progress',
+      description: 'Monitor your improvement with detailed statistics and analytics.',
+      icon: 'bi-bar-chart'
     },
     {
-      title: 'Track Progress',
-      description: 'Monitor your improvement with detailed statistics and achievements.',
+      title: 'Global Ranking',
+      description: 'Compete with other developers and climb the leaderboard.',
       icon: 'bi-trophy'
     }
   ];
