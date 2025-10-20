@@ -1,1 +1,19 @@
-<app-demo></app-demo>
+<!-- Main application shell container -->
+<div class="app-shell-container">
+  
+  <!-- Navigation Header -->
+  <header class="app-header">
+    <app-navigation-header></app-navigation-header>
+  </header>
+
+  <!-- Main content area with router outlet -->
+  <main class="app-main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <app-footer></app-footer>
+  </footer>
+
+</div>
