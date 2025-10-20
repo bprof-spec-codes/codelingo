@@ -15,8 +15,8 @@
         min-height: 90dvh;
         display: flex;
         align-items: center;
-        
-        .hero-content{
+
+        .hero-content {
             .logo {
                 max-width: 16rem;
                 height: auto;
@@ -49,7 +49,7 @@
                     max-width: 13rem;
                 }
 
-                .login-link{
+                .login-link {
                     font-size: 0.95rem;
                     color: $secondary-200;
 
@@ -95,15 +95,23 @@
             .code-dots {
                 display: flex;
                 gap: 6px;
-          
+
                 .dot {
                     width: 12px;
                     height: 12px;
                     border-radius: 50%;
-            
-                    &.dot-red { background: #ff6469; }
-                    &.dot-yellow { background: #f8a23a; }
-                    &.dot-green { background: #13d460; }
+
+                    &.dot-red {
+                        background: #ff6469;
+                    }
+
+                    &.dot-yellow {
+                        background: #f8a23a;
+                    }
+
+                    &.dot-green {
+                        background: #13d460;
+                    }
                 }
             }
 
@@ -122,10 +130,11 @@
     // features
     .features-section {
         padding: $space-9 0;
-        background: #00000033;;
+        background: #00000033;
+        ;
 
         .feature-card {
-            background-color: #ffffff0d; 
+            background-color: #ffffff0d;
             border: 1px solid #dae2431a; //primary-400 with 10% opacity
             border-radius: 12px;
             padding: $space-5;
@@ -142,7 +151,7 @@
             .feature-icon {
                 width: 3.5rem;
                 height: 3.5rem;
-                background: linear-gradient(135deg,  $primary-400 0%, $primary-600 100%);
+                background: linear-gradient(135deg, $primary-400 0%, $primary-600 100%);
                 border-radius: 12px;
                 display: flex;
                 align-items: center;
@@ -172,61 +181,127 @@
     // getting started section
     .getting-started-section {
         padding: $space-9 0;
-    
+
         .section-title {
-        font-size: 2.5rem;
-        color: $primary;
+            font-size: 2.5rem;
+            color: $primary;
         }
-    
+
         .step-card {
-            background: #ffffff0d; 
+            background: #ffffff0d;
             border: 1px solid #327dc333; // primary-500 with 20% opacity
             border-radius: 12px;
             padding: $space-6;
             height: 100%;
             text-align: center;
-            transition: all 0.3s ease;  
-      
+            transition: all 0.3s ease;
+
             &:hover {
                 background: #ffffff14;
                 border-color: #327dc366; // primary-500 with 40% opacity
+            }
+
+            .step-number {
+                width: 3rem;
+                height: 3rem;
+                background: $primary-500;
+                color: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                font-weight: $font-weight-bold;
+                margin: 0 auto $space-4;
+            }
+
+            .step-title {
+                font-size: 1.25rem;
+                margin-bottom: $space-3;
+                color: $primary-400;
+            }
+
+            .step-description {
+                color: $secondary-200;
+                line-height: 1.6;
+                margin: 0;
+            }
         }
-      
-        .step-number {
-            width: 3rem;
-            height: 3rem;
-            background: $primary-500;
-            color: #fff;
-            border-radius: 50%;
+
+        .cta-buttons {
             display: flex;
-            align-items: center;
+            gap: $space-4;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: $font-weight-bold;
-            margin: 0 auto $space-4;
-        }
-      
-        .step-title {
-            font-size: 1.25rem;
-            margin-bottom: $space-3;
-            color: $primary-400;
-        }
-      
-        .step-description {
-            color: $secondary-200;
-            line-height: 1.6;
-            margin: 0;
+
+            .btn {
+                min-width: 12rem;
+            }
         }
     }
-    
-    .cta-buttons {
-      display: flex;
-      gap: $space-4;
-      justify-content: center;
-      
-      .btn {
-        min-width: 12rem;
-      }
+}
+
+
+// responsive adjustments
+// tablets
+@media (max-width: 991px) {
+    .landing-page {
+        .hero-section {
+            padding: $space-6 0;
+
+            .hero-content {
+                margin-bottom: $space-6;
+
+
+                .hero-title {
+                    font-size: 2.5rem;
+                }
+            }
+
+            .hero-code-block {
+                transform: rotate(0deg);
+            }
+        }
     }
-  }
+}
+
+// phones
+@media (max-width: 767px) {
+    .landing-page {
+        .hero-section {
+            .hero-content {
+                .hero-title {
+                    font-size: 2rem;
+                }
+
+                .btn {
+                    width: 100%;
+                }
+            }
+        }
+
+        .getting-started-section {
+            .cta-buttons {
+                flex-direction: column;
+
+                .btn {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+// small phones
+@media (max-width: 575px) {
+    .landing-page {
+        .features-section {
+            .feature-card {
+                text-align: center;
+
+                .feature-icon {
+                    margin: 0 auto $space-4;
+                }
+            }
+        }
+    }
 }
