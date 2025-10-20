@@ -15,88 +15,142 @@
 
 ```mermaid
 classDiagram
+    %% Enums
+    class QuestionType {
+        <<enumeration>>
+        MultipleChoice
+        CodeCompletion
+        TrueFalse
+        FillInBlank
+        CodeReview
+    }
+    
+    class DifficultyLevel {
+        <<enumeration>>
+        Easy
+        Medium
+        Hard
+    }
+    
+    class SessionStatus {
+        <<enumeration>>
+        Active
+        Completed
+        Terminated
+    }
+    
+    %% Core Entities
     class User {
-      +string id
-      +string username
-      +string email
-      +string passwordHash
-      +Date createdAt
-      +Date updatedAt
-      +bool isActive
+        +string Id
+        +string Username
+        +string PasswordHash
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
+        +bool IsActive
     }
+    
     class Question {
-      +string id
-      +string type
-      +string language
-      +string difficulty
-      +string title
-      +string questionText
-      +string explanation
-      +string[] tags
-      +object metadata
-      +Date createdAt
-      +Date updatedAt
-      +bool isActive
+        +string Id
+        +QuestionType Type
+        +string Language
+        +DifficultyLevel Difficulty
+        +string Title
+        +string QuestionText
+        +string Explanation
+        +string Tags
+        +string Metadata
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
+        +string CreatedBy
+        +bool IsActive
     }
+    
     class MultipleChoiceQuestion {
-      +string[] options
-      +string[] correctAnswerIds
-      +bool allowMultipleSelection
+        +string QuestionId
+        +string Options
+        +string CorrectAnswerIds
+        +bool AllowMultipleSelection
+        +bool ShuffleOptions
     }
+    
     class CodeCompletionQuestion {
-      +string starterCode
-      +string correctAnswer
-      +string[] hints
-      +object constraints
+        +string QuestionId
+        +string StarterCode
+        +string CorrectAnswer
+        +string Hints
+        +string Constraints
     }
+    
     class Session {
-      +string id
-      +string userId
-      +string language
-      +string difficulty
-      +int desiredCount
-      +string status
-      +Date createdAt
-      +Date updatedAt
+        +string Id
+        +string UserId
+        +string Language
+        +DifficultyLevel Difficulty
+        +int DesiredCount
+        +SessionStatus Status
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
     }
+    
     class SessionQuestion {
-      +string id
-      +string sessionId
-      +string questionId
-      +bool answered
-      +bool correct
-      +int pointsEarned
-      +Date answeredAt
+        +string Id
+        +string SessionId
+        +string QuestionId
+        +bool Answered
+        +bool Correct
+        +int PointsEarned
+        +DateTime? AnsweredAt
     }
+    
     class Progress {
-      +string userId
-      +int totalScore
-      +int xp
-      +int currentLevel
-      +int streak
-      +float accuracy
-      +Date lastSessionAt
+        +string UserId
+        +int TotalScore
+        +int Xp
+        +int CurrentLevel
+        +int Streak
+        +float Accuracy
+        +DateTime? LastSessionAt
     }
+    
     class Achievement {
-      +string id
-      +string name
-      +string description
-      +int points
+        +string Id
+        +string Name
+        +string Description
+        +int Points
     }
+    
     class UserAchievement {
-      +string userId
-      +string achievementId
-      +Date dateClaimed
+        +string Id
+        +string UserId
+        +string AchievementId
+        +DateTime DateClaimed
     }
-
-    User "1" -- "0..*" Session : owns
-    Session "1" -- "0..*" SessionQuestion : includes
-    SessionQuestion "*" -- "1" Question : represents
-    User "1" -- "1" Progress : has
-    User "1" -- "0..*" UserAchievement : earns
-    UserAchievement "*" -- "1" Achievement : links
-    Question <|-- MultipleChoiceQuestion
-    Question <|-- CodeCompletionQuestion
+    
+    %% Relationships
+    User "1" --> "0..*" Session : has
+    User "1" --> "1" Progress : has
+    User "1" --> "0..*" UserAchievement : earns
+    
+    Session "1" --> "0..*" SessionQuestion : includes
+    Session "*" --> "1" User : belongs to
+    
+    Question "1" --> "0..*" SessionQuestion : used in
+    Question "1" --> "0..1" MultipleChoiceQuestion : extends
+    Question "1" --> "0..1" CodeCompletionQuestion : extends
+    Question --> QuestionType : uses
+    Question --> DifficultyLevel : uses
+    
+    SessionQuestion "*" --> "1" Session : belongs to
+    SessionQuestion "*" --> "1" Question : references
+    
+    Session --> SessionStatus : uses
+    Session --> DifficultyLevel : uses
+    
+    Progress "1" --> "1" User : aggregates
+    
+    Achievement "1" --> "0..*" UserAchievement : granted as
+    UserAchievement "*" --> "1" User : belongs to
+    UserAchievement "*" --> "1" Achievement : represents
 ```
 
 
