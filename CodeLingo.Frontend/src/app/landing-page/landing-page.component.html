@@ -11,16 +11,17 @@
 
                         <!-- welcome text -->
                         <h1 class="hero-title" *ngIf="!isLoggedIn">Master coding with CodeLingo</h1>
-                        <h1 class="hero-title" *ngIf="isLoggedIn">Welcome back, {{ username }}</h1>
+                        <h1 class="hero-title" *ngIf="isLoggedIn">Welcome back, {{ username }}!</h1>
 
-                        <p class="hero-subtitle" *ngIf="!isLoggedIn"> Learn, practice, and improve your coding skills with interactive challenges and instant feedback. </p>
+                        <p class="hero-subtitle" *ngIf="!isLoggedIn"> Learn, practice, and improve your coding skills
+                            with interactive challenges and instant feedback. </p>
                         <p class="hero-subtitle" *ngIf="isLoggedIn">
                             Continue your coding journey.<br>
                             Current rank: {{ userRank }} </p>
 
                         <!-- action buttons -->
                         <div *ngIf="!isLoggedIn" class="cta-buttons">
-                            <div class="button-group">  
+                            <div class="button-group">
                                 <button class="btn btn-primary btn-lg" (click)="signUp()">
                                     Sign in
                                 </button>
@@ -29,7 +30,8 @@
                                 </button>
                             </div>
                             <p class="login-link">
-                                Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log in</a>
+                                Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log
+                                    in</a>
                             </p>
                         </div>
 
@@ -40,9 +42,34 @@
                     </div>
                 </div>
                 <!-- right column with code block  -->
-                 <div class="col-lg-6">
-                    
-                 </div>
+                <div class="col-lg-6">
+                    <div class="hero-code-block">
+                        <div class="code-header">
+                            <span class="code-lang">JavaScript</span>
+                            <div class="code-dots">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                            </div>
+                        </div>
+                        <pre class="code-content"><code>function fibonacci(n) {{'{}'}}
+  if (n <= 1) return n;
+  
+  let prev = 0, curr = 1;
+  
+  for (let i = 2; i <= n; i++) {{'{}'}}
+    let next = prev + curr;
+    prev = curr;
+    curr = next;
+  {{'}'}}
+  
+  return curr;
+{{'}'}}
+
+// Calculate 10th Fibonacci number
+console.log(fibonacci(10)); // 55</code></pre>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
