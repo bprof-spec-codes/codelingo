@@ -62,4 +62,27 @@ export class LandingPageComponent implements OnInit {
     this.isLoggedIn = false; // Replace with an actual authentication check method
   }
 
+  signUp(): void {
+    console.log('Navigate to sign in');
+    // TODO: route to sign in page
+  }
+
+  tryCodeLingo(): void {
+    console.log('Navigate to a demo practice session');
+    // TODO: route to a demo practice session
+  }
+
+  login(): void {
+    console.log('Navigate to login page');
+    // TODO: route to login page
+    this.isLoggedIn = true;
+  }
+
+  startPractice(): void {
+    console.log('Navigate to practice session');
+    //TODO: route to practice session
+    this.isLoggedIn = false;
+  }
+
+
 }

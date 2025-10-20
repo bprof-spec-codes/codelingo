@@ -1,5 +1,11 @@
 @import '../../styles.scss';
 
+
+// div {
+//     border: 1px solid red;
+// }
+
+
 .landing-page {
     min-height: 100dvh;
     background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
@@ -28,7 +34,38 @@
                 margin-bottom: $space-6;
                 color: $secondary-200;
             }
+
+            .cta-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: $space-3;
+
+                .button-group {
+                    display: flex;
+                    gap: $space-3;
+                    flex-wrap: wrap;
+                }
+
+                .btn {
+                    max-width: 13rem;
+                }
+
+                .login-link{
+                    font-size: 0.95rem;
+                    color: $secondary-200;
+
+                    a {
+                        color: $primary;
+                        text-decoration: none;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
         }
+
     }
 
 }

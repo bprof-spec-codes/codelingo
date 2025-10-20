@@ -19,6 +19,24 @@
                             Current rank: {{ userRank }} </p>
 
                         <!-- action buttons -->
+                        <div *ngIf="!isLoggedIn" class="cta-buttons">
+                            <div class="button-group">  
+                                <button class="btn btn-primary btn-lg" (click)="signUp()">
+                                    Sign in
+                                </button>
+                                <button class="btn btn-outline-primary btn-lg" (click)="tryCodeLingo()">
+                                    Try CodeLingo
+                                </button>
+                            </div>
+                            <p class="login-link">
+                                Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log in</a>
+                            </p>
+                        </div>
+
+                        <div *ngIf="isLoggedIn" class="cta-buttons">
+                            <button class="btn btn-primary btn-lg" (click)="startPractice()">Start Practice
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <!-- right column with code block  -->
