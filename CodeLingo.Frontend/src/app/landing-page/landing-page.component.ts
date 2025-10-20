@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ComponentState, Feature, GettingStartedStep } from '../models/landing-page';
 
 
 @Component({
@@ -9,13 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingPageComponent implements OnInit {
   
+  // Component state
+  state: ComponentState = {
+    isLoading: false,
+    error: null
+  };
+
+  // Authentication state
   isLoggedIn: boolean = false;
   
   // Logged in user details TODO: Replace with actual user data
   username: string = 'JohnDoe';
   userRank: number = 42;
 
-  features = [
+  features: Feature[] = [
     {
       title: 'Interactive Practice',
       description: 'Solve real coding problems with instant feedback and explanations.',
@@ -38,7 +46,7 @@ export class LandingPageComponent implements OnInit {
     }
   ];
 
-  gettingStartedSteps = [
+  gettingStartedSteps: GettingStartedStep[] = [
     {
       number: 1,
       title: 'Create your account',
@@ -55,6 +63,8 @@ export class LandingPageComponent implements OnInit {
       description: 'Begin solving challenges and track your improvement.'
     }
   ];
+
+
 
 
   ngOnInit(): void {
