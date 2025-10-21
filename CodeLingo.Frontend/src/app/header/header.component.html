@@ -2,7 +2,7 @@
     <div class="container">
         <!-- Logo balra -->
         <a class="navbar-brand" href="#">
-            <img src="/assets/brand/codelingo_logo_black.svg" alt="Logo" width="256">
+            <img src="/assets/brand/codelingo_logo_black.svg" alt="Logo" routerLink="/" width="256">
         </a>
 
         <!-- Hamburger menü mobilra -->
@@ -16,7 +16,7 @@
             <!-- Menüpontok középre -->
             <ul class="navbar-nav mx-auto d-flex gap-4">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">
+                    <a class="nav-link active" routerLink="/" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-house-door-fill" viewBox="0 0 16 16">
                             <path
@@ -25,7 +25,7 @@
                         Főoldal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" routerLink="/" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
                             <path
@@ -34,7 +34,7 @@
                         Gyakorlás</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" routerLink="/" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-star-fill" viewBox="0 0 16 16">
                             <path
@@ -46,8 +46,8 @@
 
             <!-- Jobb oldali gombok -->
             <div class="d-flex">
-                <button class="btn btn-outline-dark me-2">Bejelentkezés</button>
-                <button class="btn btn-secondary text-white me-2">Regisztráció</button>
+                <button class="btn btn-outline-dark me-2" routerLink="/">Bejelentkezés</button>
+                <button class="btn btn-secondary text-white me-2" routerLink="/">Regisztráció</button>
 
             </div>
         </div>
