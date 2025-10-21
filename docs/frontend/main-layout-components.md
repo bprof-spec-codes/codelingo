@@ -24,8 +24,6 @@ Layout --> Header[HeaderComponent]
 Layout --> Sidebar[SidebarComponent]
 Layout --> Content[RouterOutlet]
 Layout --> Footer[FooterComponent]
-Header --> NavMenu[NavMenuComponent]
-Sidebar --> NavLinks[NavLinksComponent]
 style App fill:#e1f5ff
 style Layout fill:#fff3e0
 style Header fill:#f3e5f5
@@ -50,8 +48,8 @@ style Footer fill:#f3e5f5
 | `HeaderComponent`     | Displays application title, user info, and quick actions.  | Integrates with `AuthStateService` and emits navigation or logout actions.                  |
 | `SidebarComponent`    | Provides role-based navigation links and collapsible menu. | Observes responsive state, manages active route highlighting, supports keyboard navigation. |
 | `FooterComponent`     | Displays footer information (version, copyright).          | Static content with optional dynamic data from app config or environment variables.         |
-| `NavMenuComponent`    | Renders horizontal navigation items in header.             | Displays menu items, highlights active routes, supports dropdowns for user profile.         |
-| `NavLinksComponent`   | Renders vertical navigation items for sidebar.             | Handles route links, active state detection, and emits navigation events.                   |
+| `NavMenuComponent`    | Renders horizontal navigation items in header.             | Displays menu items, highlights active routes, supports dropdowns for user profile. *(Implemented in the HeaderComponent)*         |
+| `NavLinksComponent`   | Renders vertical navigation items for sidebar.             | Handles route links, active state detection, and emits navigation events. *(Implemented in the SidebarComponent)*                  |
 
 ---
 
