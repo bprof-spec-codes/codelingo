@@ -3,15 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace CodeLingo.API.Models
-
 {
-    public class Question
+    public class Session
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        public QuestionType Type { get; set; }
+        [StringLength(36)]
+        [ForeignKey("User")]
+        public string UserId { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -21,32 +22,17 @@ namespace CodeLingo.API.Models
         public DifficultyLevel Difficulty { get; set; }
 
         [Required]
-        [StringLength(255)]
-        public string Title { get; set; }
+        public int DesiredCount { get; set; }
 
         [Required]
-        [Column(TypeName = "text")]
-        public string QuestionText { get; set; }
-
-        [Column(TypeName = "text")]
-        public string Explanation { get; set; }
-
-        [Column(TypeName = "json")]
-        public string Tags { get; set; } // JSON array of strings
-
-        [Column(TypeName = "json")]
-        public string Metadata { get; set; } // JSON object
+        [StringLength(20)]
+        public SessionStatus Status { get; set; } = SessionStatus.Active;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        [Required]
-        [StringLength(36)]
-        public string CreatedBy { get; set; }
-
-        public bool IsActive { get; set; } = true;
-
         // Navigation properties
+        public virtual User User { get; set; }
         public virtual ICollection<SessionQuestion> SessionQuestions { get; set; }
     }
 }
