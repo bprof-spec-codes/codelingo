@@ -1,0 +1,353 @@
+@import '../../variables';
+
+// div {
+//     border: 1px solid red;
+// }
+
+
+.landing-page {
+    min-height: 100dvh;
+    background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
+    color: $light;
+
+    // loading state
+    .loading-container {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: $space-4;
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .loading-text {
+            color: $primary-400;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+    }
+
+    // error state
+    .error-container {
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: $space-6;
+
+        .alert {
+            max-width: 600px;
+            background-color: #ed151c33; // danger-600 with 20% opacity
+            border: 1px solid $danger-400;
+            color: $light;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: $space-3;
+
+            i {
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    // hero section
+    .hero-section {
+        padding: $space-8 0;
+        min-height: 90dvh;
+        display: flex;
+        align-items: center;
+
+        .hero-content {
+            .logo {
+                max-width: 16rem;
+                height: auto;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+                margin-bottom: $space-4;
+                color: $primary;
+            }
+
+            .hero-subtitle {
+                font-size: 1.25rem;
+                margin-bottom: $space-6;
+                color: $secondary-200;
+            }
+
+            .cta-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: $space-3;
+
+                .button-group {
+                    display: flex;
+                    gap: $space-3;
+                    flex-wrap: wrap;
+                }
+
+                .btn {
+                    max-width: 13rem;
+                }
+
+                .login-link {
+                    font-size: 0.95rem;
+                    color: $secondary-200;
+
+                    a {
+                        color: $primary;
+                        text-decoration: none;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Hero Code Block
+        .hero-code-block {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px #00000080;
+            transform: rotate(-2deg);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+
+            &:hover {
+                transform: rotate(0deg);
+                box-shadow: 0 15px 40px #dae24333;
+            }
+
+            .code-header {
+                background: #2d2d2d;
+                padding: $space-3 $space-4;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .code-lang {
+                color: $primary-400;
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
+
+            .code-dots {
+                display: flex;
+                gap: 6px;
+
+                .dot {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+
+                    &.dot-red {
+                        background: #ff6469;
+                    }
+
+                    &.dot-yellow {
+                        background: #f8a23a;
+                    }
+
+                    &.dot-green {
+                        background: #13d460;
+                    }
+                }
+            }
+
+            .code-content {
+                padding: $space-5;
+                margin: 0;
+                background: #1e1e1e;
+                color: $primary-200;
+                font-size: 0.9rem;
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+        }
+    }
+
+    // features
+    .features-section {
+        padding: $space-9 0;
+        background: #00000033;
+        ;
+
+        .feature-card {
+            background-color: #ffffff0d;
+            border: 1px solid #dae2431a; //primary-400 with 10% opacity
+            border-radius: 12px;
+            padding: $space-5;
+            height: 100%;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-8px);
+                background: #ffffff14;
+                border-color: #dae2434d; // primary-400 with 30% opacity
+                box-shadow: 0 8px 24px #dae24326; // primary-400 with 15% opacity
+            }
+
+            .feature-icon {
+                width: 3.5rem;
+                height: 3.5rem;
+                background: linear-gradient(135deg, $primary-400 0%, $primary-600 100%);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: $space-4;
+
+                i {
+                    font-size: 2rem;
+                    color: $dark-950;
+                }
+            }
+
+            .feature-title {
+                font-size: 1.25rem;
+                margin-bottom: $space-3;
+                color: $primary;
+            }
+
+            .feature-description {
+                color: $secondary-200;
+                line-height: 1.6;
+                margin: 0;
+            }
+        }
+    }
+
+    // getting started section
+    .getting-started-section {
+        padding: $space-9 0;
+
+        .section-title {
+            font-size: 2.5rem;
+            color: $primary;
+        }
+
+        .step-card {
+            background: #ffffff0d;
+            border: 1px solid #327dc333; // primary-500 with 20% opacity
+            border-radius: 12px;
+            padding: $space-6;
+            height: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: #ffffff14;
+                border-color: #327dc366; // primary-500 with 40% opacity
+            }
+
+            .step-number {
+                width: 3rem;
+                height: 3rem;
+                background: $primary-500;
+                color: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                font-weight: $font-weight-bold;
+                margin: 0 auto $space-4;
+            }
+
+            .step-title {
+                font-size: 1.25rem;
+                margin-bottom: $space-3;
+                color: $primary-400;
+            }
+
+            .step-description {
+                color: $secondary-200;
+                line-height: 1.6;
+                margin: 0;
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: $space-4;
+            justify-content: center;
+
+            .btn {
+                min-width: 12rem;
+            }
+        }
+    }
+}
+
+
+// responsive adjustments
+// tablets
+@media (max-width: 991px) {
+    .landing-page {
+        .hero-section {
+            padding: $space-6 0;
+
+            .hero-content {
+                margin-bottom: $space-6;
+
+
+                .hero-title {
+                    font-size: 2.5rem;
+                }
+            }
+
+            .hero-code-block {
+                transform: rotate(0deg);
+            }
+        }
+    }
+}
+
+// phones
+@media (max-width: 767px) {
+    .landing-page {
+        .hero-section {
+            .hero-content {
+                .hero-title {
+                    font-size: 2rem;
+                }
+
+                .btn {
+                    width: 100%;
+                }
+            }
+        }
+
+        .getting-started-section {
+            .cta-buttons {
+                flex-direction: column;
+
+                .btn {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+// small phones
+@media (max-width: 575px) {
+    .landing-page {
+        .features-section {
+            .feature-card {
+                text-align: center;
+
+                .feature-icon {
+                    margin: 0 auto $space-4;
+                }
+            }
+        }
+    }
+}

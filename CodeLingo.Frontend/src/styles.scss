@@ -1,2 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
-@import "bootstrap/dist/css/bootstrap.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
+
+// Import variables (this won't generate CSS, just makes variables available)
+@import 'variables';
+
+
+
+// Global typography styles
+h1, .h1 { font-weight: $font-weight-extrabold; }
+h2, .h2 { font-weight: $font-weight-extrabold; }
+h3, .h3 { font-weight: $font-weight-bold; }
+h4, .h4 { font-weight: $font-weight-semibold; }
+h5, .h5, h6, .h6 { font-weight: $font-weight-regular; }
+
+// Caption text
+.caption {
+  font-size: 0.875rem;
+  font-weight: $font-weight-regular;
+  line-height: 1.4;
+}
+
+// Code blocks
+code, pre, .code {
+  font-family: $font-family-monospace;
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+// Import Bootstrap with our custom theme
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";

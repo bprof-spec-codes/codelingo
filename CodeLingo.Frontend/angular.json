@@ -36,6 +36,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/brand",
+                "output": "assets/brand"
               }
             ],
             "styles": [
@@ -101,6 +106,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/brand",
+                "output": "assets/brand"
               }
             ],
             "styles": [
