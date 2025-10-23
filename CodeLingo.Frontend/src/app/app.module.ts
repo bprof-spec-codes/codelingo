@@ -10,6 +10,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { PracticeStarterComponent } from './practice-starter/practice-starter.component';
+import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PracticeStarterComponent } from './practice-starter/practice-starter.co
     SidebarComponent,
     FooterComponent,
     LandingPageComponent,
-    PracticeStarterComponent
+    PracticeStarterComponent,
+    DifficultySelectorComponent
   ],
   imports: [
     BrowserModule,
