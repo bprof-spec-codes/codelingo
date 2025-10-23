@@ -1,0 +1,34 @@
+@import '../../variables';
+
+.practice-starter {
+    min-height: 100dvh;
+    background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
+    color: $light;
+    padding: $space-6 0;
+
+    //header
+    .page-header {
+        text-align: center;
+        margin-bottom: $space-8;
+
+        .page-title {
+            font-size: 2.5rem;
+            color: $primary-400;
+            margin-bottom: $space-3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: $space-3;
+
+            i {
+                font-size: 2.5rem;
+            }
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: $secondary-200;
+            margin: 0;
+        }
+    }
+}
