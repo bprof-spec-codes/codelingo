@@ -10,6 +10,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { PracticeStarterComponent } from './practice-starter/practice-starter.component';
+import { LanguageSelectorComponent } from './practice-starter/language-selector/language-selector.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,11 +22,13 @@ import { PracticeStarterComponent } from './practice-starter/practice-starter.co
     SidebarComponent,
     FooterComponent,
     LandingPageComponent,
-    PracticeStarterComponent
+    PracticeStarterComponent,
+    LanguageSelectorComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [
     provideHttpClient()
