@@ -1,0 +1,11 @@
+@media (max-width: 576px) {
+  footer .col-md-4:last-child { // a közösségi ikonok oszlopa
+    display: flex;
+    justify-content: center; // vízszintesen középre
+    gap: 0.5rem; // ikonok közti távolság
+    margin-top: 0.5rem;
+  }
+  footer .row {
+    text-align: center; // szöveg középre
+  }
+}
