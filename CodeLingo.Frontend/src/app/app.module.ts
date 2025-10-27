@@ -25,9 +25,9 @@ import { QuestionCountSelectorComponent } from './practice-starter/question-coun
     FooterComponent,
     LandingPageComponent,
     PracticeStarterComponent,
-    LanguageSelectorComponent
+    LanguageSelectorComponent,
     PracticeStarterComponent,
-    DifficultySelectorComponent
+    DifficultySelectorComponent,
     PracticeStarterComponent,
     QuestionCountSelectorComponent
   ],

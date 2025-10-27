@@ -5,6 +5,10 @@
     background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
     color: $light;
     padding: $space-6 0;
+    
+    .container {
+        max-width: 80dvh;
+    }
 
     //header
     .page-header {
