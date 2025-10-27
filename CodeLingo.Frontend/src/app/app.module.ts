@@ -13,6 +13,7 @@ import { PracticeStarterComponent } from './practice-starter/practice-starter.co
 import { LanguageSelectorComponent } from './practice-starter/language-selector/language-selector.component';
 import { FormsModule } from '@angular/forms';
 import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
+import { QuestionCountSelectorComponent } from './practice-starter/question-count-selector/question-count-selector.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,8 @@ import { DifficultySelectorComponent } from './practice-starter/difficulty-selec
     LanguageSelectorComponent
     PracticeStarterComponent,
     DifficultySelectorComponent
+    PracticeStarterComponent,
+    QuestionCountSelectorComponent
   ],
   imports: [
     BrowserModule,
