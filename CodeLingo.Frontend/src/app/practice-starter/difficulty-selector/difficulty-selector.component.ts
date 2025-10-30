@@ -1,14 +1,5 @@
 import { Component, Input, Output, OutputEmitterRef } from '@angular/core';
-
-//Difficulty level option interface
-export interface DifficultyLevel {
-  value: string;
-  label: string;
-  description: string;
-  multiplier: number;
-}
-
-
+import { DifficultyLevel } from '../../models/difficulty-level';
 
 @Component({
   selector: 'app-difficulty-selector',

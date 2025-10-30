@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ComponentState } from '../models/landing-page';
 import { Router } from '@angular/router';
 import { SessionConfig } from '../models/session-config';
+import { ComponentState } from '../models/component-state';
 
 @Component({
   selector: 'app-practice-starter',
