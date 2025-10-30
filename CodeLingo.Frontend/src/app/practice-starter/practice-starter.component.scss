@@ -5,9 +5,9 @@
     background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
     color: $light;
     padding: $space-6 0;
-    
+
     .container {
-        max-width: 80dvh;
+        max-width: 800px;
     }
 
     //header
@@ -33,6 +33,167 @@
             font-size: 1.2rem;
             color: $secondary-200;
             margin: 0;
+        }
+    }
+
+    // Configuration Form
+    .config-form {
+        .config-card {
+            border: 1px solid $secondary-400;
+            border-radius: 16px;
+            padding: $space-6;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    // API Error
+    .api-error {
+        margin-bottom: $space-5;
+
+        .alert {
+            background-color: rgba($danger-500, 0.15);
+            border: 1px solid $danger-400;
+            color: $danger-400;
+            padding: $space-4;
+            border-radius: 8px;
+            display: flex;
+            gap: $space-3;
+            align-items: center;
+
+            i {
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    // Action Buttons
+    .action-buttons {
+        display: flex;
+        gap: $space-4;
+        margin-bottom: $space-6;
+
+        .btn {
+            flex: 1;
+            padding: $space-4 $space-5;
+            font-size: 1.1rem;
+            font-weight: $font-weight-semibold;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: $space-2;
+
+
+            i {
+                font-size: 1.2rem;
+            }
+
+            &:disabled {
+                opacity: 0.5;
+            }
+        }
+
+        .start-button {
+            &:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba($primary-400, 0.3);
+            }
+        }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+
+    // Configuration Summary
+    .config-summary {
+        background-color: rgba($secondary-500, 0.1);
+        border: 1px solid $secondary-400;
+        border-radius: 12px;
+        padding: $space-5;
+
+        .summary-title {
+            font-size: 1.25rem;
+            color: $primary-400;
+            margin-bottom: $space-4;
+            display: flex;
+            align-items: center;
+            gap: $space-2;
+
+            i {
+                font-size: 1.4rem;
+            }
+        }
+
+        .summary-items {
+            display: flex;
+            flex-direction: column;
+            gap: $space-3;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: $space-3;
+            background-color: rgba($dark, 0.3);
+            border-radius: 8px;
+
+            .summary-label {
+                color: $secondary-200;
+                font-weight: $font-weight-medium;
+            }
+
+            .summary-value {
+                color: $light;
+                font-weight: $font-weight-bold;
+                text-transform: capitalize;
+            }
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+    .practice-starter {
+        padding: $space-4 0;
+
+        .page-header {
+            margin-bottom: $space-6;
+
+            .page-title {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: $space-2;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        .config-form {
+            .config-card {
+                padding: $space-4;
+            }
+        }
+
+        .action-buttons {
+            flex-direction: column;
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .config-summary {
+            .summary-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: $space-2;
+            }
         }
     }
 }
