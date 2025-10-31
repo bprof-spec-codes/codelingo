@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentState, Feature, GettingStartedStep } from '../models/landing-page';
 import { Router } from '@angular/router';
+import { ComponentState } from '../models/component-state';
+import { GettingStartedStep } from '../models/getting-started-step';
+import { Feature } from '../models/feautre';
 
 
 @Component({

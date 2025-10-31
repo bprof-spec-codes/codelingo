@@ -12,6 +12,81 @@
         </div>
 
         <!-- form -->
+        <div class="config-form">
+            <div class="config-card">
 
+                <!-- language selector -->
+                <app-language-selector [languages]="availableLanguages" [selectedLanguage]="config.language"
+                    (languageChange)="onLangugaeChange($event)">
+                </app-language-selector>
+
+                <!-- difficulty selector -->
+                <app-difficulty-selector [selectedDifficulty]="config.difficulty"
+                    (difficultyChange)="onDifficultyChange($event)">
+                </app-difficulty-selector>
+
+                <!-- question count selector -->
+                <app-question-count-selector [selectedCount]="config.questionCount"
+                    (countChange)="onQuestionCountChange($event)">
+                </app-question-count-selector>
+
+                <!-- API Error -->
+                <div *ngIf="state.error != null" class="api-error">
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-x-circle-fill"></i>
+                        {{ state.error }}
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-primary btn-lg start-button" [disabled]="isStartButtonDisabled"
+                        (click)="startSession()">
+
+                        <!-- Loading spinner -->
+                        <span *ngIf="state.isLoading" class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+
+                        <!-- Button text -->
+                        <span *ngIf="!state.isLoading">
+                            <i class="bi bi-rocket-takeoff"></i>
+                            Start Practice
+                        </span>
+                        <span *ngIf="state.isLoading">
+                            Starting Session...
+                        </span>
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary btn-lg" [disabled]="state.isLoading"
+                        routerLink="/landing-page">
+                        <i class="bi bi-arrow-left"></i>
+                        Back to Home
+                    </button>
+                </div>
+
+                <!-- Configuration Summary -->
+                <div class="config-summary" *ngIf="config.language && config.difficulty">
+                    <h3 class="summary-title">
+                        <i class="bi bi-clipboard-check"></i>
+                        Configuration Summary
+                    </h3>
+                    <div class="summary-items">
+                        <div class="summary-item">
+                            <span class="summary-label">Language:</span>
+                            <span class="summary-value">{{ config.language }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Difficulty:</span>
+                            <span class="summary-value">{{ config.difficulty }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Questions:</span>
+                            <span class="summary-value">{{ config.questionCount }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
