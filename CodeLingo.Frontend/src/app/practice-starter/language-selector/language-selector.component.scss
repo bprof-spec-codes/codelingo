@@ -1,0 +1,56 @@
+@import '../../../variables';
+
+.language-selector {
+    margin-bottom: $space-5;
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        gap: $space-2;
+        font-weight: $font-weight-semibold;
+        color: $primary-400;
+        margin-bottom: $space-2;
+        font-size: 1.3rem;
+
+        i {
+            font-size: 1.5rem;
+        }
+    }
+
+    .form-select {
+        padding: $space-3 $space-4;
+        font-size: 1rem;
+        border: 2px solid $secondary-400;
+        border-radius: 12px;
+        background-color: $dark-900;
+        color: $light;
+        transition: all 0.3s ease;
+
+        &:focus {
+            border-color: $primary-400;
+            box-shadow: 0 0 0 0.2rem rgba($primary-400, 0.25);
+            outline: none;
+        }
+
+        &:hover {
+            border-color: $primary-300;
+        }
+
+        option {
+            padding: $space-3;
+            background-color: $dark-900;
+            color: $light;
+
+            &:disabled {
+                color: $dark-700;
+            }
+        }
+    }
+
+    .form-text {
+        display: block;
+        margin-top: $space-2;
+        color: $secondary-200;
+    }
+}

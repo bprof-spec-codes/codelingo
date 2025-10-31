@@ -1,0 +1,39 @@
+<div class="question-count-selector">
+    <label class="form-label">
+        <i class="bi bi-list-ol"></i>
+        Number of Questions
+    </label>
+
+    <!-- preset options -->
+    <div class="preset-options">
+        <button *ngFor="let count of presetCounts" type="button" class="preset-button"
+            [ngClass]="isPresetSelected(count) ? 'active' : ''" 
+            (click)="onPresetSelect(count)">
+            {{ count }} questions
+        </button>
+    </div>
+
+    <!-- custom input -->
+    <div class="custom-input-group">
+        <label for="custom-count" class="custom-label">Or enter a custom number:</label>
+        <div class="input-wrapper">
+            <input type="number" id="custom-count" class="form-control" [min]="minCount" [max]="maxCount"
+                [value]="customCount || ''" (input)="onCustomInput($event)"
+                placeholder="Enter number ({{ minCount }}-{{ maxCount }})">
+            <span class="input-icon">
+                <i class="bi bi-pencil"></i>
+            </span>
+        </div>
+    </div>
+
+    <!-- current selection display -->
+    <div class="selection-display">
+        <i class="bi bi-check-circle-fill"></i>
+        Selected: <strong>{{ selectedCount }}</strong> questions
+    </div>
+
+    <!-- helper text -->
+    <small class="form-text">
+        Choose between {{ minCount }} and {{ maxCount }} questions
+    </small>
+</div>

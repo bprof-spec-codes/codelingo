@@ -1,0 +1,39 @@
+<div class="difficulty-selector">
+    <label class="form-label">
+        <i class="bi bi-speedometer2"></i>
+        Difficulty level
+    </label>
+
+    <div class="difficulty-options">
+        <div *ngFor="let level of difficultyLevels"
+            class="difficulty-card"
+            (click)="selectedDifficulty = level.value; difficultyChange.emit(level.value)"
+            [ngClass]="selectedDifficulty === level.value ? 'selected' : ''"
+            >
+            
+            <!-- radio buttons -->
+            <input type="radio"
+                name="difficulty"
+                [id]="'difficulty-' + level.value"
+                [value]="level.value"
+                [checked]="selectedDifficulty === level.value"
+                class="difficulty-radio"
+                >
+            
+            <!-- level info -->
+            <div class="difficulty-info">
+                <div class="difficulty-header">
+                    <span class="difficulty-label">{{level.label}}</span>
+                    <span class="difficulty-multiplier">x{{level.multiplier}}</span>
+                </div>
+                <p class="difficulty-description">{{level.description}}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- helper text -->
+    <small class="form-text">
+        Higher difficulty levels yield more points but are more challenging.
+    </small>
+
+</div>

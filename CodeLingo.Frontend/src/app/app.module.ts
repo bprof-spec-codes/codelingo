@@ -9,6 +9,11 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { PracticeStarterComponent } from './practice-starter/practice-starter.component';
+import { LanguageSelectorComponent } from './practice-starter/language-selector/language-selector.component';
+import { FormsModule } from '@angular/forms';
+import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
+import { QuestionCountSelectorComponent } from './practice-starter/question-count-selector/question-count-selector.component';
 
 @NgModule({
   declarations: [
@@ -18,11 +23,18 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    PracticeStarterComponent,
+    LanguageSelectorComponent,
+    PracticeStarterComponent,
+    DifficultySelectorComponent,
+    PracticeStarterComponent,
+    QuestionCountSelectorComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [
     provideHttpClient()

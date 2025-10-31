@@ -1,0 +1,109 @@
+@import '../../../variables';
+
+.difficulty-selector {
+    margin-bottom: $space-5;
+
+    .form-label {
+        display: flex;
+        gap: $space-2;
+        align-items: center;
+        justify-content: left;
+        font-weight: $font-weight-semibold;
+        color: $primary-400;
+        margin-bottom: $space-3;
+        font-size: 1.3rem;
+
+        i {
+            font-size: 1.5rem;
+        }
+    }
+
+    .difficulty-options {
+        display: flex;
+        gap: $space-4;
+        flex-direction: column;
+    }
+
+    .difficulty-card {
+        background-color: $dark-900;
+        border: 2px solid $secondary-400;
+        border-radius: 12px;
+        padding: $space-4;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-start;
+        gap: $space-3;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: $primary-400;
+            background-color: $dark-800;
+            transform: translateX(4px);
+        }
+
+        &.selected {
+            border-color: $primary-400;
+            background-color: rgba($primary-400, 0.1);
+            box-shadow: 0 0 0 0.2rem rgba($primary-400, 0.15);
+        }
+    }
+
+    .difficulty-radio {
+        margin-top: $space-1;
+        cursor: pointer;
+        width: 1.2rem;
+        height: 1.2rem;
+        accent-color: $primary-400;
+    }
+
+    .difficulty-info {
+        flex: 1;
+    }
+
+    .difficulty-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $space-2;
+    }
+
+    .difficulty-label {
+        font-weight: $font-weight-semibold;
+        font-size: 1.1rem;
+        color: $light;
+    }
+
+    .difficulty-multiplier {
+        background-color: $primary-400;
+        color: $dark;
+        padding: $space-1 $space-3;
+        border-radius: 12px;
+        font-weight: $font-weight-bold;
+        font-size: 0.875rem;
+    }
+
+    .difficulty-description {
+        color: $secondary-200;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .form-text {
+        display: block;
+        margin-top: $space-3;
+        color: $secondary-200;
+        font-size: 0.875rem;
+    }
+}
+
+
+// responsive adjustments
+@media (max-width: 767px) {
+  .difficulty-selector {
+    .difficulty-card {
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+}

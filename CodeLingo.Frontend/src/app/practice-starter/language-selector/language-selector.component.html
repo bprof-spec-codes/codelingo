@@ -1,0 +1,23 @@
+<div class="language-selector">
+    <label for="language-select" class="form-label">
+        <i class="bi bi-code-slash"></i>
+        Programming Language
+    </label>
+
+    <select id="language-select"
+            class="form-select"
+            [(ngModel)]="selectedLanguage"
+            (ngModelChange)="languageChange.emit($event)"
+            required>
+
+            <option value="" disabled>Choose a language...</option>
+            <option *ngFor="let language of languages" [value]="language">
+                {{language}}
+            </option>
+    </select>
+
+    <!--  helper text -->
+      <small class="form-text">
+        Select the programming language you want to practice.
+      </small>
+</div>
