@@ -9,7 +9,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
-import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { AdminQuestionListComponent } from './admin/admin-question-list/admin-question-list.component';
 
 @NgModule({
