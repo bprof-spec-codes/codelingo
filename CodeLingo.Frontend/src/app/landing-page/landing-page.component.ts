@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ComponentState, Feature, GettingStartedStep } from '../models/landing-page';
+import { Router } from '@angular/router';
+import { ComponentState } from '../models/component-state';
+import { GettingStartedStep } from '../models/getting-started-step';
+import { Feature } from '../models/feautre';
 
 
 @Component({
@@ -10,6 +13,8 @@ import { ComponentState, Feature, GettingStartedStep } from '../models/landing-p
 })
 export class LandingPageComponent implements OnInit {
   
+  constructor(private router: Router) { }
+
   // Component state
   state: ComponentState = {
     isLoading: false,
@@ -80,6 +85,7 @@ export class LandingPageComponent implements OnInit {
   tryCodeLingo(): void {
     console.log('Navigate to a demo practice session');
     // TODO: route to a demo practice session
+    this.router.navigate(['/practice/start']);
   }
 
   login(): void {
@@ -91,7 +97,7 @@ export class LandingPageComponent implements OnInit {
   startPractice(): void {
     console.log('Navigate to practice session');
     //TODO: route to practice session
-    this.isLoggedIn = false;
+    this.router.navigate(['/practice/start']);
   }
 
 
