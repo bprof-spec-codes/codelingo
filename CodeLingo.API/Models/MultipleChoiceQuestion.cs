@@ -24,4 +24,4 @@ namespace CodeLingo.API.Models
         public virtual Question Question { get; set; }
     }
 }
-}
+
