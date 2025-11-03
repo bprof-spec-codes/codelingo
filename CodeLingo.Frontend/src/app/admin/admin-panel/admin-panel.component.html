@@ -1,13 +1,13 @@
 <!-- Lista -->
 <div class="container-fluid bg-dark text-light min-vh-100 py-4">
     <div class="container">
-        <h2 class="mb-3 text-center">Admin dashboard</h2>
-        <p>
-        <p class="text-center mb-5">
-            Welcome to the Admin Dashboard. Here you can manage all questions in the system.
-            You can view the full list of questions, create new ones, edit or delete existing questions,
-            and import or export questions in supported formats (CSV/Aiken). Only users with admin privileges can access these
-            features.
+        <h2 class="mb-3 text-center">Admin Dashboard</h2>
+        <hr>
+        <p class=" mb-5">
+            Welcome to the Admin Dashboard! Here you can browse all existing questions in the system, review their
+            details, and make updates directly. Use the interface to edit question titles, content, difficulty levels,
+            and other attributes, ensuring your question bank stays accurate and up to date. You can also create new
+            questions seamlessly to expand the available content for users.
         </p>
         <h3>Questions</h3>
         <hr>
@@ -43,6 +43,25 @@
 
         <div class="text-center mt-4">
             <button class="btn btn-primary" (click)="createQuestion()">Create new question</button>
+        </div>
+        <div class="mt-5">
+            <h3>Import / Export questions</h3>
+            <hr>
+        <p class="mb-5">
+            The import and export tools allow you to efficiently manage questions in bulk. You can upload CSV or Aiken
+            files to quickly add multiple questions at once, or export the current question bank in CSV, JSON, or Aiken
+            format for backup, sharing, or offline editing. These features make it easy to maintain and distribute your
+            question data without manual entry.
+        </p>
+        <hr>
+        <div class="mt-4 mb-4 d-flex gap-2 flex-wrap">
+            <input type="file" (change)="onFileSelected($event)" class="form-control form-control-sm w-auto" />
+            <button class="btn btn-sm btn-outline-success" (click)="importQuestions('csv')">Import CSV</button>
+            <button class="btn btn-sm btn-outline-success" (click)="importQuestions('aiken')">Import Aiken</button>
+            <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('csv')">Export CSV</button>
+            <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('json')">Export JSON</button>
+            <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('aiken')">Export Aiken</button>
+        </div>
         </div>
     </div>
 </div>
@@ -85,6 +104,7 @@
                         <label class="form-check-label">Is active</label>
                     </div>
                 </form>
+
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>

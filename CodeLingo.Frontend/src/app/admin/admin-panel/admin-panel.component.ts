@@ -12,6 +12,7 @@ import { AdminService } from '../../services/admin.service';
 export class AdminPanelComponent implements OnInit {
   questions$!: Observable<Question[]>;
   selectedQuestion: Partial<Question> | null = null;
+  selectedFile: File | null = null;
 
   constructor(private adminService: AdminService) { }
 
@@ -103,6 +104,43 @@ createQuestion(): void {
     this.adminService.deleteQuestion(id).subscribe({
       next: () => this.loadQuestions(),
       error: () => alert('Nem sikerült a törlés.')
+    });
+  }
+  
+  //Import/Export
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+    /** CSV/Aiken importálás */
+  importQuestions(format?: 'csv' | 'aiken') {
+    if (!this.selectedFile) return;
+
+    this.adminService.importQuestions(this.selectedFile, format).subscribe({
+      next: (res) => {
+        console.log('Import response:', res);
+        // újra lekérhetjük a listát import után
+        this.questions$ = this.adminService.getQuestions();
+      },
+      error: (err) => console.error('Import error:', err)
+    });
+  }
+
+  /** Kérdések exportálása */
+  exportQuestions(format: 'csv' | 'json' | 'aiken' = 'json') {
+    this.adminService.exportQuestions({ format }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `questions.${format}`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => console.error('Export error:', err)
     });
   }
 }
