@@ -9,7 +9,8 @@
             and other attributes, ensuring your question bank stays accurate and up to date. You can also create new
             questions seamlessly to expand the available content for users.
         </p>
-        <h3>Questions</h3>
+        <h3>
+            Questions</h3>
         <hr>
         <table class="table table-dark table-striped table-hover align-middle">
             <thead class="table-accent">
@@ -18,7 +19,7 @@
                     <th>Language</th>
                     <th>Difficulty</th>
                     <th>Type</th>
-                    <th>Is active</th>
+                    <th>Active</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -29,39 +30,46 @@
                     <td>{{ q.difficulty }}</td>
                     <td>{{ q.type }}</td>
                     <td>
-                        <span [class.text-success]="q.isActive" [class.text-danger]="!q.isActive">
-                            {{ q.isActive ? 'Yes' : 'No' }}
+                        <span>
+                            <i *ngIf="q.isActive" class="bi bi-check-circle text-success"></i>
+                            <i *ngIf="!q.isActive" class="bi bi-x-circle text-danger"></i>
                         </span>
                     </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-info me-2" (click)="editQuestion(q)">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(q.id)">Delete</button>
+                    <td >
+                        <button class="btn btn-sm btn-outline-info me-2" (click)="editQuestion(q)"><i
+                                class="bi bi-pencil-square"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(q.id)"><i
+                                class="bi bi-trash3-fill"></i></button>
                     </td>
                 </tr>
             </tbody>
         </table>
 
         <div class="text-center mt-4">
-            <button class="btn btn-primary" (click)="createQuestion()">Create new question</button>
+            <button class="btn btn-primary" (click)="createQuestion()"><i class="bi bi-plus-circle"></i>
+                Add question
+</button>
         </div>
         <div class="mt-5">
             <h3>Import / Export questions</h3>
             <hr>
-        <p class="mb-5">
-            The import and export tools allow you to efficiently manage questions in bulk. You can upload CSV or Aiken
-            files to quickly add multiple questions at once, or export the current question bank in CSV, JSON, or Aiken
-            format for backup, sharing, or offline editing. These features make it easy to maintain and distribute your
-            question data without manual entry.
-        </p>
-        <hr>
-        <div class="mt-4 mb-4 d-flex gap-2 flex-wrap">
-            <input type="file" (change)="onFileSelected($event)" class="form-control form-control-sm w-auto" />
-            <button class="btn btn-sm btn-outline-success" (click)="importQuestions('csv')">Import CSV</button>
-            <button class="btn btn-sm btn-outline-success" (click)="importQuestions('aiken')">Import Aiken</button>
-            <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('csv')">Export CSV</button>
-            <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('json')">Export JSON</button>
-            <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('aiken')">Export Aiken</button>
-        </div>
+            <p class="mb-5">
+                The import and export tools allow you to efficiently manage questions in bulk. You can upload CSV or
+                Aiken
+                files to quickly add multiple questions at once, or export the current question bank in CSV, JSON, or
+                Aiken
+                format for backup, sharing, or offline editing. These features make it easy to maintain and distribute
+                your
+                question data without manual entry.
+            </p>
+            <div class="mt-4 mb-4 d-flex gap-2 flex-wrap">
+                <input type="file" (change)="onFileSelected($event)" class="form-control form-control-sm w-auto" />
+                <button class="btn btn-sm btn-primary" (click)="importQuestions('csv')">Import CSV</button>
+                <button class="btn btn-sm btn-primary" (click)="importQuestions('aiken')">Import Aiken</button>
+                <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('csv')">Export CSV</button>
+                <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('json')">Export JSON</button>
+                <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('aiken')">Export Aiken</button>
+            </div>
         </div>
     </div>
 </div>

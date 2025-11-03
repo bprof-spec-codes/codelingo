@@ -9,13 +9,15 @@ import { AdminService } from '../../services/admin.service';
   templateUrl: './admin-panel.component.html',
   styleUrl: './admin-panel.component.scss'
 })
+
+  //toDo: Question type input should be radio 
+
 export class AdminPanelComponent implements OnInit {
   questions$!: Observable<Question[]>;
   selectedQuestion: Partial<Question> | null = null;
   selectedFile: File | null = null;
 
   constructor(private adminService: AdminService) { }
-
   ngOnInit(): void {
     //this.loadQuestions();
     this.loadMockQuestions()
@@ -115,21 +117,18 @@ createQuestion(): void {
       this.selectedFile = file;
     }
   }
-    /** CSV/Aiken importálás */
   importQuestions(format?: 'csv' | 'aiken') {
     if (!this.selectedFile) return;
 
     this.adminService.importQuestions(this.selectedFile, format).subscribe({
       next: (res) => {
         console.log('Import response:', res);
-        // újra lekérhetjük a listát import után
-        this.questions$ = this.adminService.getQuestions();
+        //this.questions$ = this.adminService.getQuestions();
       },
       error: (err) => console.error('Import error:', err)
     });
   }
 
-  /** Kérdések exportálása */
   exportQuestions(format: 'csv' | 'json' | 'aiken' = 'json') {
     this.adminService.exportQuestions({ format }).subscribe({
       next: (blob) => {
