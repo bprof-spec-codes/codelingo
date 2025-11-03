@@ -51,4 +51,39 @@ export class AdminService {
   deleteQuestion(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/questions/${id}`);
   }
+   /** Import questions from CSV or Aiken file */
+  importQuestions(file: File, format?: 'csv' | 'aiken', async = false, batchSize = 100, validateOnly = false): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (format) formData.append('format', format);
+    formData.append('async', String(async));
+    formData.append('batchSize', String(batchSize));
+    formData.append('validateOnly', String(validateOnly));
+
+    return this.http.post(`${this.baseUrl}/questions/import`, formData);
+  }
+
+  /** Export questions with optional filters and format */
+  exportQuestions(params?: {
+    format?: 'csv' | 'json' | 'aiken',
+    language?: string,
+    difficulty?: string,
+    type?: string,
+    fromDate?: string,
+    toDate?: string,
+    async?: boolean
+  }): Observable<Blob> {
+    let httpParams = new HttpParams();
+    if (params) {
+      Object.keys(params).forEach(key => {
+        const value = (params as any)[key];
+        if (value !== undefined && value !== null) {
+          httpParams = httpParams.set(key, value.toString());
+        }
+      });
+    }
+
+    // Expecting binary file response
+    return this.http.get(`${this.baseUrl}/questions/export`, { params: httpParams, responseType: 'blob' });
+  }
 }
