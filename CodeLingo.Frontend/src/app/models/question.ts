@@ -8,8 +8,8 @@ export interface Question {
   explanation: string;
   tags: string;
   metadata: string;
-  createdAt: string;     
-  updatedAt: string;     
+  createdAt: Date;     
+  updatedAt: Date;     
   createdBy: string;
   isActive: boolean;
 }
