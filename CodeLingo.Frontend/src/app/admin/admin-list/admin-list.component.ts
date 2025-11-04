@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Question } from '../../models/question';
 
 @Component({
   selector: 'app-admin-list',
@@ -7,5 +9,6 @@ import { Component } from '@angular/core';
   styleUrl: './admin-list.component.scss'
 })
 export class AdminListComponent {
-
+  @Input() questions$!: Observable<Question[]>;
+  constructor(){}
 }

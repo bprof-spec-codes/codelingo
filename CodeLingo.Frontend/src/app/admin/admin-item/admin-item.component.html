@@ -1,1 +1,31 @@
-<p>admin-item works!</p>
+<div class="item-row rounded row align-items-center border-bottom small py-2 ">
+  <div class="col-2 text-truncate fw-bold text-primary">{{ question.title }}</div>
+  <div class="col-4 text-truncate">{{ question.questionText }}</div>
+  <div class="col-2">{{ question.difficulty }}</div>
+  <div class="col-2">{{ question.language }}</div>
+
+  <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+    <button class="btn btn-sm btn-outline-secondary" (click)="toggleDetails()">
+      <i [ngClass]="{ 'bi bi-chevron-down': !showDetails, 'bi bi-chevron-up': showDetails }"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés">
+      <i class="bi bi-pencil-square"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-danger d-none d-sm-inline" title="Törlés">
+      <i class="bi bi-trash"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Lenyíló rész -->
+<div class="details py-2" [class.show]="showDetails">
+  <div class="content small">
+    <p><strong>ID:</strong> {{ question.id }}</p>
+    <p><strong>Type:</strong> {{ question.type }}</p>
+    <p><strong>Explanation:</strong> {{ question.explanation }}</p>
+    <p><strong>Tag-ek:</strong> {{ question.tags }}</p>
+    <p><strong>Létrehozva:</strong> {{ question.createdAt | date }}</p>
+    <p><strong>Frissítve:</strong> {{ question.updatedAt | date }}</p>
+    <p><strong>Aktív:</strong> {{ question.isActive ? 'Igen' : 'Nem' }}</p>
+  </div>
+</div>

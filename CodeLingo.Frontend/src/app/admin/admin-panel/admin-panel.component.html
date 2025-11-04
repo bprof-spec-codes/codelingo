@@ -1,22 +1,35 @@
 <div class="bg-dark">
-    <div class="container px-4 py-4">
-        <h2 class="text-light mt-2 mb-4">Dashboard</h2>
-        <p class="text-light">Here is a report about questions, users, sessions.</p>
-        <div class="d-flex flex-row gap-4 text-center mt-2">
-            <div class="bg-dark rounded-2 px-4 py-4 border border-primary w-100">
-                <h5 class="text-primary">Total number of questions</h5>
-                <h3 class="text-light">17</h3>
-            </div>
+  <div class="container px-4 py-4">
+    <h2 class="text-light mt-2 mb-2">Dashboard</h2>
+    <p class="text-white-50">Here is a report about questions, users, sessions.</p>
 
-            <div class="bg-dark rounded-2 px-4 py-4 border border-primary w-100">
-                <h5 class="text-primary">Total users registered</h5>
-                <h3 class="text-light">513</h3>
-            </div>
-
-            <div class="bg-dark rounded-2 px-4 py-4 border border-primary w-100">
-                <h5 class="text-primary">Sessions this week</h5>
-                <h3 class="text-light">46</h3>
-            </div>
+    <!-- Reszponzív grid -->
+    <div class="row g-3 text-center mt-2">
+      <div class="col-12 col-md-4">
+        <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
+          <h5 class="text-primary">Total number of questions</h5>
+          <h3 class="text-light">17</h3>
         </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
+          <h5 class="text-primary">Total users registered</h5>
+          <h3 class="text-light">513</h3>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
+          <h5 class="text-primary">Sessions this week</h5>
+          <h3 class="text-light">46</h3>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Lista -->
+  <div class="container px-4 pb-4">
+    <app-admin-list [questions$]="questions$"></app-admin-list>
+  </div>
 </div>

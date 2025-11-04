@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminListComponent } from './admin/admin-list/admin-list.component';
 import { AdminEditComponent } from './admin/admin-edit/admin-edit.component';
 import { AdminItemComponent } from './admin/admin-item/admin-item.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -28,11 +29,12 @@ import { AdminItemComponent } from './admin/admin-item/admin-item.component';
     AdminListComponent,
     AdminEditComponent,
     AdminItemComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [
     provideHttpClient()

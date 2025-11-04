@@ -1,1 +1,21 @@
-<p>admin-list works!</p>
+<div class="text-light mt-4">
+    <h2 class="text-light mt-2 mb-2">Question list</h2>
+    <p class="text-white-50">This section displays all questions in a list. You can view details, edit, or
+        delete individual questions directly from the interface.</p>
+    <!-- Fejléc -->
+    <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
+        <div class="col-6 col-sm-2">Title</div>
+        <div class="col-6 col-sm-4">Question</div>
+        <div class="col-2 d-none d-sm-block">Difficulty</div>
+        <div class="col-2 d-none d-sm-block">Language</div>
+    </div>
+
+    <!-- Listaelemek -->
+    <div *ngIf="questions$ | async as questions; else loading">
+        <app-admin-item *ngFor="let q of questions" [question]="q"></app-admin-item>
+    </div>
+
+    <ng-template #loading>
+        <p class="text-muted small">Loading...</p>
+    </ng-template>
+</div>
