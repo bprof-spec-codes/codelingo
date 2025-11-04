@@ -1,122 +1,21 @@
-<!-- Lista -->
-<div class="container-fluid bg-dark text-light min-vh-100 py-4">
-    <div class="container">
-        <h2 class="mb-3 text-center">Admin Dashboard</h2>
-        <hr>
-        <p class=" mb-5">
-            Welcome to the Admin Dashboard! Here you can browse all existing questions in the system, review their
-            details, and make updates directly. Use the interface to edit question titles, content, difficulty levels,
-            and other attributes, ensuring your question bank stays accurate and up to date. You can also create new
-            questions seamlessly to expand the available content for users.
-        </p>
-        <h3>
-            Questions</h3>
-        <hr>
-        <table class="table table-dark table-striped table-hover align-middle">
-            <thead class="table-accent">
-                <tr>
-                    <th>Title</th>
-                    <th>Language</th>
-                    <th>Difficulty</th>
-                    <th>Type</th>
-                    <th>Active</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let q of questions$ | async">
-                    <td>{{ q.title }}</td>
-                    <td>{{ q.language }}</td>
-                    <td>{{ q.difficulty }}</td>
-                    <td>{{ q.type }}</td>
-                    <td>
-                        <span>
-                            <i *ngIf="q.isActive" class="bi bi-check-circle text-success"></i>
-                            <i *ngIf="!q.isActive" class="bi bi-x-circle text-danger"></i>
-                        </span>
-                    </td>
-                    <td >
-                        <button class="btn btn-sm btn-outline-info me-2" (click)="editQuestion(q)"><i
-                                class="bi bi-pencil-square"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" (click)="deleteQuestion(q.id)"><i
-                                class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="text-center mt-4">
-            <button class="btn btn-primary" (click)="createQuestion()"><i class="bi bi-plus-circle"></i>
-                Add question
-</button>
-        </div>
-        <div class="mt-5">
-            <h3>Import / Export questions</h3>
-            <hr>
-            <p class="mb-5">
-                The import and export tools allow you to efficiently manage questions in bulk. You can upload CSV or
-                Aiken
-                files to quickly add multiple questions at once, or export the current question bank in CSV, JSON, or
-                Aiken
-                format for backup, sharing, or offline editing. These features make it easy to maintain and distribute
-                your
-                question data without manual entry.
-            </p>
-            <div class="mt-4 mb-4 d-flex gap-2 flex-wrap">
-                <input type="file" (change)="onFileSelected($event)" class="form-control form-control-sm w-auto" />
-                <button class="btn btn-sm btn-primary" (click)="importQuestions('csv')">Import CSV</button>
-                <button class="btn btn-sm btn-primary" (click)="importQuestions('aiken')">Import Aiken</button>
-                <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('csv')">Export CSV</button>
-                <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('json')">Export JSON</button>
-                <button class="btn btn-sm btn-outline-primary" (click)="exportQuestions('aiken')">Export Aiken</button>
+<div class="bg-dark">
+    <div class="container px-4 py-4">
+        <h2 class="text-light mt-2 mb-4">Dashboard</h2>
+        <p class="text-light">Here is a report about questions, users, sessions.</p>
+        <div class="d-flex flex-row gap-4 text-center mt-2">
+            <div class="bg-dark rounded-2 px-4 py-4 border border-primary w-100">
+                <h5 class="text-primary">Total number of questions</h5>
+                <h3 class="text-light">17</h3>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- Create/Edit Modal -->
-<div *ngIf="selectedQuestion" class="modal show d-block" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark text-light">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ selectedQuestion.id ? 'Edit question' : 'New question' }}</h5>
-                <button type="button" class="btn-close btn-close-white" (click)="cancelEdit()"></button>
+            <div class="bg-dark rounded-2 px-4 py-4 border border-primary w-100">
+                <h5 class="text-primary">Total users registered</h5>
+                <h3 class="text-light">513</h3>
             </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label">Title</label>
-                        <input type="text" class="form-control" [(ngModel)]="selectedQuestion.title" name="title">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" rows="4" [(ngModel)]="selectedQuestion.questionText"
-                            name="questionText"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Language</label>
-                        <input type="text" class="form-control" [(ngModel)]="selectedQuestion.language" name="language">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Difficulty</label>
-                        <input type="text" class="form-control" [(ngModel)]="selectedQuestion.difficulty"
-                            name="difficulty">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Type</label>
-                        <input type="text" class="form-control" [(ngModel)]="selectedQuestion.type" name="type">
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="selectedQuestion.isActive"
-                            name="isActive">
-                        <label class="form-check-label">Is active</label>
-                    </div>
-                </form>
 
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
-                <button class="btn btn-primary" (click)="saveQuestion()">Save</button>
+            <div class="bg-dark rounded-2 px-4 py-4 border border-primary w-100">
+                <h5 class="text-primary">Sessions this week</h5>
+                <h3 class="text-light">46</h3>
             </div>
         </div>
     </div>
