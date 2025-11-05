@@ -25,7 +25,7 @@ loadMockQuestions(): void {
     {
       id: '1',
       type: 'radio',
-      language: 'hu',
+      language: 'JavaScript',
       difficulty: 'easy',
       title: 'JavaScript típusok',
       questionText: 'Melyik típus nem létezik JavaScriptben?',
@@ -40,7 +40,7 @@ loadMockQuestions(): void {
     {
       id: '2',
       type: 'radio',
-      language: 'en',
+      language: 'Python',
       difficulty: 'medium',
       title: 'Python lists',
       questionText: 'What is the result of len([1, [2, 3], 4])?',
@@ -55,7 +55,7 @@ loadMockQuestions(): void {
     {
       id: '3',
       type: 'radio',
-      language: 'hu',
+      language: 'C',
       difficulty: 'hard',
       title: 'C változók',
       questionText: 'Mi történik, ha egy pointert felszabadítás után újra felhasználsz?',
@@ -70,7 +70,7 @@ loadMockQuestions(): void {
     {
       id: '4',
       type: 'radio',
-      language: 'en',
+      language: 'Java',
       difficulty: 'medium',
       title: 'Java classes',
       questionText: 'Which keyword is used to inherit a class in Java?',
@@ -85,7 +85,7 @@ loadMockQuestions(): void {
     {
       id: '5',
       type: 'radio',
-      language: 'hu',
+      language: 'HTML',
       difficulty: 'easy',
       title: 'HTML alapok',
       questionText: 'Melyik HTML elem jelöli a legnagyobb címsort?',
