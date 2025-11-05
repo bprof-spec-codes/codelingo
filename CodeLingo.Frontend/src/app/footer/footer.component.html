@@ -1,28 +1,32 @@
 <footer class="bg-primary text-dark pt-4">
     <div class="container">
-        <div class="row">
-            <!--Brand section-->
-            <div class="col-md-4 mb-3">
-                <img src="/assets/brand/codelingo_logo_black.svg" alt="Logo" routerLink="/" width="186">
-                <p class="text-dark my-2">© 2025 Codelingo Team</p>
+        <div class="d-flex flex-column align-items-center">
+
+            <!-- Brand section -->
+            <div class="mb-2 md-2">
+                <img src="/assets/brand/codelingo_logo_black.svg" alt="Logo" routerLink="landing-page" width="186"
+                    class="mb-1">
             </div>
-            <!--Links section-->
-            <div class="col-md-4 mb-3">
-                <h5>Links</h5>
-                <ul class="list-unstyled">
-                    <li><a [routerLink]="" class="text-dark text-decoration-none">
-                            <i class="bi bi-house-door-fill me-2"></i>Home</a></li>
-                    <li><a [routerLink]="" class="text-dark text-decoration-none">
-                            <i class="bi bi-arrow-right-circle-fill me-2"></i>Practice</a></li>
-                    <li><a [routerLink]="" class="text-dark text-decoration-none">
-                            <i class="bi bi-star-fill me-2"></i>Leaderboard</a></li>
+            <!-- Links section -->
+            <div class="my-1 text-center ">
+                <ul class="list-unstyled d-flex flex-column gap-2">
+                    <li><a routerLink="landing-page" class="text-dark text-decoration-none">
+                            Home</a></li>
+                    <li><a routerLink="practice/start" class="text-dark text-decoration-none ">
+                            Practice</a></li>
+                    <li><a routerLink="leaderboard" class="text-dark text-decoration-none">
+                            Leaderboard</a></li>
                 </ul>
             </div>
-            <!--Social media section-->
-            <div class="col-md-4 mb-3">
-                <h5>Follow us</h5>
-                <a [routerLink]="" class="text-dark me-3"><i class="bi bi-github"></i></a>
+            <div class="my-1">
+                <h5>
+                    <a href="https://github.com/bprof-spec-codes/codelingo" target="_blank" class="text-dark ms-2">
+                        <i class="bi bi-github"></i>
+                    </a> Follow us
+                </h5>
             </div>
+                <p class="text-dark">© 2025 Codelingo Team</p>
         </div>
+
     </div>
 </footer>
