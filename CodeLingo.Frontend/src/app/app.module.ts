@@ -15,6 +15,7 @@ import { AdminListComponent } from './admin/admin-list/admin-list.component';
 import { AdminEditComponent } from './admin/admin-edit/admin-edit.component';
 import { AdminItemComponent } from './admin/admin-item/admin-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CountUpModule } from 'ngx-countup';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    CountUpModule
   ],
   providers: [
     provideHttpClient()

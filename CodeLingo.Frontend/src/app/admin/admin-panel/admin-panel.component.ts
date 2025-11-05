@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Question } from '../../models/question';
 import { AdminService } from '../../services/admin.service';
+import { CountUpModule } from 'ngx-countup';
 
 @Component({
   selector: 'app-admin-panel',
