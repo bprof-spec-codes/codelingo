@@ -1,16 +1,15 @@
 .details {
-  max-height: 0;
+  height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+  transition: all 0.3s ease;
   opacity: 0;
 }
 
 .details.show {
-  max-height: 200px;
-  overflow: auto;
+  height: auto;
+  overflow: visible;
   opacity: 1;
 }
-
 /* Lenyíló tartalom stílus */
 .details .content {
   background-color: #2a2a2a; /* világosabb a bg-dark-nál */
