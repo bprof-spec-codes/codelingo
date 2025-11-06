@@ -1,17 +1,20 @@
 <div class="text-light mt-4">
-    <h2 class="text-light mt-2 mb-2">Question list</h2>
+    <h2 class="text-light mt-2 mb-2">Questions</h2>
     <p class="text-white-50">This section displays all questions in a list. You can view details, edit, or
         delete individual questions directly from the interface.</p>
     <!-- Fejléc -->
+
     <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
         <div class="col-6 col-sm-2">Title</div>
         <div class="col-6 col-sm-4">Question</div>
         <div class="col-2 d-none d-sm-block">Difficulty</div>
         <div class="col-2 d-none d-sm-block">Language</div>
     </div>
-
     <!-- Listaelemek -->
     <div *ngIf="questions$ | async as questions; else loading">
+             <button class="fw-bold btn btn-outline-primary my-3 btn-sm w-100 text-white custom-btn">
+                <i class="bi bi-plus-circle"></i>
+                Add question</button>
         <app-admin-item *ngFor="let q of questions" [question]="q"></app-admin-item>
     </div>
 

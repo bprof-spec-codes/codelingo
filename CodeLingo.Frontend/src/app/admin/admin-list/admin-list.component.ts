@@ -10,10 +10,10 @@ import { Question } from '../../models/question';
 })
 export class AdminListComponent {
   @Input() questions$!: Observable<Question[]>;
+  
   constructor(){}
+
   onCreateQuestion() {
-  // Példa: routing új kérdés formra
-  // vagy modál megnyitása:
-  // this.modalService.open(CreateQuestionModalComponent);
+    //toDo
 }
 }
