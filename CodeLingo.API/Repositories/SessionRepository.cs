@@ -13,7 +13,27 @@ namespace CodeLingo.API.Repositories
         }
         public void Create(Session entity)
         {
-            this.DbContext.Add(entity);
+            this.DbContext.Sessions.Add(entity);
+        }
+
+        public void Delete(Session entity)
+        {
+            this.DbContext.Sessions.Remove(entity);
+        }
+
+        public Session Read(string id)
+        {
+            return this.DbContext.Sessions.Where(s => s.Id == id).SingleOrDefault();
+        }
+
+        public List<Session> ReadAll()
+        {
+            return this.DbContext.Sessions.ToList();
+        }
+
+        public void SaveChanges()
+        {
+            this.DbContext.SaveChanges();
         }
     }
 }
