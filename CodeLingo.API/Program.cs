@@ -3,6 +3,7 @@ using CodeLingo.API.Models;
 using Microsoft.EntityFrameworkCore;
 using static CodeLingo.API.Models.Enums;
 using System.Text.Json;
+using CodeLingo.API.Repositories;
 
 namespace CodeLingo.API
 {
@@ -16,8 +17,8 @@ namespace CodeLingo.API
 
             // EF Core + ConnectionString
             //var cs = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb"));
-
+            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb").UseLazyLoadingProxies());
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
