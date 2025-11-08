@@ -5,7 +5,7 @@ using static CodeLingo.API.DTOs.Session.SessionDtos;
 
 namespace CodeLingo.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/session")]
     [ApiController]
     public class SessionController : ControllerBase
     {
@@ -14,10 +14,10 @@ namespace CodeLingo.API.Controllers
         {
             this.sessionLogic = sessionLogic;
         }
-        [HttpPost("create")]
-        public void Create([FromBody] StartSessionRequestDto session)
+        [HttpPost("start")]
+        public StartSessionResponseDto Create([FromBody] StartSessionRequestDto session)
         {
-            sessionLogic.Create(session);
+            return sessionLogic.Create(session);
         }
 
         [HttpPut("update")]
