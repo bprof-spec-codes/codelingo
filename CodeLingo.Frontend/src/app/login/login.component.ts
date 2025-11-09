@@ -31,7 +31,9 @@ export class LoginComponent {
       return;
     }
 
-    const { usernameOrEmail, password } = this.form.value;
+    const { usernameOrEmail, password, rememberMe } = this.form.value;
+
+    this.authService.setRememberMe(rememberMe);
 
     const loginData: LoginRequest = {
       usernameOrEmail,

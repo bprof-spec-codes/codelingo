@@ -16,6 +16,8 @@ export class AuthService {
   private readonly API_URL = '/auth';
   private readonly REFRESH_MARGIN = 30; // seconds
 
+  private storage: Storage = localStorage;
+
   private isLoggedInSubject = new BehaviorSubject<boolean>(
     this.hasValidToken()
   );
@@ -69,20 +71,24 @@ export class AuthService {
       );
   }
 
+  setRememberMe(remember: boolean): void {
+    this.storage = remember ? this.storage : sessionStorage;
+  }
+
   private handleAuthSuccess(response: AuthResponse, updateLogin = true): void {
     const { accessToken, refreshToken, expiresIn } = response;
     const expiryTime = Date.now() + expiresIn * 1000;
 
-    localStorage.setItem('accessToken', accessToken);
-    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('tokenExpiry', expiryTime.toString());
+    this.storage.setItem('accessToken', accessToken);
+    if (refreshToken) this.storage.setItem('refreshToken', refreshToken);
+    this.storage.setItem('tokenExpiry', expiryTime.toString());
 
     if (updateLogin) this.isLoggedInSubject.next(true);
     this.scheduleTokenRefresh();
   }
 
   private scheduleTokenRefresh(): void {
-    const expiry = Number(localStorage.getItem('tokenExpiry'));
+    const expiry = Number(this.storage.getItem('tokenExpiry'));
     if (!expiry) return;
 
     const delay = Math.max(expiry - Date.now() - this.REFRESH_MARGIN * 1000, 0);
@@ -105,23 +111,23 @@ export class AuthService {
   }
 
   private clearAuthData(): void {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('tokenExpiry');
+    this.storage.removeItem('accessToken');
+    this.storage.removeItem('refreshToken');
+    this.storage.removeItem('tokenExpiry');
     clearTimeout(this.refreshTimer);
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem('accessToken');
+    return this.storage.getItem('accessToken');
   }
 
   private getRefreshToken(): string | null {
-    return localStorage.getItem('refreshToken');
+    return this.storage.getItem('refreshToken');
   }
 
   private hasValidToken(): boolean {
     const token = this.getAccessToken();
-    const expiry = Number(localStorage.getItem('tokenExpiry'));
+    const expiry = Number(this.storage.getItem('tokenExpiry'));
     return !!token && expiry > Date.now();
   }
 
