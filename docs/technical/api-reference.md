@@ -432,7 +432,7 @@ Globális vagy szűrt ranglista lekérése.
 Összes támogatott programozási nyelv listázása.
 
 **Headers:**
-- `string`: Authorization (Bearer token, admin required)
+- `string`: Authorization (Bearer token, no!! admin required)
 
 **Responses:**
 
@@ -992,5 +992,6 @@ Export job állapotának és letöltési link lekérése.
 - Nagy fájl import/export támogatás aszinkron feldolgozással
 - Job ID alapú állapot lekérdezés
 - Progress tracking az előrehaladás nyomon követésére
+
 
 
