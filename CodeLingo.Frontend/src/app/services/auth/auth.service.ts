@@ -28,8 +28,6 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {
     if (this.hasValidToken()) {
       this.scheduleTokenRefresh();
-    } else {
-      this.autoLogout();
     }
   }
 
@@ -104,10 +102,12 @@ export class AuthService {
     }, delay);
   }
 
-  private autoLogout(): void {
+  private autoLogout(redirect: boolean = true): void {
     this.clearAuthData();
     this.isLoggedInSubject.next(false);
-    this.router.navigate(['/login']);
+    if (redirect) {
+      this.router.navigate(['/login']);
+    }
   }
 
   private clearAuthData(): void {
