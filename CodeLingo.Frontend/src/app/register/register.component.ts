@@ -14,6 +14,7 @@ export class RegisterComponent {
   form: FormGroup;
   isLoading = false;
   serverError: string | null = null;
+  successMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -44,9 +45,13 @@ export class RegisterComponent {
     this.authService.register(registerData).subscribe({
       next: (res) => {
         console.log('Registration successful:', res);
-
         this.isLoading = false;
-        this.router.navigate(['/landing-page']);
+
+        this.successMessage = res.message || 'Registration successful!';
+
+        setTimeout(() => {
+          this.router.navigate(['/landing-page']);
+        }, 2000);
       },
       error: (err) => {
         console.error('Registration failed:', err);

@@ -115,6 +115,11 @@
       <div *ngIf="serverError" class="alert alert-danger" role="alert">
         {{ serverError }}
       </div>
+
+      <!-- Success alert -->
+      <div *ngIf="successMessage" class="alert alert-success" role="alert">
+        {{ successMessage }}
+      </div>
     </div>
   </div>
 </div>
