@@ -1,0 +1,120 @@
+<div class="register-page">
+  <div
+    class="container d-flex justify-content-center align-items-center min-vh-100"
+  >
+    <div
+      class="card dark-card-lg shadow p-4"
+      style="max-width: 400px; width: 100%"
+    >
+      <h2 class="h3 mb-4 text-center">Create Your Account</h2>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <!-- Username -->
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            formControlName="username"
+            placeholder="Choose a username"
+            [class.is-invalid]="
+              username?.invalid && (username?.dirty || username?.touched)
+            "
+            required
+          />
+          <div
+            *ngIf="username?.invalid && (username?.dirty || username?.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="username?.errors?.['required']"
+              >Username is required.</span
+            >
+            <span *ngIf="username?.errors?.['minlength']"
+              >Must be at least 3 characters long.</span
+            >
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+            placeholder="you@example.com"
+            [class.is-invalid]="
+              email?.invalid && (email?.dirty || email?.touched)
+            "
+            required
+          />
+          <div
+            *ngIf="email?.invalid && (email?.dirty || email?.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="email?.errors?.['required']">Email is required.</span>
+            <span *ngIf="email?.errors?.['email']">Invalid email format.</span>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            formControlName="password"
+            placeholder="Create a strong password"
+            [class.is-invalid]="
+              password?.invalid && (password?.dirty || password?.touched)
+            "
+            required
+          />
+          <div
+            *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="password?.errors?.['required']"
+              >Password is required.</span
+            >
+            <span *ngIf="password?.errors?.['minlength']"
+              >At least 8 characters required.</span
+            >
+            <span *ngIf="password?.errors?.['pattern']">
+              Must include uppercase, lowercase, and a number.
+            </span>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn btn-primary w-100"
+          [disabled]="isLoading || form.invalid"
+        >
+          <ng-container *ngIf="!isLoading; else loadingTpl"
+            >Register</ng-container
+          >
+          <ng-template #loadingTpl>
+            <span class="loading-dots"
+              ><span>.</span><span>.</span><span>.</span></span
+            >
+          </ng-template>
+        </button>
+      </form>
+
+      <p class="caption text-center mt-3 login-link">
+        Already have an account?
+        <a routerLink="/login" class="text-primary">Login</a>
+      </p>
+
+      <!-- Global server error -->
+      <div *ngIf="serverError" class="alert alert-danger" role="alert">
+        {{ serverError }}
+      </div>
+    </div>
+  </div>
+</div>

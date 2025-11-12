@@ -19,8 +19,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
 import { QuestionCountSelectorComponent } from './practice-starter/question-count-selector/question-count-selector.component';
 import { LoginComponent } from './login/login.component';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AuthMockInterceptor } from './interceptors/auth-mock.interceptor';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,7 @@ import { AuthMockInterceptor } from './interceptors/auth-mock.interceptor';
     PracticeStarterComponent,
     QuestionCountSelectorComponent,
     LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +50,6 @@ import { AuthMockInterceptor } from './interceptors/auth-mock.interceptor';
   providers: [
     provideHttpClient(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthMockInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
