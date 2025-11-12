@@ -9,18 +9,31 @@
       <h2 class="h3 mb-4 text-center">Welcome Back</h2>
 
       <form [formGroup]="form" (ngSubmit)="submit()">
+        <!-- Username -->
         <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
+          <label for="username" class="form-label">Username</label>
           <input
-            type="email"
+            type="text"
             class="form-control"
-            id="email"
-            formControlName="usernameOrEmail"
-            placeholder="you@example.com"
+            id="username"
+            formControlName="username"
+            placeholder="Enter your username"
+            [class.is-invalid]="
+              username?.invalid && (username?.dirty || username?.touched)
+            "
             required
           />
+          <div
+            *ngIf="username?.invalid && (username?.dirty || username?.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="username?.errors?.['required']"
+              >Username is required.</span
+            >
+          </div>
         </div>
 
+        <!-- Password -->
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
           <input
@@ -29,10 +42,22 @@
             id="password"
             formControlName="password"
             placeholder="Enter your password"
+            [class.is-invalid]="
+              password?.invalid && (password?.dirty || password?.touched)
+            "
             required
           />
+          <div
+            *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+            class="invalid-feedback"
+          >
+            <span *ngIf="password?.errors?.['required']"
+              >Password is required.</span
+            >
+          </div>
         </div>
 
+        <!-- Remember Me -->
         <div class="form-check mb-4">
           <input
             class="form-check-input"
@@ -43,6 +68,7 @@
           <label class="form-check-label" for="rememberMe">Remember me</label>
         </div>
 
+        <!-- Submit -->
         <button
           type="submit"
           class="btn btn-primary w-100"
@@ -59,8 +85,13 @@
 
       <p class="caption text-center mt-3 login-link">
         Don't have an account?
-        <a href="#" class="text-primary">Sign up</a>
+        <a routerLink="/register" class="text-primary">Sign up</a>
       </p>
+
+      <!-- Server error -->
+      <div *ngIf="serverError" class="alert alert-danger" role="alert">
+        {{ serverError }}
+      </div>
     </div>
   </div>
 </div>

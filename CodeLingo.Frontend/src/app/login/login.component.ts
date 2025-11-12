@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   form: FormGroup;
   isLoading = false;
+  serverError: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -20,7 +21,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.form = this.fb.group({
-      usernameOrEmail: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', Validators.required],
       rememberMe: [false],
     });
@@ -31,12 +32,13 @@ export class LoginComponent {
       return;
     }
 
-    const { usernameOrEmail, password, rememberMe } = this.form.value;
+    this.serverError = null;
+    const { username, password, rememberMe } = this.form.value;
 
     this.authService.setRememberMe(rememberMe);
 
     const loginData: LoginRequest = {
-      usernameOrEmail,
+      usernameOrEmail: username,
       password,
     };
 
@@ -51,7 +53,19 @@ export class LoginComponent {
       error: (err) => {
         console.error('Login error:', err);
         this.isLoading = false;
+
+        this.serverError =
+          typeof err === 'string'
+            ? err
+            : 'Invalid credentials or server error. Please try again.';
       },
     });
+  }
+
+  get username() {
+    return this.form.get('username');
+  }
+  get password() {
+    return this.form.get('password');
   }
 }
