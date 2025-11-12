@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navigation-header',
@@ -8,9 +9,11 @@ import { AuthService } from '../services/auth/auth.service';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  isLoggedIn$;
+  isLoggedIn$!: Observable<boolean>;
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService) {}
+
+  ngOnInit(): void {
     this.isLoggedIn$ = this.auth.isLoggedIn$;
   }
 
