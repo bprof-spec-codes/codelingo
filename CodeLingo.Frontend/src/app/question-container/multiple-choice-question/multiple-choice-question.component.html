@@ -24,5 +24,12 @@
         <p>{{ question.questionText }}</p>
     </div>
 
+    <!-- selection info -->
+    <div class="selection-info">
+        <i class="bi" [ngClass]="question.allowMultipleSelection ? 'bi-check-square' : 'bi-circle'"></i>
+        <span *ngIf="question.allowMultipleSelection">Select all that apply</span>
+        <span *ngIf="!question.allowMultipleSelection">Select one answer</span>
+    </div>
+
 
 </div>

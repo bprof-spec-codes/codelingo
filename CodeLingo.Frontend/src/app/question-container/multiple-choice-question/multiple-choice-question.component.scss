@@ -64,4 +64,21 @@
             margin: 0;
         }
     }
+
+    // selection info
+    .selection-info {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        color: $secondary-200;
+        font-size: 0.95rem;
+        font-weight: $font-weight-medium;
+        margin-bottom: $space-4;
+
+        i {
+            color: $primary-400;
+            font-size: 1.1rem;
+        }
+    }
+
 }
