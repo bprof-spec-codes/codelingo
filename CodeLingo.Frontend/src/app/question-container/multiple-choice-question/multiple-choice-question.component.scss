@@ -48,4 +48,20 @@
             }
         }
     }
+
+    // question text
+    .question-text {
+        background-color: $dark-900;
+        border-left: 4px solid $primary-400;
+        padding: $space-4;
+        border-radius: 8px;
+        margin-bottom: $space-5;
+
+        p {
+            color: $light;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+    }
 }
