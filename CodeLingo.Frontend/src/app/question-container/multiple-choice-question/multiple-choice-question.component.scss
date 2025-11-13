@@ -81,4 +81,90 @@
         }
     }
 
+    // answer options
+    .answer-options {
+        display: flex;
+        flex-direction: column;
+        gap: $space-3;
+        margin-bottom: $space-5;
+    }
+
+    .answer-card {
+        background-color: $dark-900;
+        border: 2px solid $secondary-400;
+        border-radius: 12px;
+        padding: $space-4;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-start;
+        gap: $space-3;
+        transition: all 0.3s ease;
+
+        &:hover:not(.disabled) {
+            border-color: $primary-400;
+            background-color: $dark-800;
+            transform: translateX(4px);
+        }
+
+        &:focus {
+            outline: 2px solid $primary-400;
+            outline-offset: 2px;
+        }
+
+        &.selected {
+            border-color: $primary-400;
+            background-color: rgba($primary-400, 0.1);
+            box-shadow: 0 0 0 0.2rem rgba($primary-400, 0.15);
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+
+            &:hover {
+                transform: none;
+            }
+        }
+    }
+
+    .answer-selector {
+        margin-top: $space-1;
+        pointer-events: none;
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 1.2rem;
+            height: 1.2rem;
+            accent-color: $primary-400;
+
+            &:disabled {
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    .answer-content {
+        flex: 1;
+
+        .answer-text {
+            color: $light;
+            font-size: 1.05rem;
+            font-weight: $font-weight-medium;
+            cursor: inherit;
+            margin: 0;
+            display: block;
+            line-height: 1.5;
+            user-select: none;
+        }
+
+        .answer-image {
+            margin-top: $space-3;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid $secondary-400;
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MultipleChoiceQuestion } from '../../models/multiple-choice-question';
+import { AnswerOption } from '../../models/answer-option';
 
 @Component({
   selector: 'app-multiple-choice-question',
@@ -27,7 +28,7 @@ export class MultipleChoiceQuestionComponent {
         {
           "id": "opt-1",
           "text": "ToUpper()",
-          "order": 1
+          "order": 1,
         },
         {
           "id": "opt-2",
@@ -61,6 +62,54 @@ export class MultipleChoiceQuestionComponent {
       "isActive": false
 
     };
+  }
+
+
+  selectedAnswerIds: string[] = [];
+  isSubmitted: boolean = false;
+
+  // toggle option selection
+  toggleOption(optionId: string): void {
+    if (this.isSubmitted) {
+      return; // prevent changes after submission
+    }
+
+    if (this.question.allowMultipleSelection) {
+      // multiple selection mode
+      const index = this.selectedAnswerIds.indexOf(optionId);
+      if (index > -1) {
+        this.selectedAnswerIds.splice(index, 1);
+        //console.log('Option deselected:', optionId);
+      } else {
+        this.selectedAnswerIds.push(optionId);
+        //console.log('Option selected:', optionId);
+      }
+    } else {
+      // single selection mode
+      this.selectedAnswerIds = [optionId];
+      //console.log('Option selected:', optionId);
+    }
+
+    //console.log('Currently selected answers:', this.selectedAnswerIds);
+  }
+
+  // check if an option is selected
+  isOptionSelected(optionId: string): boolean {
+    return this.selectedAnswerIds.includes(optionId);
+  }
+
+  // sort and optionally shuffle options
+  getSortedOptions(): AnswerOption[] {
+    const sorted = [...this.question.options].sort((a, b) => a.order - b.order);
+
+    if (this.question.shuffleOptions) {
+      for (let i = sorted.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
+      }
+    }
+
+    return sorted;
   }
 
 }

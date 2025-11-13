@@ -32,4 +32,31 @@
     </div>
 
 
+    <!-- answer options -->
+    <div class="answer-options">
+        <div *ngFor="let option of getSortedOptions()"
+            class="answer-card"
+            [class.selected]="isOptionSelected(option.id)"
+            [class.disabled]="isSubmitted"
+            (click)="toggleOption(option.id)">
+
+            <div class="answer-selector">
+                <input [type]="question.allowMultipleSelection ? 'checkbox' : 'radio'"
+                    [name]="question.id"
+                    [id]="option.id" 
+                    [value]="option.id"
+                    [checked]="isOptionSelected(option.id)"
+                    [disabled]="isSubmitted"
+                    (click)="$event.stopPropagation()">
+            </div>
+
+            <div class="answer-content">
+                <span class="answer-text">
+                    {{ option.text }}
+                </span>
+                <img *ngIf="option.imageUrl" [src]="option.imageUrl" [alt]="option.text" class="answer-image">
+            </div>
+        </div>
+    </div>
+
 </div>
