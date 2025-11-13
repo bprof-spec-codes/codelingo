@@ -286,3 +286,61 @@
         }
     }
 }
+
+
+// responsive adjustments
+@media (max-width: 767px) {
+    .multiple-choice-question {
+        padding: $space-3;
+
+        .question-header {
+            .question-title {
+                font-size: 1.4rem;
+            }
+
+            .question-meta {
+                gap: $space-3;
+
+                .meta-item {
+                    font-size: 0.85rem;
+                }
+            }
+        }
+
+        .question-text p {
+            font-size: 1rem;
+        }
+
+        .answer-card {
+            &:hover:not(.disabled) {
+                transform: none;
+            }
+        }
+
+        .submit-section .btn-submit {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .no-question {
+        padding: $space-5 $space-3;
+        min-height: 300px;
+
+        .no-question-content {
+            padding: $space-6 $space-4;
+
+            i {
+                font-size: 3rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+        }
+    }
+}
