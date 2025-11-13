@@ -1,1 +1,22 @@
-<p>multiple-choice-question works!</p>
+<div class="multiple-choice-question">
+
+    <!-- header -->
+    <div class="question-header">
+        <h2 class="question-title">{{ question.title }}</h2>
+        <div class="question-meta">
+            <span class="meta-item">
+                <i class="bi bi-code-square"></i>
+                {{ question.language | uppercase }}
+            </span>
+            <span class="meta-item difficulty" [ngClass]="'difficulty-' + question.difficulty">
+                <i class="bi bi-bar-chart-fill"></i>
+                {{ question.difficulty | titlecase }}
+            </span>
+            <span class="meta-item">
+                <i class="bi bi-clock"></i>
+                {{ question.metadata.estimatedTimeSeconds }}s
+            </span>
+        </div>
+    </div>
+
+</div>
