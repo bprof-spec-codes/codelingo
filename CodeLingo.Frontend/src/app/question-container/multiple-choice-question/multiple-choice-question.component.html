@@ -34,20 +34,14 @@
 
     <!-- answer options -->
     <div class="answer-options">
-        <div *ngFor="let option of getSortedOptions()"
-            class="answer-card"
-            [class.selected]="isOptionSelected(option.id)"
-            [class.disabled]="isSubmitted"
+        <div *ngFor="let option of getSortedOptions()" class="answer-card"
+            [class.selected]="isOptionSelected(option.id)" [class.disabled]="isSubmitted"
             (click)="toggleOption(option.id)">
 
             <div class="answer-selector">
-                <input [type]="question.allowMultipleSelection ? 'checkbox' : 'radio'"
-                    [name]="question.id"
-                    [id]="option.id" 
-                    [value]="option.id"
-                    [checked]="isOptionSelected(option.id)"
-                    [disabled]="isSubmitted"
-                    (click)="$event.stopPropagation()">
+                <input [type]="question.allowMultipleSelection ? 'checkbox' : 'radio'" [name]="question.id"
+                    [id]="option.id" [value]="option.id" [checked]="isOptionSelected(option.id)"
+                    [disabled]="isSubmitted" (click)="$event.stopPropagation()">
             </div>
 
             <div class="answer-content">
@@ -59,4 +53,24 @@
         </div>
     </div>
 
+    <!-- submit section -->
+    <div class="submit-section">
+        <button type="button"
+            class="btn btn-submit"
+            [disabled]="!canSubmit()"
+            (click)="submitAnswer()">
+            <i class="bi bi-check-circle-fill"></i>
+            Submit Answer
+        </button>
+
+        <p class="submit-hint" *ngIf="!isSubmitted && selectedAnswerIds.length === 0">
+            <i class="bi bi-info-circle"></i>
+            Please select {{ question.allowMultipleSelection ? 'at least one option' : 'an option' }} to continue
+        </p>
+
+        <p class="submit-success" *ngIf="isSubmitted">
+            <i class="bi bi-check-circle-fill"></i>
+            Answer submitted successfully
+        </p>
+    </div>
 </div>

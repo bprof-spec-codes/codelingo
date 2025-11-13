@@ -112,4 +112,18 @@ export class MultipleChoiceQuestionComponent {
     return sorted;
   }
 
+
+  // check if submission is allowed
+  canSubmit(): boolean {
+    return this.selectedAnswerIds.length > 0 && !this.isSubmitted;
+  }
+
+  // submit the selected answers
+  submitAnswer(): void {
+    if (this.canSubmit()) {
+      //console.log('Submitting answer(s):', this.selectedAnswerIds);
+      this.isSubmitted = true;
+      this.answerSubmitted.emit([...this.selectedAnswerIds]);
+    }
+  }
 }
