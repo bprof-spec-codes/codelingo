@@ -26,7 +26,7 @@ import { MultipleChoiceQuestionComponent } from './question-container/multiple-c
     SidebarComponent,
     FooterComponent,
     LandingPageComponent,
-    LeaderboardComponent
+    LeaderboardComponent,
     PracticeStarterComponent,
     LanguageSelectorComponent,
     PracticeStarterComponent,
