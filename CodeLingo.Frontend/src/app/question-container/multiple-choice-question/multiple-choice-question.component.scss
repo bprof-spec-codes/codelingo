@@ -242,3 +242,47 @@
     }
 
 }
+
+
+
+// no question state
+.no-question {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: $space-8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+
+    .no-question-content {
+        text-align: center;
+        background-color: $dark-900;
+        border: 2px dashed $secondary-400;
+        border-radius: 16px;
+        padding: $space-8 $space-6;
+        max-width: 35rem;
+
+        i {
+            font-size: 4rem;
+            color: $secondary-400;
+            margin-bottom: $space-4;
+            display: block;
+            opacity: 0.7;
+        }
+
+        h3 {
+            color: $light;
+            font-size: 1.5rem;
+            font-weight: $font-weight-bold;
+            margin-bottom: $space-3;
+        }
+
+        p {
+            color: $secondary-200;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+    }
+}

@@ -1,4 +1,4 @@
-<div class="multiple-choice-question">
+<div class="multiple-choice-question" *ngIf="question; else noQuestion">
 
     <!-- header -->
     <div class="question-header">
@@ -74,3 +74,13 @@
         </p>
     </div>
 </div>
+
+<ng-template #noQuestion>
+    <div class="no-question">
+        <div class="no-question-content">
+            <i class="bi bi-question-circle"></i>
+            <h3>No Question Available</h3>
+            <p>There is currently no question to display. Please try again or contact support if the problem persists.
+            </p>
+        </div>
+    </div>
