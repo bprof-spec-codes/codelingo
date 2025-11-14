@@ -10,9 +10,13 @@ import { Question, MultipleChoiceQuestion, CodeCompletionQuestion, QuestionType 
 export class AdminItemComponent {
   @Input() question!: Question;
   @Output() questionUpdated = new EventEmitter<Question>();
+  @Output() delete = new EventEmitter<string>();
   QuestionType = QuestionType;
   showDetails = false;
   editing = false; // szerkesztési állapot
+deleteItem() {
+  this.delete.emit(this.question.id);
+}
   startEdit() {
     this.editing = true;
   }
@@ -20,7 +24,7 @@ export class AdminItemComponent {
   cancelEdit() {
     this.editing = false;
   }
-onSave(updatedQuestion: Question) {
+  onSave(updatedQuestion: Question) {
     this.editing = false;
     this.questionUpdated.emit(updatedQuestion); // értesíti a szülőt
   }

@@ -120,15 +120,11 @@ export class AdminPanelComponent implements OnInit {
     this.questions$ = of(mockQuestions);
   }
   onQuestionUpdated(updated: Question) {
-    this.adminService.updateQuestion(updated.id, updated).subscribe(saved => {
-
-      // itt frissíted a listát
-      this.questions$ = this.questions$.pipe(
-        map(arr => arr.map(q => q.id === saved.id ? saved : q))
-      );
-
-    });
+    this.adminService.updateQuestion(updated.id, updated)
   }
+  onDelete(id: string) {
+    this.adminService.deleteQuestion(id)
+}
   
 
 }

@@ -12,10 +12,13 @@ import { AdminService } from '../../services/admin.service';
 export class AdminListComponent {
   @Input() questions$!: Observable<Question[]>;
   @Output() questionUpdated = new EventEmitter<Question>();
-  
-onItemUpdated(q: Question) {
-  this.questionUpdated.emit(q);
-}
+  @Output() delete = new EventEmitter<string>();
+  onItemDelete(id: string) {
+    this.delete.emit(id);
+  }
+  onItemUpdated(q: Question) {
+    this.questionUpdated.emit(q);
+  }
   QuestionType = QuestionType
   constructor(private service: AdminService) { }
 
