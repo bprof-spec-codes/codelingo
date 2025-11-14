@@ -19,6 +19,7 @@ namespace CodeLingo.API.Logics
 
         public StartSessionResponseDto Create(StartSessionRequestDto session)
         {
+            // TODO: Check that user ID is valid and return with 404 error if not present
             Session DatabaseSession = new Session();
             DatabaseSession.UserId = session.UserId;
             DatabaseSession.Language = session.Language;
@@ -27,7 +28,11 @@ namespace CodeLingo.API.Logics
 
             repository.Create(DatabaseSession);
 
-            List<Question> questions = this.questionRepository.getRandomQuestions(session.RequestedQuestionCount);
+            List<Question> questions = this.questionRepository.getRandomQuestions(
+                session.RequestedQuestionCount,
+                session.Language,
+                DatabaseSession.Difficulty
+                );
             List<SessionQuestion> sessionQuestions = new List<SessionQuestion>();
             foreach (Question question in questions)
             {

@@ -21,6 +21,12 @@ namespace CodeLingo.API.Repositories
             this.DbContext.Sessions.Remove(entity);
         }
 
+        public List<Session> GetOutdatedSessions()
+        {
+            DateTime yestterday = DateTime.Now.AddHours(-24);
+            return this.DbContext.Sessions.Where(s => s.Status == Enums.SessionStatus.Active && s.CreatedAt < yestterday).ToList();
+        }
+
         public Session Read(string id)
         {
             return this.DbContext.Sessions.Where(s => s.Id == id).SingleOrDefault();
