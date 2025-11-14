@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Question } from '../../models/question';
+import { Question, MultipleChoiceQuestion, CodeCompletionQuestion, QuestionType } from '../../models/question';
 import { AdminService } from '../../services/admin.service';
 import { CountUpModule } from 'ngx-countup';
 
@@ -21,14 +21,15 @@ export class AdminPanelComponent implements OnInit {
     //this.loadQuestions();
     this.loadMockQuestions()
   }
-loadMockQuestions(): void {
+loadMockQuestions() {
   const mockQuestions: Question[] = [
+    // MultipleChoice
     {
       id: '1',
-      type: 'radio',
+      type: QuestionType.MultipleChoice,
       language: 'JavaScript',
       difficulty: 'easy',
-      title: 'JavaScript típusok',
+      title: 'JS típusok',
       questionText: 'Melyik típus nem létezik JavaScriptben?',
       explanation: 'A "character" típus nem létezik JavaScriptben.',
       tags: 'javascript,types',
@@ -36,66 +37,82 @@ loadMockQuestions(): void {
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'teszt-admin',
-      isActive: true
-    },
+      isActive: true,
+      options: ['string', 'number', 'boolean', 'character'],
+      correctAnswerIds: ['character'],
+      allowMultipleSelection: false,
+      shuffleOptions: true
+    } as MultipleChoiceQuestion,
+
+    // CodeCompletion
     {
       id: '2',
-      type: 'radio',
+      type: QuestionType.CodeCompletion,
       language: 'Python',
       difficulty: 'medium',
       title: 'Python lists',
-      questionText: 'What is the result of len([1, [2, 3], 4])?',
-      explanation: 'It returns 3 because there are three elements in the list.',
+      questionText: 'Írd ki a hiányzó kódot, hogy a list hosszát kapd meg!',
+      explanation: 'A len() függvény adja vissza a lista hosszát.',
       tags: 'python,lists',
       metadata: '',
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'admin',
-      isActive: true
-    },
+      isActive: true,
+      starterCode: '[1, [2, 3], 4]',
+      correctAnswer: 'len([1, [2, 3], 4])',
+      hints: ['Használd a len() függvényt'],
+      constraints: ['Ne használj ciklust']
+    } as CodeCompletionQuestion,
+
+    // TrueFalse
     {
       id: '3',
-      type: 'radio',
+      type: QuestionType.TrueFalse,
       language: 'C',
       difficulty: 'hard',
-      title: 'C változók',
-      questionText: 'Mi történik, ha egy pointert felszabadítás után újra felhasználsz?',
-      explanation: 'Ez "dangling pointer" hibát okoz, ami undefined behavior-hoz vezet.',
-      tags: 'c,pointer,memory',
-      metadata: '',
+      title: 'C pointer',
+      questionText: 'A pointer felszabadítás után használható újra?',
+      explanation: 'Ez "dangling pointer" hibát okoz.',
+      tags: 'c,pointer',
+      metadata: 'False',
       createdAt: new Date(),
       updatedAt: new Date(),
-      createdBy: 'teszt-admin',
+      createdBy: 'admin',
       isActive: true
     },
+
+    // FillInBlank
     {
       id: '4',
-      type: 'radio',
+      type: QuestionType.FillInBlank,
       language: 'Java',
       difficulty: 'medium',
-      title: 'Java classes',
-      questionText: 'Which keyword is used to inherit a class in Java?',
-      explanation: 'The keyword "extends" is used for class inheritance in Java.',
-      tags: 'java,oopp,inheritance',
-      metadata: '',
+      title: 'Java class inheritance',
+      questionText: 'Melyik kulcsszó használható öröklésre? ___',
+      explanation: 'A "extends" kulcsszó használható.',
+      tags: 'java,oopp',
+      metadata: 'extends',
       createdAt: new Date(),
       updatedAt: new Date(),
-      createdBy: 'system-admin',
+      createdBy: 'admin',
       isActive: true
     },
+
+    // CodeReview
     {
       id: '5',
-      type: 'radio',
+      type: QuestionType.CodeReview,
       language: 'HTML',
       difficulty: 'easy',
       title: 'HTML alapok',
-      questionText: 'Melyik HTML elem jelöli a legnagyobb címsort?',
+      questionText: 'Melyik elem jelöli a legnagyobb címsort?',
       explanation: 'Az <h1> jelöli a legnagyobb címsort.',
-      tags: 'html,frontend,markup',
-      metadata: '',
+      tags: 'html,markup',
+      metadata: '<h1>',
       createdAt: new Date(),
       updatedAt: new Date(),
-      createdBy: 'frontend-admin',
+      createdBy: 'admin',
       isActive: true
     }
   ];

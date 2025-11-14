@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Question } from '../../models/question';
+import { Question, QuestionType } from '../../models/question';
 
 @Component({
   selector: 'app-admin-list',
@@ -10,10 +10,10 @@ import { Question } from '../../models/question';
 })
 export class AdminListComponent {
   @Input() questions$!: Observable<Question[]>;
-  
+  QuestionType = QuestionType
   constructor(){}
 
   onCreateQuestion() {
-    //toDo
+    
 }
 }

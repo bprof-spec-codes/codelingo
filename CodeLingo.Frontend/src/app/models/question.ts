@@ -26,3 +26,10 @@ export interface CodeCompletionQuestion extends Question {
   hints: string[];
   constraints: string[];
 }
+export enum QuestionType {
+  MultipleChoice = 'MultipleChoice',
+  CodeCompletion = 'CodeCompletion',
+  TrueFalse = 'TrueFalse',
+  FillInBlank = 'FillInBlank',
+  CodeReview = 'CodeReview'
+}
