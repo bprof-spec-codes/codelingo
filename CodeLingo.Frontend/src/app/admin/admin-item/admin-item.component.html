@@ -68,6 +68,10 @@
       <p>Nincs extra adat ehhez a kérdéstípushoz.</p>
     </div>
   </div>
-  <div *ngIf="editing">
-    <app-admin-edit [question]="question" (save)="onSave($event)"></app-admin-edit>
-  </div>
+<div *ngIf="editing">
+  <app-admin-edit 
+    [question]="question" 
+    (save)="onSave($event)" 
+    (cancel)="editing = false">
+  </app-admin-edit>
+</div>

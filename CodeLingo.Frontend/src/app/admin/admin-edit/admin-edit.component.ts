@@ -24,7 +24,9 @@ export class AdminEditComponent implements OnInit {
       this.patchForm(this.question);
     }
   }
-
+  onCancel() {
+    this.cancel.emit();
+  }
   initForm() {
     this.questionForm = this.fb.group({
       type: [QuestionType.MultipleChoice, Validators.required],
