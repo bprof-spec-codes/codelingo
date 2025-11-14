@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Question } from '../models/question';
 
@@ -40,11 +40,11 @@ export class AdminService {
     return this.http.get<Question>(`${this.baseUrl}/questions/${id}`);
   }
 
-  createQuestion(data: Partial<Question>): Observable<Question> {
+  createQuestion(data: Question): Observable<Question> {
     return this.http.post<Question>(`${this.baseUrl}/questions`, data);
   }
 
-  updateQuestion(id: string, data: Partial<Question>): Observable<Question> {
+  updateQuestion(id: string, data: Question): Observable<Question> {
     return this.http.put<Question>(`${this.baseUrl}/questions/${id}`, data);
   }
 

@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Question, QuestionType } from '../../models/question';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-admin-list',
@@ -10,10 +11,15 @@ import { Question, QuestionType } from '../../models/question';
 })
 export class AdminListComponent {
   @Input() questions$!: Observable<Question[]>;
+  @Output() questionUpdated = new EventEmitter<Question>();
+  
+onItemUpdated(q: Question) {
+  this.questionUpdated.emit(q);
+}
   QuestionType = QuestionType
-  constructor(){}
+  constructor(private service: AdminService) { }
 
   onCreateQuestion() {
-    
-}
+
+  }
 }
