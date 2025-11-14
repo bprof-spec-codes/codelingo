@@ -45,7 +45,7 @@ namespace CodeLingo.API
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát [web:129] inmemory miatt kikommentezve
+                //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát inmemory miatt kikommentezve
 
                 // Seed only if empty
                 if (!await db.ProgrammingLanguages.AnyAsync() && !await db.Questions.AnyAsync())
