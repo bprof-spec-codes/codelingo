@@ -13,3 +13,16 @@ export interface Question {
   createdBy: string;
   isActive: boolean;
 }
+export interface MultipleChoiceQuestion extends Question {
+  options: string[];
+  correctAnswerIds: string[];
+  allowMultipleSelection: boolean;
+  shuffleOptions: boolean;
+}
+
+export interface CodeCompletionQuestion extends Question {
+  starterCode: string;
+  correctAnswer: string;
+  hints: string[];
+  constraints: string[];
+}
