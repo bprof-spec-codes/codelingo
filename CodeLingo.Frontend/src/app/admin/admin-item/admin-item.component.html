@@ -8,7 +8,7 @@
     <button class="btn btn-sm btn-outline-secondary" (click)="toggleDetails()">
       <i [ngClass]="{ 'bi bi-chevron-down': !showDetails, 'bi bi-chevron-up': showDetails }"></i>
     </button>
-    <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés">
+    <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés" (click)="startEdit()">
       <i class="bi bi-pencil-square"></i>
     </button>
     <button class="btn btn-sm btn-outline-danger d-none d-sm-inline" title="Törlés">
@@ -69,6 +69,5 @@
     </div>
   </div>
   <div *ngIf="editing">
-  <app-admin-edit [question]="question" (save)="onSave($event)"></app-admin-edit>
-  <button type="button" class="btn btn-secondary mt-2" (click)="cancelEdit()">Cancel</button>
-</div>
+    <app-admin-edit [question]="question" (save)="onSave($event)"></app-admin-edit>
+  </div>

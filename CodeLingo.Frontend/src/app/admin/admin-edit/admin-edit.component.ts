@@ -15,8 +15,8 @@ export class AdminEditComponent implements OnInit {
   QuestionType = QuestionType;
 
   questionForm!: FormGroup;
-
-  constructor(private fb: FormBuilder) {}
+  @Output() cancel = new EventEmitter<void>();
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.initForm();

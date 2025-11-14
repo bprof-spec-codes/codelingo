@@ -1,1 +1,124 @@
-<p>admin-edit works!</p>
+<div class="p-4 bg-dark text-white rounded shadow-sm">
+
+  <h4 class="mb-4">{{ question ? 'Edit Question' : 'Create Question' }}</h4>
+
+  <form [formGroup]="questionForm" (ngSubmit)="saveQuestion()">
+
+    <!-- Alapadatok -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Type</label>
+        <select formControlName="type" class="form-select bg-dark text-white border-secondary">
+          <option *ngFor="let t of (QuestionType | keyvalue)" [value]="t.value">{{ t.key }}</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Title</label>
+        <input type="text" formControlName="title" class="form-control bg-dark text-white border-secondary"/>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Language</label>
+        <input type="text" formControlName="language" class="form-control bg-dark text-white border-secondary"/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Difficulty</label>
+        <input type="text" formControlName="difficulty" class="form-control bg-dark text-white border-secondary"/>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Question Text</label>
+        <textarea formControlName="questionText" class="form-control bg-dark text-white border-secondary" rows="3"></textarea>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Explanation</label>
+        <textarea formControlName="explanation" class="form-control bg-dark text-white border-secondary" rows="2"></textarea>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Tags</label>
+        <input type="text" formControlName="tags" class="form-control bg-dark text-white border-secondary"/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Metadata</label>
+        <input type="text" formControlName="metadata" class="form-control bg-dark text-white border-secondary"/>
+      </div>
+
+      <div class="col-12 form-check mt-2 ms-2">
+        <input type="checkbox" formControlName="isActive" class="form-check-input" id="isActive"/>
+        <label class="form-check-label" for="isActive">Active</label>
+      </div>
+    </div>
+
+    <!-- MultipleChoice mezők -->
+    <div *ngIf="questionForm.get('type')?.value === QuestionType.MultipleChoice" class="mb-3">
+      <h5 class="mb-2">Multiple Choice Options</h5>
+      
+      <div formArrayName="options" class="mb-2">
+        <div *ngFor="let opt of options.controls; let i=index" class="input-group mb-1">
+          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary" placeholder="Option {{ i + 1 }}"/>
+          <button type="button" class="btn btn-outline-danger" (click)="removeOption(i)">Remove</button>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addOption()">Add Option</button>
+      </div>
+
+      <div formArrayName="correctAnswerIds" class="mb-2">
+        <label>Correct Answers</label>
+        <div *ngFor="let ans of correctAnswerIds.controls; let i=index" class="input-group mb-1">
+          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary" placeholder="Correct Answer {{ i + 1 }}"/>
+          <button type="button" class="btn btn-outline-danger" (click)="removeCorrectAnswer(i)">Remove</button>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCorrectAnswer()">Add Correct Answer</button>
+      </div>
+
+      <div class="form-check mt-2">
+        <input type="checkbox" formControlName="allowMultipleSelection" class="form-check-input" id="allowMultiple"/>
+        <label class="form-check-label" for="allowMultiple">Allow multiple selection</label>
+      </div>
+      <div class="form-check mt-1">
+        <input type="checkbox" formControlName="shuffleOptions" class="form-check-input" id="shuffleOptions"/>
+        <label class="form-check-label" for="shuffleOptions">Shuffle options</label>
+      </div>
+    </div>
+
+    <!-- CodeCompletion mezők -->
+    <div *ngIf="questionForm.get('type')?.value === QuestionType.CodeCompletion" class="mb-3">
+      <h5 class="mb-2">Code Completion</h5>
+
+      <div class="mb-2">
+        <label class="form-label">Starter Code</label>
+        <textarea formControlName="starterCode" class="form-control bg-dark text-white border-secondary" rows="3"></textarea>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Correct Answer</label>
+        <textarea formControlName="correctAnswer" class="form-control bg-dark text-white border-secondary" rows="3"></textarea>
+      </div>
+
+      <h6>Hints</h6>
+      <div formArrayName="hints" class="mb-2">
+        <div *ngFor="let h of hints.controls; let i=index" class="input-group mb-1">
+          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary" placeholder="Hint {{ i + 1 }}"/>
+          <button type="button" class="btn btn-outline-danger" (click)="removeHint(i)">Remove</button>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addHint()">Add Hint</button>
+      </div>
+
+      <h6>Constraints</h6>
+      <div formArrayName="constraints" class="mb-2">
+        <div *ngFor="let c of constraints.controls; let i=index" class="input-group mb-1">
+          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary" placeholder="Constraint {{ i + 1 }}"/>
+          <button type="button" class="btn btn-outline-danger" (click)="removeConstraint(i)">Remove</button>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addConstraint()">Add Constraint</button>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-3 gap-2">
+      <button type="button" class="btn btn-danger" (click)="cancel.emit()">Cancel</button>
+      <button type="submit" class="btn btn-success">Save Question</button>
+    </div>
+
+  </form>
+</div>

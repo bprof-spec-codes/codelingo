@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Question, MultipleChoiceQuestion, CodeCompletionQuestion, QuestionType } from '../../models/question';
 
 @Component({
@@ -9,7 +9,7 @@ import { Question, MultipleChoiceQuestion, CodeCompletionQuestion, QuestionType 
 })
 export class AdminItemComponent {
   @Input() question!: Question;
-   @Output() questionUpdated = new EventEmitter<Question>();
+  @Output() questionUpdated = new EventEmitter<Question>();
   QuestionType = QuestionType;
   showDetails = false;
   editing = false; // szerkesztési állapot
