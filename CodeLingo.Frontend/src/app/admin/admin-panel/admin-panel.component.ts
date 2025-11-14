@@ -11,7 +11,7 @@ import { CountUpModule } from 'ngx-countup';
   styleUrl: './admin-panel.component.scss'
 })
 
-//toDo: Question type input should be radio 
+//toDo: other question type ???, question pages, filter 
 
 export class AdminPanelComponent implements OnInit {
   questions$!: Observable<Question[]>;

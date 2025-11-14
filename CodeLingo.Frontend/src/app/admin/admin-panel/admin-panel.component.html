@@ -31,5 +31,7 @@
   <!-- Lista -->
   <div class="container px-4 pb-4">
     <app-admin-list [questions$]="questions$" (questionUpdated)="onQuestionUpdated($event)" (delete)="onDelete($event)"></app-admin-list>
+        <app-admin-edit></app-admin-edit>
   </div>
+
 </div>
