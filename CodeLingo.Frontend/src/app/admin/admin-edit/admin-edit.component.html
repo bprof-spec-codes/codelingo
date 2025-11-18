@@ -69,7 +69,7 @@
       </div>
 
       <div formArrayName="correctAnswerIds" class="mb-2">
-        <label>Correct Answers</label>
+        <p class="h5 mb-2">Correct Answers</p>
         <div *ngFor="let ans of correctAnswerIds.controls; let i=index" class="input-group mb-1">
           <input [formControlName]="i" class="form-control bg-dark text-white border-secondary"
             placeholder="Correct Answer {{ i + 1 }}" />
@@ -127,7 +127,7 @@
     </div>
 
     <div class="d-flex justify-content-end mt-3 gap-2">
-      <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+      <button *ngIf="question" type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
       <button type="submit" class="btn btn-success">Save Question</button>
     </div>
 

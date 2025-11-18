@@ -87,8 +87,8 @@ export class AdminEditComponent implements OnInit {
 
   saveQuestion() {
     const q: Question = {
-      ...this.questionForm.value,
-      id: this.question?.id || Math.random().toString(36).substr(2, 9), // ideiglenes ID create esetén
+    ...this.question,             // ha edit, belemászik az eredeti (id, createdAt, stb.)
+    ...this.questionForm.value,   // felülírja a form értékekkel
       createdAt: this.question?.createdAt || new Date(),
       updatedAt: new Date(),
       createdBy: this.question?.createdBy || 'admin'

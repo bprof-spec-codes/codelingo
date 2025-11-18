@@ -22,7 +22,7 @@
       <div class="col-12 col-md-4">
         <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
           <h5 class="text-primary">Sessions this week</h5>
-          <h3 class="text-light"[countUp]="79" [options]="{ duration: 2 }">0</h3>
+          <h3 class="text-light" [countUp]="79" [options]="{ duration: 2 }">0</h3>
         </div>
       </div>
     </div>
@@ -30,8 +30,11 @@
 
   <!-- Lista -->
   <div class="container px-4 pb-4">
-    <app-admin-list [questions$]="questions$" (questionUpdated)="onQuestionUpdated($event)" (delete)="onDelete($event)"></app-admin-list>
-        <app-admin-edit></app-admin-edit>
+    <app-admin-list [questions$]="questions$" (questionUpdated)="onQuestionUpdated($event)"
+      (delete)="onDelete($event)"></app-admin-list>
   </div>
-
+  <!--Új létrehozás-->
+  <div class="container px-4 pb-4">
+    <app-admin-edit></app-admin-edit>
+  </div>
 </div>

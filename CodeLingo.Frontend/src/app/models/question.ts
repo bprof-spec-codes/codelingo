@@ -29,7 +29,8 @@ export interface CodeCompletionQuestion extends Question {
 export enum QuestionType {
   MultipleChoice = 'MultipleChoice',
   CodeCompletion = 'CodeCompletion',
-  TrueFalse = 'TrueFalse',
-  FillInBlank = 'FillInBlank',
-  CodeReview = 'CodeReview'
+  //Future question types
+  //TrueFalse = 'TrueFalse',
+  //FillInBlank = 'FillInBlank',
+  //CodeReview = 'CodeReview'
 }

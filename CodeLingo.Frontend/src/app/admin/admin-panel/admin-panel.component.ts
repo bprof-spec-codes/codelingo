@@ -11,7 +11,7 @@ import { CountUpModule } from 'ngx-countup';
   styleUrl: './admin-panel.component.scss'
 })
 
-//toDo: other question type ???, question pages, filter 
+//toDo: question pages, filter 
 
 export class AdminPanelComponent implements OnInit {
   questions$!: Observable<Question[]>;
@@ -64,57 +64,6 @@ export class AdminPanelComponent implements OnInit {
         hints: ['Használd a len() függvényt'],
         constraints: ['Ne használj ciklust']
       } as CodeCompletionQuestion,
-
-      // TrueFalse
-      {
-        id: '3',
-        type: QuestionType.TrueFalse,
-        language: 'C',
-        difficulty: 'hard',
-        title: 'C pointer',
-        questionText: 'A pointer felszabadítás után használható újra?',
-        explanation: 'Ez "dangling pointer" hibát okoz.',
-        tags: 'c,pointer',
-        metadata: 'False',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: 'admin',
-        isActive: true
-      },
-
-      // FillInBlank
-      {
-        id: '4',
-        type: QuestionType.FillInBlank,
-        language: 'Java',
-        difficulty: 'medium',
-        title: 'Java class inheritance',
-        questionText: 'Melyik kulcsszó használható öröklésre? ___',
-        explanation: 'A "extends" kulcsszó használható.',
-        tags: 'java,oopp',
-        metadata: 'extends',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: 'admin',
-        isActive: true
-      },
-
-      // CodeReview
-      {
-        id: '5',
-        type: QuestionType.CodeReview,
-        language: 'HTML',
-        difficulty: 'easy',
-        title: 'HTML alapok',
-        questionText: 'Melyik elem jelöli a legnagyobb címsort?',
-        explanation: 'Az <h1> jelöli a legnagyobb címsort.',
-        tags: 'html,markup',
-        metadata: '<h1>',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: 'admin',
-        isActive: true
-      }
     ];
 
     this.questions$ = of(mockQuestions);
@@ -124,6 +73,10 @@ export class AdminPanelComponent implements OnInit {
   }
   onDelete(id: string) {
     this.adminService.deleteQuestion(id)
+}
+onQuestionCretaed(created: Question){
+  console.log("created")
+  console.log(created)
 }
   
 
