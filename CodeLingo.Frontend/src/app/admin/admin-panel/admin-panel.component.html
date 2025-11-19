@@ -35,6 +35,8 @@
   </div>
   <!--Új létrehozás-->
   <div class="container px-4 pb-4">
-    <app-admin-edit></app-admin-edit>
+    <app-admin-edit
+    [question]="question" 
+    (save)="onQuestionCreated($event)" >></app-admin-edit>
   </div>
 </div>

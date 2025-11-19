@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 import { Question, MultipleChoiceQuestion, CodeCompletionQuestion, QuestionType } from '../../models/question';
 import { AdminService } from '../../services/admin.service';
@@ -15,7 +15,7 @@ import { CountUpModule } from 'ngx-countup';
 
 export class AdminPanelComponent implements OnInit {
   questions$!: Observable<Question[]>;
-
+  @Input() question!: Question;
   constructor(private adminService: AdminService) { }
   ngOnInit(): void {
     //this.loadQuestions();
@@ -73,11 +73,11 @@ export class AdminPanelComponent implements OnInit {
   }
   onDelete(id: string) {
     this.adminService.deleteQuestion(id)
-}
-onQuestionCretaed(created: Question){
-  console.log("created")
-  console.log(created)
-}
-  
+  }
+  onQuestionCreated(created: Question) {
+    console.log("created")
+    console.log(created)
+  }
+
 
 }

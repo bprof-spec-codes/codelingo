@@ -12,10 +12,10 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AdminEditComponent implements OnInit {
   @Input() question?: Question; // meglévő kérdés, vagy undefined = create
   @Output() save = new EventEmitter<Question>(); // értesítés a szülőnek
+    @Output() cancel = new EventEmitter<void>();
   QuestionType = QuestionType;
-
   questionForm!: FormGroup;
-  @Output() cancel = new EventEmitter<void>();
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
