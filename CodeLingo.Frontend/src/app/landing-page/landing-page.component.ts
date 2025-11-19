@@ -82,9 +82,10 @@ export class LandingPageComponent implements OnInit {
   }
 
   tryCodeLingo(): void {
-    console.log('Navigate to a demo practice session');
-    // TODO: route to a demo practice session
-    this.router.navigate(['/practice/start']);
+    const element = document.getElementById('getting-started');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   login(): void {

@@ -49,8 +49,7 @@
                                     </button>
                                 </div>
                                 <p class="login-link">
-                                    Already have an account? <a routerLink="/login" (click)="login(); $event.preventDefault();">Log
-                                        In</a>
+                                    Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log In</a>
                                 </p>
                             </div>
 
@@ -111,7 +110,7 @@ console.log(fibonacci(10)); // 55</code></pre>
         </section>
 
         <!-- getting started section -->
-        <section class="getting-started-section" *ngIf="!(isLoggedIn$ | async)">
+        <section class="getting-started-section" *ngIf="!isLoggedIn" id="getting-started">
             <div class="container">
                 <h2 class="section-title text-center mb-5">Ready to Start Your Coding Journey?</h2>
 
@@ -129,8 +128,8 @@ console.log(fibonacci(10)); // 55</code></pre>
                     <button class="btn btn-primary btn-lg" (click)="signUp()">
                         Sign Up
                     </button>
-                    <button class="btn btn-outline-primary btn-lg" (click)="tryCodeLingo()">
-                        Try CodeLingo
+                    <button class="btn btn-outline-primary btn-lg" (click)="login()">
+                        Log In
                     </button>
                 </div>
             </div>
