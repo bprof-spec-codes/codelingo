@@ -33,7 +33,7 @@
             class="form-control"
             formControlName="language"
           >
-            <option value="">Select language</option>
+            <option value="" disabled>Select language</option>
             <option *ngFor="let lang of languages" [value]="lang">{{ lang }}</option>
           </select>
           <small class="form-error" *ngIf="questionForm.get('language')?.invalid && questionForm.get('language')?.touched">
@@ -48,7 +48,7 @@
             class="form-control"
             formControlName="difficulty"
           >
-            <option value="">Select difficulty</option>
+            <option value="" disabled>Select difficulty</option>
             <option *ngFor="let diff of difficulties" [value]="diff">{{ diff }}</option>
           </select>
           <small class="form-error" *ngIf="questionForm.get('difficulty')?.invalid && questionForm.get('difficulty')?.touched">
@@ -108,8 +108,46 @@
           max="600"
         />
         <small class="form-error" *ngIf="questionForm.get('estimatedTimeSeconds')?.invalid && questionForm.get('estimatedTimeSeconds')?.touched">
-          Time must be between 10 and 600 seconds
+          Time must be between 5 and 600 seconds
         </small>
+      </div>
+    </div>
+
+
+    <!-- question settings section -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <i class="bi bi-gear"></i>
+        Question Settings
+      </h3>
+
+      <div class="">
+        <div class="">
+          <input
+            type="checkbox"
+            id="allowMultiple"
+            formControlName="allowMultipleSelection"
+          />
+          <label for="allowMultiple">Allow Multiple Selection</label>
+        </div>
+
+        <div class="">
+          <input
+            type="checkbox"
+            id="shuffleOptions"
+            formControlName="shuffleOptions"
+          />
+          <label for="shuffleOptions">Shuffle Options</label>
+        </div>
+
+        <div class="">
+          <input
+            type="checkbox"
+            id="isActive"
+            formControlName="isActive"
+          />
+          <label for="isActive">Active Question</label>
+        </div>
       </div>
     </div>
 
