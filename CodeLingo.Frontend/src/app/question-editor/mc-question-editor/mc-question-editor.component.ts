@@ -122,11 +122,59 @@ export class McQuestionEditorComponent implements OnInit {
     if (this.options.length > 2) {
       this.options.removeAt(index);
 
-      // update order
-      this.options.controls.forEach((control, idx) => {
-        control.patchValue({ order: idx + 1 });
-      });
+      this.updateOrders();
     }
   }
 
+  moveOptionUp(index: number): void {
+    if (index > 0) {
+      const currentOption = this.options.at(index).value;
+      const previousOption = this.options.at(index - 1).value;
+
+      this.options.at(index).patchValue({
+        text: previousOption.text,
+        imageUrl: previousOption.imageUrl,
+        id: previousOption.id,
+        isCorrect: previousOption.isCorrect
+      });
+
+      this.options.at(index - 1).patchValue({
+        text: currentOption.text,
+        imageUrl: currentOption.imageUrl,
+        id: currentOption.id,
+        isCorrect: currentOption.isCorrect
+      });
+
+      this.updateOrders();
+    }
+  }
+
+  moveOptionDown(index: number): void {
+    if (index < this.options.length - 1) {
+      const currentOption = this.options.at(index).value;
+      const nextOption = this.options.at(index + 1).value;
+
+      this.options.at(index).patchValue({
+        text: nextOption.text,
+        imageUrl: nextOption.imageUrl,
+        id: nextOption.id,
+        isCorrect: nextOption.isCorrect
+      });
+
+      this.options.at(index + 1).patchValue({
+        text: currentOption.text,
+        imageUrl: currentOption.imageUrl,
+        id: currentOption.id,
+        isCorrect: currentOption.isCorrect
+      });
+
+      this.updateOrders();
+    }
+  }
+
+  updateOrders(): void {
+    this.options.controls.forEach((control, idx) => {
+      control.patchValue({ order: idx + 1 });
+    });
+  }
 }
