@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MultipleChoiceQuestion } from '../../models/multiple-choice-question';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AnswerOption } from '../../models/answer-option';
 
 @Component({
   selector: 'app-mc-question-editor',
@@ -25,6 +26,10 @@ export class McQuestionEditorComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+
+    if (this.existingQuestion) {
+      this.loadExistingQuestion();
+    }
   }
 
   initializeForm(): void {
@@ -42,5 +47,57 @@ export class McQuestionEditorComponent implements OnInit {
       options: this.fb.array([], Validators.minLength(2))
     });
   }
+
+  get options(): FormArray {
+    return this.questionForm.get('options') as FormArray;
+  }
+
+  createOptionFormGroup(option?: AnswerOption): FormGroup {
+    return this.fb.group({
+      id: [option?.id || this.generateOptionId()],
+      text: [option?.text || '', Validators.required],
+      imageUrl: [option?.imageUrl || ''],
+      order: [option?.order || 1],
+      isCorrect: [false]
+    });
+  }
+
+  loadExistingQuestion(): void {
+    if (!this.existingQuestion) return;
+
+    this.questionId = this.existingQuestion.id;
+    this.version = this.existingQuestion.metadata.version + 1;
+
+    // parse tags
+    const tagsInput = this.existingQuestion.tags.join(', ');
+
+    // patch form values
+    this.questionForm.patchValue({
+      title: this.existingQuestion.title,
+      language: this.existingQuestion.language,
+      difficulty: this.existingQuestion.difficulty,
+      questionText: this.existingQuestion.questionText,
+      explanation: this.existingQuestion.explanation,
+      tagsInput: tagsInput,
+      estimatedTimeSeconds: this.existingQuestion.metadata.estimatedTimeSeconds,
+      allowMultipleSelection: this.existingQuestion.allowMultipleSelection,
+      shuffleOptions: this.existingQuestion.shuffleOptions,
+      isActive: this.existingQuestion.isActive
+    });
+
+    // load options
+    this.existingQuestion.options.forEach(option => {
+      const optionGroup = this.createOptionFormGroup(option);
+      const isCorrect = this.existingQuestion!.correctAnswerIds.includes(option.id);
+      optionGroup.patchValue({ isCorrect });
+      this.options.push(optionGroup);
+    });
+  }
+
+  generateOptionId(): string {
+    return 'opt-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+  }
+
+
 
 }
