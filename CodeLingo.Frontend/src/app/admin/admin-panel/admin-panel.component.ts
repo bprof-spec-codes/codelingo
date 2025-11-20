@@ -75,8 +75,7 @@ export class AdminPanelComponent implements OnInit {
     this.adminService.deleteQuestion(id)
   }
   onQuestionCreated(created: Question) {
-    console.log("created")
-    console.log(created)
+    this.adminService.createQuestion(created)
   }
 
 
