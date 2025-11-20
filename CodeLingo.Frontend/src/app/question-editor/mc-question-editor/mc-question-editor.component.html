@@ -1,1 +1,118 @@
-<p>mc-question-editor works!</p>
+<div class="mc-question-editor">
+  <div class="editor-header">
+    <h2>{{ existingQuestion ? 'Edit' : 'Create' }} Multiple Choice Question</h2>
+  </div>
+
+  <form [formGroup]="questionForm" class="question-form">
+    <!-- Basic Information Section -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <i class="bi bi-info-circle"></i>
+        Basic Information
+      </h3>
+
+      <div class="form-group">
+        <label for="title" class="form-label">Question Title *</label>
+        <input
+          type="text"
+          id="title"
+          class="form-control"
+          formControlName="title"
+          placeholder="Enter a descriptive title"
+        />
+        <small class="form-error" *ngIf="questionForm.get('title')?.invalid && questionForm.get('title')?.touched">
+          Title is required
+        </small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="language" class="form-label">Programming Language *</label>
+          <select
+            id="language"
+            class="form-control"
+            formControlName="language"
+          >
+            <option value="">Select language</option>
+            <option *ngFor="let lang of languages" [value]="lang">{{ lang }}</option>
+          </select>
+          <small class="form-error" *ngIf="questionForm.get('language')?.invalid && questionForm.get('language')?.touched">
+            Language is required
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="difficulty" class="form-label">Difficulty *</label>
+          <select
+            id="difficulty"
+            class="form-control"
+            formControlName="difficulty"
+          >
+            <option value="">Select difficulty</option>
+            <option *ngFor="let diff of difficulties" [value]="diff">{{ diff }}</option>
+          </select>
+          <small class="form-error" *ngIf="questionForm.get('difficulty')?.invalid && questionForm.get('difficulty')?.touched">
+            Difficulty is required
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="questionText" class="form-label">Question Text *</label>
+        <textarea
+          id="questionText"
+          class="form-control"
+          formControlName="questionText"
+          rows="4"
+          placeholder="Enter the question that will be displayed to students"
+        ></textarea>
+        <small class="form-error" *ngIf="questionForm.get('questionText')?.invalid && questionForm.get('questionText')?.touched">
+          Question text is required
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="explanation" class="form-label">Explanation *</label>
+        <textarea
+          id="explanation"
+          class="form-control"
+          formControlName="explanation"
+          rows="3"
+          placeholder="Explain the correct answer"
+        ></textarea>
+        <small class="form-error" *ngIf="questionForm.get('explanation')?.invalid && questionForm.get('explanation')?.touched">
+          Explanation is required
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="tags" class="form-label">Tags</label>
+        <input
+          type="text"
+          id="tags"
+          class="form-control"
+          formControlName="tagsInput"
+          placeholder="Enter tags separated by commas (e.g., loops, arrays, basics)"
+        />
+        <small class="form-text">Separate multiple tags with commas</small>
+      </div>
+
+      <div class="form-group">
+        <label for="estimatedTime" class="form-label">Estimated Time (seconds) *</label>
+        <input
+          type="number"
+          id="estimatedTime"
+          class="form-control"
+          formControlName="estimatedTimeSeconds"
+          min="5"
+          max="600"
+        />
+        <small class="form-error" *ngIf="questionForm.get('estimatedTimeSeconds')?.invalid && questionForm.get('estimatedTimeSeconds')?.touched">
+          Time must be between 10 and 600 seconds
+        </small>
+      </div>
+    </div>
+
+
+  </form>
+</div>
