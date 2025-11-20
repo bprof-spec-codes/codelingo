@@ -15,6 +15,7 @@ import { LanguageSelectorComponent } from './practice-starter/language-selector/
 import { FormsModule } from '@angular/forms';
 import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
 import { QuestionCountSelectorComponent } from './practice-starter/question-count-selector/question-count-selector.component';
+import { McQuestionEditorComponent } from './question-editor/mc-question-editor/mc-question-editor.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { QuestionCountSelectorComponent } from './practice-starter/question-coun
     PracticeStarterComponent,
     DifficultySelectorComponent,
     PracticeStarterComponent,
-    QuestionCountSelectorComponent
+    QuestionCountSelectorComponent,
+    McQuestionEditorComponent
   ],
   imports: [
     BrowserModule,
