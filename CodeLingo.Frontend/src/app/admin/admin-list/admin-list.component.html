@@ -12,11 +12,61 @@
     </div>
     <!-- Listaelemek -->
     <div *ngFor="let q of questions$ | async as questions">
-        <app-admin-item [question]="q" (questionUpdated)="onItemUpdated($event)"  (delete)="onItemDelete($event)">
+        <app-admin-item [question]="q" (questionUpdated)="onItemUpdated($event)" (delete)="onItemDelete($event)">
         </app-admin-item>
     </div>
-
     <ng-template #loading>
         <p class="text-muted small">Loading...</p>
     </ng-template>
+    <div class="text-light mt-4">
+        <h2 class="text-light mt-2 mb-2">Languages</h2>
+        <p class="text-white-50">
+            This section displays all supported programming languages. You can view details, edit,
+            or delete individual languages directly from the interface.
+        </p>
+
+        <!-- Fejléc -->
+        <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
+            <div class="col-6 col-sm-3">Name</div>
+            <div class="col-6 col-sm-3">Version</div>
+            <div class="col-3 d-none d-sm-block">Created</div>
+            <div class="col-3 d-none d-sm-block">Updated</div>
+        </div>
+
+        <!-- Listaelemek -->
+        <ng-container *ngIf="languages$ | async as languages; else loading">
+            <div class="item-row rounded row align-items-center border-bottom small py-2"
+                *ngFor="let lang of languages">
+                <div class="col-6 col-sm-3 text-truncate fw-bold text-primary">
+                    {{ lang.name }}
+                </div>
+                <div class="col-6 col-sm-3 text-truncate">
+                    {{ lang.version }}
+                </div>
+
+                <div class="col-6 col-sm-3 d-none d-sm-block">
+                    {{ lang.createdAt | date }}
+                </div>
+                <div class="col-6 col-sm-3 d-none d-sm-block">
+                    {{ lang.updatedAt | date }}
+                </div>
+
+                <!-- Akciók -->
+                <div class="col-12 mt-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés"
+                        (click)="onEdit(lang)">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger d-none d-sm-inline" title="Törlés"
+                        (click)="onDelete(lang)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #loading>
+            <p class="text-muted small">Loading...</p>
+        </ng-template>
+    </div>
 </div>
