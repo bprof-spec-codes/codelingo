@@ -177,4 +177,20 @@ export class McQuestionEditorComponent implements OnInit {
       control.patchValue({ order: idx + 1 });
     });
   }
+
+  toggleCorrectAnswer(index: number): void {
+    const allowMultiple = this.questionForm.get('allowMultipleSelection')?.value;
+    const currentIsCorrect = this.options.at(index).get('isCorrect')?.value;
+
+    if (!allowMultiple) {
+      // single selection: uncheck all others
+      this.options.controls.forEach((control, idx) => {
+        control.patchValue({ isCorrect: idx === index ? !currentIsCorrect : false });
+      });
+    } else {
+      // multiple selection: toggle current
+      this.options.at(index).patchValue({ isCorrect: !currentIsCorrect });
+    }
+    this.updateOrders();
+  }
 }
