@@ -73,6 +73,13 @@ namespace CodeLingo.API.Logics
         { 
             return repository.ReadAll();
         }
+        public bool IsValidSessionId(string sessionId)
+        {
+            return repository.ReadAll()
+                .Select(s => s.Id)
+                .ToList()
+                .Contains(sessionId);
+        }
        
     }
 }
