@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MultipleChoiceQuestion } from '../../models/multiple-choice-question';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './mc-question-editor.component.html',
   styleUrl: './mc-question-editor.component.scss'
 })
-export class McQuestionEditorComponent {
+export class McQuestionEditorComponent implements OnInit {
 
   @Input() existingQuestion?: MultipleChoiceQuestion;
   @Input() languages: string[] = [];
@@ -22,6 +22,10 @@ export class McQuestionEditorComponent {
   version: number = 1;
 
   constructor(private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.initializeForm();
+  }
 
   initializeForm(): void {
     this.questionForm = this.fb.group({
