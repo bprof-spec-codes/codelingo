@@ -32,6 +32,8 @@ export class McQuestionEditorComponent implements OnInit {
     } else {
       this.initializeNewQuestion();
     }
+
+    this.setupMultipleSelectionListener();
   }
 
   initializeForm(): void {
@@ -193,4 +195,17 @@ export class McQuestionEditorComponent implements OnInit {
     }
     this.updateOrders();
   }
+
+  setupMultipleSelectionListener(): void {
+    this.questionForm.get('allowMultipleSelection')?.valueChanges.subscribe(allowMultiple => {
+      if (!allowMultiple) {
+        this.options.controls.forEach(control => {
+          control.patchValue({ isCorrect: false });
+        });
+      }
+    });
+  }
+
+
+  
 }
