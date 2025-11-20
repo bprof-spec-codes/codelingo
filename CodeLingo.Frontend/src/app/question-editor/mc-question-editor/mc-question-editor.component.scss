@@ -1,0 +1,114 @@
+@import '../../../variables';
+
+
+.mc-question-editor {
+  background-color: $dark-900;
+  border-radius: 12px;
+  padding: $space-5;
+  border: 2px solid $secondary-400;
+
+  .editor-header {
+    margin-bottom: $space-5;
+    
+    h2 {
+      color: $primary-400;
+      font-weight: $font-weight-bold;
+      font-size: 1.8rem;
+      margin: 0;
+    }
+  }
+
+  .question-form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+
+  .form-section {
+    background-color: $dark-800;
+    border: 1px solid $secondary-400;
+    border-radius: 8px;
+    padding: $space-4;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      color: $primary-400;
+      font-weight: $font-weight-semibold;
+      font-size: 1.2rem;
+      margin-bottom: $space-4;
+
+      i {
+        font-size: 1.3rem;
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: $space-4;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      color: $secondary-200;
+      font-weight: $font-weight-semibold;
+      margin-bottom: $space-2;
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: $space-3;
+      background-color: $dark-900;
+      border: 2px solid $secondary-400;
+      border-radius: 8px;
+      color: $light;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-400;
+        background-color: $dark-800;
+      }
+
+      &::placeholder {
+        color: $secondary-300;
+      }
+
+      &.ng-invalid.ng-touched {
+        border-color: #dc3545;
+      }
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .form-text {
+      display: block;
+      margin-top: $space-2;
+      color: $secondary-300;
+      font-size: 0.85rem;
+    }
+
+    .form-error {
+      display: block;
+      margin-top: $space-2;
+      color: #dc3545;
+      font-size: 0.85rem;
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+    margin-bottom: $space-4;
+  }
+}
