@@ -119,48 +119,48 @@
                 Answer Options
             </h3>
 
-            <div class="" formArrayName="options">
-                <div *ngFor="let optionControl of options.controls; let i = index" class=""
+            <div class="options-container" formArrayName="options">
+                <div *ngFor="let optionControl of options.controls; let i = index" class="option-card"
                     [formGroupName]="i">
-                    <div class="">
-                        <span class="">Option {{ i + 1 }}</span>
-                        <div class="">
-                            <button type="button" class="" (click)="moveOptionUp(i)" [disabled]="i === 0"
+                    <div class="option-header">
+                        <span class="option-number">Option {{ i + 1 }}</span>
+                        <div class="option-actions">
+                            <button type="button" class="btn-icon" (click)="moveOptionUp(i)" [disabled]="i === 0"
                                 title="Move up">
                                 <i class="bi bi-arrow-up"></i>
                             </button>
-                            <button type="button" class="" (click)="moveOptionDown(i)"
+                            <button type="button" class="btn-icon" (click)="moveOptionDown(i)"
                                 [disabled]="i === options.length - 1" title="Move down">
                                 <i class="bi bi-arrow-down"></i>
                             </button>
-                            <button type="button" class="" (click)="removeOption(i)"
+                            <button type="button" class="btn-icon btn-danger" (click)="removeOption(i)"
                                 [disabled]="options.length <= 2" title="Remove option">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="">
-                        <div class="">
+                    <div class="option-content">
+                        <div class="correct-answer-checkbox">
                             <input type="checkbox" [id]="'correct-' + i"
                                 [checked]="optionControl.get('isCorrect')?.value" (change)="toggleCorrectAnswer(i)" />
                             <label [for]="'correct-' + i">Correct Answer</label>
                         </div>
 
-                        <textarea class="" formControlName="text" rows="2"
+                        <textarea class="form-control" formControlName="text" rows="2"
                             placeholder="Enter answer option text"></textarea>
-                        <small class=""
+                        <small class="form-error"
                             *ngIf="optionControl.get('text')?.invalid && optionControl.get('text')?.touched">
                             Option text is required
                         </small>
 
-                        <input type="text" class="" formControlName="imageUrl"
+                        <input type="text" class="form-control" formControlName="imageUrl"
                             placeholder="Image URL (optional)" />
                     </div>
                 </div>
             </div>
 
-            <button type="button" class="" (click)="addNewOption()">
+            <button type="button" class="btn-add-option" (click)="addNewOption()">
                 <i class="bi bi-plus-circle"></i>
                 Add Another Option
             </button>

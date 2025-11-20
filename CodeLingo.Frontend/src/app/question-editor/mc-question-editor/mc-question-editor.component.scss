@@ -81,7 +81,7 @@
             }
 
             &.ng-invalid.ng-touched {
-                border-color: #dc3545;
+                border-color: $danger-500;
             }
         }
 
@@ -100,7 +100,7 @@
         .form-error {
             display: block;
             margin-top: $space-2;
-            color: #dc3545;
+            color: $danger-500;
             font-size: 0.85rem;
         }
     }
@@ -149,5 +149,121 @@
     }
 
 
+    // answer options section
+    .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: $space-3;
+        margin-bottom: $space-4;
+    }
+
+    .option-card {
+        background-color: $dark-900;
+        border: 2px solid $secondary-400;
+        border-radius: 8px;
+        padding: $space-3;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: $primary-400;
+        }
+
+        .option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $space-3;
+
+            .option-number {
+                color: $primary-400;
+                font-weight: $font-weight-semibold;
+                font-size: 0.9rem;
+            }
+
+            .option-actions {
+                display: flex;
+                gap: $space-2;
+            }
+        }
+
+        .option-content {
+            display: flex;
+            flex-direction: column;
+            gap: $space-2;
+
+            .correct-answer-checkbox {
+                display: flex;
+                align-items: center;
+                gap: $space-2;
+                margin-bottom: $space-2;
+
+                input[type="checkbox"] {
+                    width: 1.2rem;
+                    height: 1.2rem;
+                    cursor: pointer;
+                    accent-color: $primary-400;
+                }
+
+                label {
+                    color: $secondary-200;
+                    font-weight: $font-weight-semibold;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .btn-icon {
+        background: transparent;
+        border: 1px solid $secondary-400;
+        border-radius: 6px;
+        padding: $space-1 $space-2;
+        color: $light;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+            border-color: $primary-400;
+            color: $primary-400;
+        }
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        &.btn-danger {
+            &:hover:not(:disabled) {
+                border-color: $danger-500;
+                color: $danger-500;
+            }
+        }
+    }
+
+    .btn-add-option {
+        width: 100%;
+        padding: $space-3;
+        background-color: $dark-800;
+        border: 2px dashed $secondary-400;
+        border-radius: 8px;
+        color: $primary-400;
+        font-weight: $font-weight-semibold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $space-2;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: $primary-400;
+            background-color: rgba($primary-400, 0.05);
+        }
+
+        i {
+            font-size: 1.2rem;
+        }
+    }
 
 }
