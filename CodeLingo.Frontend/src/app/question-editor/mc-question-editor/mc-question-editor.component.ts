@@ -118,4 +118,15 @@ export class McQuestionEditorComponent implements OnInit {
     this.options.push(newOption);
   }
 
+  removeOption(index: number): void {
+    if (this.options.length > 2) {
+      this.options.removeAt(index);
+
+      // update order
+      this.options.controls.forEach((control, idx) => {
+        control.patchValue({ order: idx + 1 });
+      });
+    }
+  }
+
 }
