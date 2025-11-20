@@ -29,6 +29,8 @@ export class McQuestionEditorComponent implements OnInit {
 
     if (this.existingQuestion) {
       this.loadExistingQuestion();
+    } else {
+      this.initializeNewQuestion();
     }
   }
 
@@ -62,6 +64,7 @@ export class McQuestionEditorComponent implements OnInit {
     });
   }
 
+  // load existing question
   loadExistingQuestion(): void {
     if (!this.existingQuestion) return;
 
@@ -98,6 +101,21 @@ export class McQuestionEditorComponent implements OnInit {
     return 'opt-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
   }
 
+  // new question
+  initializeNewQuestion(): void {
+    this.questionId = this.generateId();
+    this.addNewOption();
+    this.addNewOption();
+  }
 
+  generateId(): string {
+    return 'mc-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+  }
+
+  addNewOption(): void {
+    const newOption = this.createOptionFormGroup();
+    newOption.patchValue({ order: this.options.length + 1 });
+    this.options.push(newOption);
+  }
 
 }
