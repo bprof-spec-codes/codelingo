@@ -19,13 +19,14 @@ export class AdminService {
   constructor(private http: HttpClient) { }
 
   // Languages
-private languagesStore: Language[] = [...MOCK_LANGUAGES];
+  private languagesStore: Language[] = [...MOCK_LANGUAGES];
   private languagesSubject = new BehaviorSubject<Language[]>(this.languagesStore);
   languages$ = this.languagesSubject.asObservable();
 
   getLanguages(): Observable<Language[]> {
     // NEM megy ki HTTP-re, csak a subject-et adja vissza
     return this.languages$;
+    //return this.http.get<Language[]>(`${this.baseUrl}/languages`);
   }
 
   addLanguage(data: { name: string; version: string }): Observable<any> {
@@ -33,7 +34,7 @@ private languagesStore: Language[] = [...MOCK_LANGUAGES];
   }
 
   updateLanguage(id: string, data: { name?: string; version?: string }): Observable<Language> {
-    return this.http.put<any>(`${this.baseUrl}/languages/${id}`, data);
+    return this.http.put<Language>(`${this.baseUrl}/languages/${id}`, data);
   }
 
   deleteLanguage(id: string): Observable<void> {
@@ -61,7 +62,7 @@ private languagesStore: Language[] = [...MOCK_LANGUAGES];
   deleteQuestion(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/questions/${id}`);
   }
-   /** Import questions from CSV or Aiken file */
+  /** Import questions from CSV or Aiken file */
   importQuestions(file: File, format?: 'csv' | 'aiken', async = false, batchSize = 100, validateOnly = false): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);

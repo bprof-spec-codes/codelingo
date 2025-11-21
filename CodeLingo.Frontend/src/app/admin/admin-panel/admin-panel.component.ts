@@ -21,6 +21,9 @@ export class AdminPanelComponent implements OnInit {
     //this.loadQuestions();
     this.loadMockQuestions()
   }
+  loadQuestions():void{
+    this.questions$ =this.adminService.getQuestions()
+  }
   loadMockQuestions() {
     const mockQuestions: Question[] = [
       // MultipleChoice
