@@ -2,14 +2,15 @@
     <h2 class="text-light mt-2 mb-2">Questions</h2>
     <p class="text-white-50">This section displays all questions in a list. You can view details, edit, or
         delete individual questions directly from the interface.</p>
-    <!-- Fejléc -->
 
+    <!-- Fejléc -->
     <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
         <div class="col-6 col-sm-2">Title</div>
         <div class="col-6 col-sm-4">Question</div>
         <div class="col-2 d-none d-sm-block">Difficulty</div>
         <div class="col-2 d-none d-sm-block">Language</div>
     </div>
+
     <!-- Listaelemek -->
     <div *ngFor="let q of questions$ | async as questions">
         <app-admin-item [question]="q" (questionUpdated)="onItemUpdated($event)" (delete)="onItemDelete($event)">
@@ -18,110 +19,140 @@
     <ng-template #loading>
         <p class="text-muted small">Loading...</p>
     </ng-template>
-<div class="text-light mt-4">
-  <h2 class="text-light mt-2 mb-2">Languages</h2>
-  <p class="text-white-50">
-    This section displays all supported programming languages. You can view details, edit,
-    or delete individual languages directly from the interface.
+    <div class="text-light mt-4">
+        <h2 class="text-light mt-2 mb-2">Languages</h2>
+        <p class="text-white-50">
+            This section displays all supported programming languages. You can view details, edit,
+            or delete individual languages directly from the interface.
+        </p>
+
+        <!-- Fejléc -->
+        <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
+            <div class="col-2">Name</div>
+            <div class="col-4">Version</div>
+            <div class="col-2 d-none d-sm-block">Created</div>
+            <div class="col-2 d-none d-sm-block">Updated</div>
+            <div class="col-2 text-end d-none d-sm-block"></div>
+        </div>
+
+        <!-- Listaelemek -->
+        <ng-container *ngIf="languages$ | async as languages; else loading">
+            <div class="item-row rounded row align-items-center border-bottom small py-2"
+                *ngFor="let lang of languages">
+                <!-- NEM szerkesztett állapot -->
+                <ng-container *ngIf="editingLanguage?.id !== lang.id; else editRow">
+                    <div class="col-2 text-truncate fw-bold text-primary">
+                        {{ lang.name }}
+                    </div>
+                    <div class="col-4 text-truncate">
+                        {{ lang.version }}
+                    </div>
+
+                    <div class="col-2 d-none d-sm-block">
+                        {{ lang.createdAt | date }}
+                    </div>
+                    <div class="col-2 d-none d-sm-block">
+                        {{ lang.updatedAt | date }}
+                    </div>
+
+                    <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+                        <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés"
+                            (click)="onEdit(lang)">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger d-none d-sm-inline" title="Törlés"
+                            (click)="onDelete(lang)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </ng-container>
+
+                <!-- SZERKESZTETT állapot -->
+                <ng-template #editRow>
+                    <div class="col-2">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="editModel.name"
+                            placeholder="Name" />
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="editModel.version"
+                            placeholder="Version" />
+                    </div>
+
+                    <div class="col-2 d-none d-sm-block">
+                        {{ lang.createdAt | date }}
+                    </div>
+                    <div class="col-2 d-none d-sm-block">
+                        {{ lang.updatedAt | date }}
+                    </div>
+
+                    <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+                        <button class="btn btn-sm btn-success" title="Mentés" (click)="onSaveEdit()">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-sm btn-secondary" title="Mégse" (click)="onCancelEdit()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </ng-container>
+
+        <ng-template #loading>
+            <p class="text-muted small">Loading...</p>
+        </ng-template>
+    </div>
+    <div>
+        <div class="py-4 bg-dark text-white rounded shadow-sm mb-4">
+  <h3 class="text-light mt-2 mb-2">Create Language</h3>
+  <p class="text-white-50 small">
+    Fill the form below to add a new programming language.
   </p>
 
-  <!-- Fejléc -->
-  <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
-    <div class="col-2">Name</div>
-    <div class="col-4">Version</div>
-    <div class="col-2 d-none d-sm-block">Created</div>
-    <div class="col-2 d-none d-sm-block">Updated</div>
-    <div class="col-2 text-end d-none d-sm-block"></div>
-  </div>
+  <form [formGroup]="languageForm" (ngSubmit)="onCreateLanguage()">
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Name</label>
+        <input
+          type="text"
+          formControlName="name"
+          class="form-control bg-dark text-white border-secondary"
+          placeholder="e.g. TypeScript"
+        />
+        <div
+          class="text-danger small mt-1"
+          *ngIf="languageForm.get('name')?.invalid && languageForm.get('name')?.touched"
+        >
+          Name is required.
+        </div>
+      </div>
 
-  <!-- Listaelemek -->
-  <ng-container *ngIf="languages$ | async as languages; else loading">
-    <div
-      class="item-row rounded row align-items-center border-bottom small py-2"
-      *ngFor="let lang of languages"
-    >
-      <!-- NEM szerkesztett állapot -->
-      <ng-container *ngIf="editingLanguage?.id !== lang.id; else editRow">
-        <div class="col-2 text-truncate fw-bold text-primary">
-          {{ lang.name }}
+      <div class="col-md-6">
+        <label class="form-label">Version</label>
+        <input
+          type="text"
+          formControlName="version"
+          class="form-control bg-dark text-white border-secondary"
+          placeholder="e.g. 5.4"
+        />
+        <div
+          class="text-danger small mt-1"
+          *ngIf="languageForm.get('version')?.invalid && languageForm.get('version')?.touched"
+        >
+          Version is required.
         </div>
-        <div class="col-4 text-truncate">
-          {{ lang.version }}
-        </div>
-
-        <div class="col-2 d-none d-sm-block">
-          {{ lang.createdAt | date }}
-        </div>
-        <div class="col-2 d-none d-sm-block">
-          {{ lang.updatedAt | date }}
-        </div>
-
-        <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
-          <button
-            class="btn btn-sm btn-outline-warning d-none d-sm-inline"
-            title="Szerkesztés"
-            (click)="onEdit(lang)"
-          >
-            <i class="bi bi-pencil-square"></i>
-          </button>
-          <button
-            class="btn btn-sm btn-outline-danger d-none d-sm-inline"
-            title="Törlés"
-            (click)="onDelete(lang)"
-          >
-            <i class="bi bi-trash"></i>
-          </button>
-        </div>
-      </ng-container>
-
-      <!-- SZERKESZTETT állapot -->
-      <ng-template #editRow>
-        <div class="col-2">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            [(ngModel)]="editModel.name"
-            placeholder="Name"
-          />
-        </div>
-        <div class="col-4">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            [(ngModel)]="editModel.version"
-            placeholder="Version"
-          />
-        </div>
-
-        <div class="col-2 d-none d-sm-block">
-          {{ lang.createdAt | date }}
-        </div>
-        <div class="col-2 d-none d-sm-block">
-          {{ lang.updatedAt | date }}
-        </div>
-
-        <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
-          <button
-            class="btn btn-sm btn-success"
-            title="Mentés"
-            (click)="onSaveEdit()"
-          >
-            <i class="bi bi-check-lg"></i>
-          </button>
-          <button
-            class="btn btn-sm btn-secondary"
-            title="Mégse"
-            (click)="onCancelEdit()"
-          >
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-      </ng-template>
+      </div>
     </div>
-  </ng-container>
 
-  <ng-template #loading>
-    <p class="text-muted small">Loading...</p>
-  </ng-template>
+    <div class="d-flex justify-content-end mt-3">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="languageForm.invalid"
+      >
+        Add Language
+      </button>
+    </div>
+  </form>
 </div>
+    </div>
 </div>

@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { Question, QuestionType } from '../../models/question';
 import { AdminService } from '../../services/admin.service';
 import { Language } from '../../models/language';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-admin-list',
   standalone: false,
@@ -14,17 +15,40 @@ export class AdminListComponent implements OnInit {
   languages$!: Observable<Language[]>;
   @Output() questionUpdated = new EventEmitter<Question>();
   @Output() delete = new EventEmitter<string>();
-
-
+  languageForm!: FormGroup;
   QuestionType = QuestionType;
 
   editingLanguage: Language | null = null;
   editModel: { name: string; version: string } = { name: '', version: '' };
 
-  constructor(private service: AdminService) { }
+  constructor(private service: AdminService, private fb: FormBuilder) {
+
+  }
 
   ngOnInit(): void {
-    this.languages$=this.service.getLanguages()
+    this.languages$ = this.service.getLanguages()
+
+    this.languageForm = this.fb.group({
+      name: ['', Validators.required],
+      version: ['', Validators.required]
+    });
+  }
+  onCreateLanguage(): void {
+    if (this.languageForm.invalid) {
+      this.languageForm.markAllAsTouched();
+      return;
+    }
+    
+    const newLanguage = this.languageForm.value;
+
+    this.service.addLanguage(newLanguage).subscribe({
+      next: () => {
+        this.languageForm.reset();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   onItemDelete(id: string) {
@@ -36,7 +60,7 @@ export class AdminListComponent implements OnInit {
   }
 
   onEdit(lang: Language) {
-    this.editingLanguage = { ...lang }; // másolat
+    this.editingLanguage = { ...lang };
     this.editModel = {
       name: lang.name,
       version: lang.version
@@ -61,7 +85,6 @@ export class AdminListComponent implements OnInit {
       },
       error: (err) => {
         console.error('Language update failed', err)
-        // hiba
       },
       complete: () => {
 
@@ -69,15 +92,11 @@ export class AdminListComponent implements OnInit {
     });
   }
 
-  // Mégse
   onCancelEdit() {
     this.editingLanguage = null;
   }
-
-  // Törlés
   onDelete(lang: Language) {
     console.log('Delete language:', lang)
-    // Itt jönne a DELETE /admin/languages/{id}
-    // this.service.deleteLanguage(lang.id).subscribe(...)
+    this.service.deleteLanguage(lang.id).subscribe()
   }
 }
