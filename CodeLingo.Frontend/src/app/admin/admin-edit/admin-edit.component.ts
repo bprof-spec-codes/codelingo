@@ -12,7 +12,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AdminEditComponent implements OnInit {
   @Input() question?: Question; // meglévő kérdés, vagy undefined = create
   @Output() save = new EventEmitter<Question>(); // értesítés a szülőnek
-    @Output() cancel = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>();
   QuestionType = QuestionType;
   questionForm!: FormGroup;
 
