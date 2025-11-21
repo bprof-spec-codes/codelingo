@@ -83,6 +83,7 @@
             &.ng-invalid.ng-touched {
                 border-color: $danger-500;
             }
+
         }
 
         textarea.form-control {
@@ -173,6 +174,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: $space-3;
+          
 
             .option-number {
                 color: $primary-400;
@@ -190,6 +192,15 @@
             display: flex;
             flex-direction: column;
             gap: $space-2;
+
+            .form-control {
+                background-color: #d4d4d4;
+                &.ng-invalid.ng-touched {
+                    border-radius: 8px;
+                    border: 2px solid;
+                    border-color: $danger-500;
+                }
+            }
 
             .correct-answer-checkbox {
                 display: flex;
@@ -210,6 +221,11 @@
                     font-size: 0.9rem;
                     cursor: pointer;
                 }
+            }
+
+            .form-error {
+                margin-bottom: $space-2;
+                color: $danger-500;
             }
         }
     }
@@ -263,6 +279,52 @@
 
         i {
             font-size: 1.2rem;
+        }
+    }
+
+    // form actions
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: $space-3;
+        padding-top: $space-4;
+        border-top: 1px solid $secondary-400;
+
+        .btn {
+            padding: $space-3 $space-5;
+            border-radius: 8px;
+            font-weight: $font-weight-semibold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+
+            &.btn-secondary {
+                background-color: $dark-800;
+                color: $light;
+                border: 2px solid $secondary-400;
+
+                &:hover {
+                    border-color: $light;
+                    background-color: $dark-700;
+                }
+            }
+
+            &.btn-primary {
+                background-color: $primary-400;
+                color: $dark;
+                border: 2px solid $primary-400;
+
+                &:hover:not(:disabled) {
+                    background-color: $primary-300;
+                    border-color: $primary-300;
+                }
+
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            }
         }
     }
 
