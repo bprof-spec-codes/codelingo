@@ -169,10 +169,10 @@
 
         <!-- form actions -->
         <div class="form-actions">
-            <button type="button" class="btn btn-secondary">
+            <button type="button" class="btn btn-secondary" (click)="cancel()">
                 Cancel
             </button>
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary" (click)="submitQuestion()">
                 {{ existingQuestion ? 'Update' : 'Create' }} Question
             </button>
         </div>

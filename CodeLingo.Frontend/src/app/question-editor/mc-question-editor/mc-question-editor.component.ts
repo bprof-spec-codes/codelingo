@@ -206,6 +206,76 @@ export class McQuestionEditorComponent implements OnInit {
     });
   }
 
+  cancel(): void {
+    this.cancelled.emit();
+  }
 
-  
+  isFormValid(): boolean {
+    const correctAnswerIds = this.getCorrectAnswerIds();
+    return this.questionForm.valid && correctAnswerIds.length > 0;
+  }
+
+  getCorrectAnswerIds(): string[] {
+    return this.options.controls
+      .filter(control => control.get('isCorrect')?.value)
+      .map(control => control.get('id')?.value);
+  }
+
+  submitQuestion(): void {
+    if (!this.isFormValid()) {
+      alert('Please fill in all required fields and select at least one correct answer!');
+      this.questionForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.questionForm.value;
+    const tags = this.parseTags();
+    const correctAnswerIds = this.getCorrectAnswerIds();
+
+    const options: AnswerOption[] = formValue.options.map((opt: any) => ({
+      id: opt.id,
+      text: opt.text,
+      imageUrl: opt.imageUrl || undefined,
+      order: opt.order
+    }));
+
+    const question: MultipleChoiceQuestion = {
+      id: this.questionId,
+      type: 'mc',
+      language: formValue.language,
+      difficulty: formValue.difficulty,
+      title: formValue.title,
+      questionText: formValue.questionText,
+      explanation: formValue.explanation,
+      tags: tags,
+      options: options,
+      correctAnswerIds: correctAnswerIds,
+      allowMultipleSelection: formValue.allowMultipleSelection,
+      shuffleOptions: formValue.shuffleOptions,
+      metadata: {
+        version: this.version,
+        estimatedTimeSeconds: formValue.estimatedTimeSeconds,
+        pointValue: 10,
+        usageCount: this.existingQuestion?.metadata.usageCount || 0,
+        averageCorrectRate: this.existingQuestion?.metadata.averageCorrectRate || 0,
+        lastUsedAt: this.existingQuestion?.metadata.lastUsedAt
+      },
+      createdAt: this.existingQuestion?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: this.existingQuestion?.createdBy || 'current-user',
+      isActive: formValue.isActive
+    };
+
+    this.questionSubmitted.emit(question);
+  }
+
+  parseTags(): string[] {
+    const tagsInput = this.questionForm.get('tagsInput')?.value || '';
+    return tagsInput
+      .split(',')
+      .map((tag: string) => tag.trim())
+      .filter((tag: string) => tag.length > 0);
+  }
+
+
 }
