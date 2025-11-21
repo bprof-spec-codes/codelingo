@@ -27,16 +27,16 @@
       </div>
     </div>
   </div>
-
+  <div class="container px-4 pb-4">
+    <app-admin-edit
+    [question]="question" 
+    (save)="onQuestionCreated($event)" >></app-admin-edit>
+  </div>
   <!-- Lista -->
   <div class="container px-4 pb-4">
     <app-admin-list [questions$]="questions$" (questionUpdated)="onQuestionUpdated($event)"
       (delete)="onDelete($event)"></app-admin-list>
   </div>
   <!--Új létrehozás-->
-  <div class="container px-4 pb-4">
-    <app-admin-edit
-    [question]="question" 
-    (save)="onQuestionCreated($event)" >></app-admin-edit>
-  </div>
+
 </div>
