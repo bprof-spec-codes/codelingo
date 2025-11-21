@@ -31,7 +31,7 @@ export class AdminEditComponent implements OnInit {
     this.questionForm = this.fb.group({
       type: [QuestionType.MultipleChoice, Validators.required],
       language: ['', Validators.required],
-      difficulty: ['', Validators.required],
+      difficulty: ['medium', Validators.required],
       title: ['', Validators.required],
       questionText: ['', Validators.required],
       explanation: [''],

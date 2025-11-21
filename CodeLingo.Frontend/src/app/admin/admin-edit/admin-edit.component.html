@@ -25,7 +25,11 @@
       </div>
       <div class="col-md-6">
         <label class="form-label">Difficulty</label>
-        <input type="text" formControlName="difficulty" class="form-control bg-dark text-white border-secondary" />
+        <select formControlName="difficulty" class="form-select bg-dark text-white border-secondary">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
       </div>
 
       <div class="col-12">
