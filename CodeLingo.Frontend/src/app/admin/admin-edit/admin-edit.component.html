@@ -4,6 +4,7 @@
   <p *ngIf="!question" class="text-white-50">
     Fill the form below to create a new question.
   </p>
+
   <form [formGroup]="questionForm" (ngSubmit)="saveQuestion()">
 
     <!-- Alapadatok -->
@@ -14,6 +15,7 @@
           <option *ngFor="let t of (QuestionType | keyvalue)" [value]="t.value">{{ t.key }}</option>
         </select>
       </div>
+
       <div class="col-md-6">
         <label class="form-label">Title</label>
         <input type="text" formControlName="title" class="form-control bg-dark text-white border-secondary" />
@@ -23,6 +25,7 @@
         <label class="form-label">Language</label>
         <input type="text" formControlName="language" class="form-control bg-dark text-white border-secondary" />
       </div>
+
       <div class="col-md-6">
         <label class="form-label">Difficulty</label>
         <select formControlName="difficulty" class="form-select bg-dark text-white border-secondary">
@@ -34,23 +37,46 @@
 
       <div class="col-12">
         <label class="form-label">Question Text</label>
-        <textarea formControlName="questionText" class="form-control bg-dark text-white border-secondary"
-          rows="3"></textarea>
+        <textarea formControlName="questionText"
+                  class="form-control bg-dark text-white border-secondary"
+                  rows="3"></textarea>
       </div>
 
       <div class="col-12">
         <label class="form-label">Explanation</label>
-        <textarea formControlName="explanation" class="form-control bg-dark text-white border-secondary"
-          rows="2"></textarea>
+        <textarea formControlName="explanation"
+                  class="form-control bg-dark text-white border-secondary"
+                  rows="2"></textarea>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Tags</label>
-        <input type="text" formControlName="tags" class="form-control bg-dark text-white border-secondary" />
+        <label class="form-label">Tags (comma separated)</label>
+        <input type="text"
+               formControlName="tags"
+               class="form-control bg-dark text-white border-secondary" />
       </div>
-      <div class="col-md-6">
-        <label class="form-label">Metadata</label>
-        <input type="text" formControlName="metadata" class="form-control bg-dark text-white border-secondary" />
+
+      <!-- METADATA: külön groupon belüli 3 mező -->
+      <div formGroupName="metadata" class="col-md-6">
+        <label class="form-label d-block">Metadata</label>
+        <div class="mb-1">
+          <input type="text"
+                 formControlName="category"
+                 class="form-control bg-dark text-white border-secondary mb-1"
+                 placeholder="Category" />
+        </div>
+        <div class="mb-1">
+          <input type="text"
+                 formControlName="topic"
+                 class="form-control bg-dark text-white border-secondary mb-1"
+                 placeholder="Topic" />
+        </div>
+        <div>
+          <input type="text"
+                 formControlName="source"
+                 class="form-control bg-dark text-white border-secondary"
+                 placeholder="Source" />
+        </div>
       </div>
 
       <div class="col-12 form-check mt-2 ms-2">
@@ -64,31 +90,54 @@
       <h5 class="mb-2">Multiple Choice Options</h5>
 
       <div formArrayName="options" class="mb-2">
-        <div *ngFor="let opt of options.controls; let i=index" class="input-group mb-1">
-          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary"
-            placeholder="Option {{ i + 1 }}" />
-          <button type="button" class="btn btn-outline-danger" (click)="removeOption(i)">Remove</button>
-        </div>
-        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addOption()">Add Option</button>
-      </div>
+        <!-- options: FormArray<FormGroup> -->
+        <div *ngFor="let opt of options.controls; let i = index"
+             [formGroupName]="i"
+             class="row g-1 align-items-center mb-1">
 
-      <div formArrayName="correctAnswerIds" class="mb-2">
-        <p class="h5 mb-2">Correct Answers</p>
-        <div *ngFor="let ans of correctAnswerIds.controls; let i=index" class="input-group mb-1">
-          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary"
-            placeholder="Correct Answer {{ i + 1 }}" />
-          <button type="button" class="btn btn-outline-danger" (click)="removeCorrectAnswer(i)">Remove</button>
+          <div class="col">
+            <input formControlName="text"
+                   class="form-control bg-dark text-white border-secondary"
+                   [placeholder]="'Option ' + (i + 1)" />
+          </div>
+
+          <div class="col-auto form-check ms-2">
+            <input type="checkbox"
+                   formControlName="isCorrect"
+                   class="form-check-input"
+                   [id]="'opt-correct-' + i" />
+            <label class="form-check-label" [for]="'opt-correct-' + i">Correct</label>
+          </div>
+
+          <div class="col-auto">
+            <button type="button"
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="removeOption(i)">
+              Remove
+            </button>
+          </div>
         </div>
-        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCorrectAnswer()">Add Correct
-          Answer</button>
+
+        <button type="button"
+                class="btn btn-outline-primary btn-sm mt-2"
+                (click)="addOption()">
+          Add Option
+        </button>
       </div>
 
       <div class="form-check mt-2">
-        <input type="checkbox" formControlName="allowMultipleSelection" class="form-check-input" id="allowMultiple" />
+        <input type="checkbox"
+               formControlName="allowMultipleSelection"
+               class="form-check-input"
+               id="allowMultiple" />
         <label class="form-check-label" for="allowMultiple">Allow multiple selection</label>
       </div>
+
       <div class="form-check mt-1">
-        <input type="checkbox" formControlName="shuffleOptions" class="form-check-input" id="shuffleOptions" />
+        <input type="checkbox"
+               formControlName="shuffleOptions"
+               class="form-check-input"
+               id="shuffleOptions" />
         <label class="form-check-label" for="shuffleOptions">Shuffle options</label>
       </div>
     </div>
@@ -99,41 +148,67 @@
 
       <div class="mb-2">
         <label class="form-label">Starter Code</label>
-        <textarea formControlName="starterCode" class="form-control bg-dark text-white border-secondary"
-          rows="3"></textarea>
+        <textarea formControlName="starterCode"
+                  class="form-control bg-dark text-white border-secondary"
+                  rows="3"></textarea>
       </div>
 
       <div class="mb-2">
         <label class="form-label">Correct Answer</label>
-        <textarea formControlName="correctAnswer" class="form-control bg-dark text-white border-secondary"
-          rows="3"></textarea>
+        <textarea formControlName="correctAnswer"
+                  class="form-control bg-dark text-white border-secondary"
+                  rows="3"></textarea>
       </div>
 
       <h6>Hints</h6>
       <div formArrayName="hints" class="mb-2">
-        <div *ngFor="let h of hints.controls; let i=index" class="input-group mb-1">
-          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary"
-            placeholder="Hint {{ i + 1 }}" />
-          <button type="button" class="btn btn-outline-danger" (click)="removeHint(i)">Remove</button>
+        <div *ngFor="let h of hints.controls; let i = index" class="input-group mb-1">
+          <input [formControlName]="i"
+                 class="form-control bg-dark text-white border-secondary"
+                 [placeholder]="'Hint ' + (i + 1)" />
+          <button type="button"
+                  class="btn btn-outline-danger"
+                  (click)="removeHint(i)">
+            Remove
+          </button>
         </div>
-        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addHint()">Add Hint</button>
+        <button type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="addHint()">
+          Add Hint
+        </button>
       </div>
 
       <h6>Constraints</h6>
       <div formArrayName="constraints" class="mb-2">
-        <div *ngFor="let c of constraints.controls; let i=index" class="input-group mb-1">
-          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary"
-            placeholder="Constraint {{ i + 1 }}" />
-          <button type="button" class="btn btn-outline-danger" (click)="removeConstraint(i)">Remove</button>
+        <div *ngFor="let c of constraints.controls; let i = index" class="input-group mb-1">
+          <input [formControlName]="i"
+                 class="form-control bg-dark text-white border-secondary"
+                 [placeholder]="'Constraint ' + (i + 1)" />
+          <button type="button"
+                  class="btn btn-outline-danger"
+                  (click)="removeConstraint(i)">
+            Remove
+          </button>
         </div>
-        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addConstraint()">Add Constraint</button>
+        <button type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="addConstraint()">
+          Add Constraint
+        </button>
       </div>
     </div>
 
     <div class="d-flex justify-content-end mt-3 gap-2">
-      <button *ngIf="question" type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
-      <button type="submit" class="btn btn-success">Save Question</button>
+      <button *ngIf="question"
+              type="button"
+              class="btn btn-danger"
+              (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-success">
+        Save Question
+      </button>
     </div>
-
   </form>
 </div>

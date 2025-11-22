@@ -32,7 +32,7 @@ deleteItem() {
     this.showDetails = !this.showDetails;
   }
   constructor() { }
-  get mcQuestion(): MultipleChoiceQuestion | null {
+get mcQuestion(): MultipleChoiceQuestion | null {
     return this.question.type === QuestionType.MultipleChoice
       ? (this.question as MultipleChoiceQuestion)
       : null;

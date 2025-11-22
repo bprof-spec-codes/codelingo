@@ -1,7 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Question, MultipleChoiceQuestion, CodeCompletionQuestion, QuestionType } from '../../models/question';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import {
+  Question,
+  MultipleChoiceQuestion,
+  CodeCompletionQuestion,
+  QuestionType,
+  MultipleChoiceOption
+} from '../../models/question';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-edit',
@@ -13,6 +18,7 @@ export class AdminEditComponent implements OnInit {
   @Input() question?: Question; // meglévő kérdés, vagy undefined = create
   @Output() save = new EventEmitter<Question>(); // értesítés a szülőnek
   @Output() cancel = new EventEmitter<void>();
+
   QuestionType = QuestionType;
   questionForm!: FormGroup;
 
@@ -24,9 +30,11 @@ export class AdminEditComponent implements OnInit {
       this.patchForm(this.question);
     }
   }
+
   onCancel() {
     this.cancel.emit();
   }
+
   initForm() {
     this.questionForm = this.fb.group({
       type: [QuestionType.MultipleChoice, Validators.required],
@@ -35,14 +43,25 @@ export class AdminEditComponent implements OnInit {
       title: ['', Validators.required],
       questionText: ['', Validators.required],
       explanation: [''],
+
+      // UI: egyszerű string, backend: string[]
       tags: [''],
-      metadata: [''],
+
+      // UI: string (pl. JSON), backend: QuestionMetadata objektum
+      metadata: this.fb.group({
+        category: [''],
+        topic: [''],
+        source: ['']
+      }),
+
       isActive: [true],
-      // MultipleChoice mezők
+
+      // MultipleChoice mezők (UI: stringek, backend: MultipleChoiceOption[])
       options: this.fb.array([]),
       correctAnswerIds: this.fb.array([]),
       allowMultipleSelection: [false],
       shuffleOptions: [false],
+
       // CodeCompletion mezők
       starterCode: [''],
       correctAnswer: [''],
@@ -51,18 +70,76 @@ export class AdminEditComponent implements OnInit {
     });
   }
 
-  patchForm(q: Question) {
-    this.questionForm.patchValue(q);
+  patchForm(q: Question): void {
+    // alapmezők
+    this.questionForm.patchValue({
+      type: q.type,
+      language: q.language,
+      difficulty: q.difficulty,
+      title: q.title,
+      questionText: q.questionText,
+      explanation: q.explanation ?? null,
+      tags: q.tags ?? [],
+      metadata: {
+        category: q.metadata?.category ?? '',
+        topic: q.metadata?.topic ?? '',
+        source: q.metadata?.source ?? ''
+      }
+    });
+
+    const optionsFa = this.questionForm.get('options') as FormArray;
+    const correctFa = this.questionForm.get('correctAnswerIds') as FormArray;
+    const hintsFa = this.questionForm.get('hints') as FormArray;
+    const constraintsFa = this.questionForm.get('constraints') as FormArray;
+
+    optionsFa.clear();
+    correctFa.clear();
+    hintsFa.clear();
+    constraintsFa.clear();
 
     if (q.type === QuestionType.MultipleChoice) {
       const mc = q as MultipleChoiceQuestion;
-      this.setFormArray('options', mc.options);
-      this.setFormArray('correctAnswerIds', mc.correctAnswerIds);
+
+      this.questionForm.patchValue({
+        allowMultipleSelection: mc.allowMultipleSelection,
+        shuffleOptions: mc.shuffleOptions
+      });
+
+      // options: MultipleChoiceOption[] → form: string[]
+mc.options.forEach(opt => {
+  optionsFa.push(
+    this.fb.group({
+      text: [opt.text, Validators.required],
+      isCorrect: [opt.isCorrect]
+    })
+  );
+});
+
     } else if (q.type === QuestionType.CodeCompletion) {
       const cc = q as CodeCompletionQuestion;
-      this.setFormArray('hints', cc.hints);
-      this.setFormArray('constraints', cc.constraints);
+
+      this.questionForm.patchValue({
+        starterCode: cc.starterCode,
+        correctAnswer: cc.correctAnswer
+      });
+
+      cc.hints.forEach(h => hintsFa.push(new FormControl(h)));
+      cc.constraints.forEach(c => constraintsFa.push(new FormControl(c)));
     }
+  }
+
+  // Ha máshol még használnád:
+  private setFormArray(controlName: string, items: string[]) {
+    const fa = this.questionForm.get(controlName) as FormArray;
+    fa.clear();
+    items.forEach(i => fa.push(new FormControl(i)));
+  }
+
+  private createOptionGroup(opt?: MultipleChoiceOption): FormGroup {
+    return this.fb.group({
+      text: [opt?.text ?? '', Validators.required],
+      isCorrect: [opt?.isCorrect ?? false]
+    });
   }
 
   get options() { return this.questionForm.get('options') as FormArray; }
@@ -70,13 +147,14 @@ export class AdminEditComponent implements OnInit {
   get hints() { return this.questionForm.get('hints') as FormArray; }
   get constraints() { return this.questionForm.get('constraints') as FormArray; }
 
-  setFormArray(name: string, values: string[]) {
-    const arr = this.questionForm.get(name) as FormArray;
-    arr.clear();
-    values.forEach(v => arr.push(this.fb.control(v)));
+  addOption() {
+    this.options.push(
+      this.fb.group({
+        text: ['', Validators.required],
+        isCorrect: [false]
+      })
+    );
   }
-
-  addOption() { this.options.push(this.fb.control('')); }
   removeOption(i: number) { this.options.removeAt(i); }
   addCorrectAnswer() { this.correctAnswerIds.push(this.fb.control('')); }
   removeCorrectAnswer(i: number) { this.correctAnswerIds.removeAt(i); }
@@ -86,14 +164,83 @@ export class AdminEditComponent implements OnInit {
   removeConstraint(i: number) { this.constraints.removeAt(i); }
 
   saveQuestion() {
-    const q: Question = {
-    ...this.question,             // ha edit, belemászik az eredeti (id, createdAt, stb.)
-    ...this.questionForm.value,   // felülírja a form értékekkel
-      createdAt: this.question?.createdAt || new Date(),
-      updatedAt: new Date(),
-      createdBy: this.question?.createdBy || 'admin'
-    };
-    console.log(q)
+    const raw = this.questionForm.value;
+
+    // tags: string → string[]
+    const tags =
+      typeof raw.tags === 'string' && raw.tags.trim().length > 0
+        ? raw.tags
+          .split(',')
+          .map((t: string) => t.trim())
+          .filter((t: string) => t.length > 0)
+        : undefined;
+
+    // metadata: string (JSON) → objektum
+    let metadata: Question['metadata'] | undefined;
+    if (typeof raw.metadata === 'string' && raw.metadata.trim().length > 0) {
+      try {
+        metadata = JSON.parse(raw.metadata);
+      } catch {
+        metadata = undefined;
+      }
+    }
+
+    let q: Question;
+
+    if (raw.type === QuestionType.MultipleChoice) {
+      const optionTexts: string[] = raw.options || [];
+      const correctAnswers: string[] = raw.correctAnswerIds || [];
+
+      const options: MultipleChoiceOption[] = optionTexts.map(text => ({
+        text,
+        isCorrect: correctAnswers.includes(text)
+      }));
+
+      q = {
+        ...(this.question ?? {}),
+        type: QuestionType.MultipleChoice,
+        language: raw.language,
+        difficulty: raw.difficulty,
+        title: raw.title,
+        questionText: raw.questionText,
+        explanation: raw.explanation || undefined,
+        tags,
+        metadata,
+        isActive: raw.isActive,
+
+        options,
+        allowMultipleSelection: raw.allowMultipleSelection,
+        shuffleOptions: raw.shuffleOptions,
+
+        createdAt: this.question?.createdAt || new Date(),
+        updatedAt: new Date(),
+        createdBy: this.question?.createdBy || 'admin'
+      } as MultipleChoiceQuestion;
+    } else {
+      q = {
+        ...(this.question ?? {}),
+        type: QuestionType.CodeCompletion,
+        language: raw.language,
+        difficulty: raw.difficulty,
+        title: raw.title,
+        questionText: raw.questionText,
+        explanation: raw.explanation || undefined,
+        tags,
+        metadata,
+        isActive: raw.isActive,
+
+        starterCode: raw.starterCode,
+        correctAnswer: raw.correctAnswer,
+        hints: raw.hints || [],
+        constraints: raw.constraints || [],
+
+        createdAt: this.question?.createdAt || new Date(),
+        updatedAt: new Date(),
+        createdBy: this.question?.createdBy || 'admin'
+      } as CodeCompletionQuestion;
+    }
+
+    console.log(q);
     this.save.emit(q); // szülő értesítése
   }
 }
