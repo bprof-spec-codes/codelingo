@@ -52,10 +52,12 @@ export class AdminService {
   }
 
   createQuestion(data: Question): Observable<Question> {
+    console.log(data)
     return this.http.post<Question>(`${this.baseUrl}/questions`, data);
   }
 
   updateQuestion(id: string, data: Question): Observable<Question> {
+    console.log(data)
     return this.http.put<Question>(`${this.baseUrl}/questions/${id}`, data);
   }
 

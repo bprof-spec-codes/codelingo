@@ -59,7 +59,6 @@ export class AdminEditComponent implements OnInit {
       // MultipleChoice mezők (UI: stringek, backend: MultipleChoiceOption[])
       options: this.fb.array([]),
       correctAnswerIds: this.fb.array([]),
-      allowMultipleSelection: [false],
       shuffleOptions: [false],
 
       // CodeCompletion mezők
@@ -79,7 +78,7 @@ export class AdminEditComponent implements OnInit {
       title: q.title,
       questionText: q.questionText,
       explanation: q.explanation ?? null,
-      tags: q.tags ?? [],
+      tags: q.tags?.join(', ') ?? '',
       metadata: {
         category: q.metadata?.category ?? '',
         topic: q.metadata?.topic ?? '',
@@ -101,19 +100,18 @@ export class AdminEditComponent implements OnInit {
       const mc = q as MultipleChoiceQuestion;
 
       this.questionForm.patchValue({
-        allowMultipleSelection: mc.allowMultipleSelection,
         shuffleOptions: mc.shuffleOptions
       });
 
       // options: MultipleChoiceOption[] → form: string[]
-mc.options.forEach(opt => {
-  optionsFa.push(
-    this.fb.group({
-      text: [opt.text, Validators.required],
-      isCorrect: [opt.isCorrect]
-    })
-  );
-});
+      mc.options.forEach(opt => {
+        optionsFa.push(
+          this.fb.group({
+            text: [opt.text, Validators.required],
+            isCorrect: [opt.isCorrect]
+          })
+        );
+      });
 
     } else if (q.type === QuestionType.CodeCompletion) {
       const cc = q as CodeCompletionQuestion;
@@ -176,24 +174,26 @@ mc.options.forEach(opt => {
         : undefined;
 
     // metadata: string (JSON) → objektum
-    let metadata: Question['metadata'] | undefined;
-    if (typeof raw.metadata === 'string' && raw.metadata.trim().length > 0) {
-      try {
-        metadata = JSON.parse(raw.metadata);
-      } catch {
-        metadata = undefined;
+    const metaGroup = raw.metadata;
+    const hasMetadata = metaGroup && (metaGroup.category || metaGroup.topic || metaGroup.source);
+
+    const metadata = hasMetadata
+      ? {
+        category: metaGroup.category || undefined,
+        topic: metaGroup.topic || undefined,
+        source: metaGroup.source || undefined
       }
-    }
+      : undefined;
 
     let q: Question;
 
     if (raw.type === QuestionType.MultipleChoice) {
       const optionTexts: string[] = raw.options || [];
       const correctAnswers: string[] = raw.correctAnswerIds || [];
-
-      const options: MultipleChoiceOption[] = optionTexts.map(text => ({
-        text,
-        isCorrect: correctAnswers.includes(text)
+      const optionGroups = (raw.options || []) as { text: string; isCorrect: boolean }[];
+      const options: MultipleChoiceOption[] = optionGroups.map(o => ({
+        text: o.text,
+        isCorrect: !!o.isCorrect
       }));
 
       q = {
@@ -209,7 +209,6 @@ mc.options.forEach(opt => {
         isActive: raw.isActive,
 
         options,
-        allowMultipleSelection: raw.allowMultipleSelection,
         shuffleOptions: raw.shuffleOptions,
 
         createdAt: this.question?.createdAt || new Date(),
