@@ -29,7 +29,7 @@ export class AdminService {
     //return this.http.get<Language[]>(`${this.baseUrl}/languages`);
   }
 
-  addLanguage(data: { name: string; version: string }): Observable<any> {
+  addLanguage(data: { name: string; version: string }): Observable<Language> {
     return this.http.post<any>(`${this.baseUrl}/languages`, data);
   }
 
@@ -52,12 +52,10 @@ export class AdminService {
   }
 
   createQuestion(data: Question): Observable<Question> {
-    console.log(data)
     return this.http.post<Question>(`${this.baseUrl}/questions`, data);
   }
 
   updateQuestion(id: string, data: Question): Observable<Question> {
-    console.log(data)
     return this.http.put<Question>(`${this.baseUrl}/questions/${id}`, data);
   }
 
