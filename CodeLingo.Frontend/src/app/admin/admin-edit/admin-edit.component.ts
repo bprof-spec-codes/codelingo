@@ -93,6 +93,7 @@ export class AdminEditComponent implements OnInit {
       updatedAt: new Date(),
       createdBy: this.question?.createdBy || 'admin'
     };
+    console.log(q)
     this.save.emit(q); // szülő értesítése
   }
 }

@@ -1,21 +1,24 @@
 export interface Question {
   id: string;
-  type: string;          
+  type: string;
   language: string;
-  difficulty: string;    
+  difficulty: string;
   title: string;
   questionText: string;
   explanation: string;
   tags: string;
   metadata: string;
-  createdAt: Date;     
-  updatedAt: Date;     
+  createdAt: Date;
+  updatedAt: Date;
   createdBy: string;
   isActive: boolean;
 }
+export interface MultipleChoiceOption {
+  text: string;
+  isCorrect: boolean;
+}
 export interface MultipleChoiceQuestion extends Question {
-  options: string[];
-  correctAnswerIds: string[];
+  options: MultipleChoiceOption[];
   allowMultipleSelection: boolean;
   shuffleOptions: boolean;
 }

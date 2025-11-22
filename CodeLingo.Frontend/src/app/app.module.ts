@@ -16,6 +16,8 @@ import { AdminEditComponent } from './admin/admin-edit/admin-edit.component';
 import { AdminItemComponent } from './admin/admin-item/admin-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CountUpModule } from 'ngx-countup';
+import { AdminLanguageCreateComponent } from './admin/admin-language-create/admin-language-create.component';
+import { AdminLanguageListComponent } from './admin/admin-language-list/admin-language-list.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { CountUpModule } from 'ngx-countup';
     AdminListComponent,
     AdminEditComponent,
     AdminItemComponent,
+    AdminLanguageCreateComponent,
+    AdminLanguageListComponent,
     
   ],
   imports: [

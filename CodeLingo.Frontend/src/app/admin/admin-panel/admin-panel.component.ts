@@ -74,7 +74,7 @@ export class AdminPanelComponent implements OnInit {
   onQuestionUpdated(updated: Question) {
     this.adminService.updateQuestion(updated.id, updated)
   }
-  onDelete(id: string) {
+  onQuestionDelete(id: string) {
     this.adminService.deleteQuestion(id)
   }
   onQuestionCreated(created: Question) {

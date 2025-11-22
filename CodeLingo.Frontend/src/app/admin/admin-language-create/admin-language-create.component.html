@@ -1,0 +1,36 @@
+<div class="py-4 bg-dark text-white rounded shadow-sm mb-4 ">
+            <h3 class="text-light mt-2 mb-2">Create Language</h3>
+            <p class="text-white-50 small">
+                Fill the form below to add a new programming language.
+            </p>
+
+            <form [formGroup]="languageForm" (ngSubmit)="onCreateLanguage()">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Name</label>
+                        <input type="text" formControlName="name"
+                            class="form-control bg-dark text-white border-secondary" placeholder="e.g. TypeScript" />
+                        <div class="text-danger small mt-1"
+                            *ngIf="languageForm.get('name')?.invalid && languageForm.get('name')?.touched">
+                            Name is required.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Version</label>
+                        <input type="text" formControlName="version"
+                            class="form-control bg-dark text-white border-secondary" placeholder="e.g. 5.4" />
+                        <div class="text-danger small mt-1"
+                            *ngIf="languageForm.get('version')?.invalid && languageForm.get('version')?.touched">
+                            Version is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-success" [disabled]="languageForm.invalid">
+                        Add Language
+                    </button>
+                </div>
+            </form>
+        </div>
