@@ -6,11 +6,12 @@ import { AnswerOption } from '../../models/answer-option';
   selector: 'app-multiple-choice-question',
   standalone: false,
   templateUrl: './multiple-choice-question.component.html',
-  styleUrl: './multiple-choice-question.component.scss'
+  styleUrl: './multiple-choice-question.component.scss',
 })
 export class MultipleChoiceQuestionComponent {
-
   @Input() question!: MultipleChoiceQuestion;
+  @Input() isSubmitted: boolean = false;
+
   @Output() answerSubmitted = new EventEmitter<string[]>();
 
   // Seed data for testing
@@ -64,9 +65,7 @@ export class MultipleChoiceQuestionComponent {
   //   };
   // }
 
-
   selectedAnswerIds: string[] = [];
-  isSubmitted: boolean = false;
 
   // toggle option selection
   toggleOption(optionId: string): void {
@@ -112,7 +111,6 @@ export class MultipleChoiceQuestionComponent {
     return sorted;
   }
 
-
   // check if submission is allowed
   canSubmit(): boolean {
     return this.selectedAnswerIds.length > 0 && !this.isSubmitted;
@@ -125,5 +123,10 @@ export class MultipleChoiceQuestionComponent {
       this.isSubmitted = true;
       this.answerSubmitted.emit([...this.selectedAnswerIds]);
     }
+  }
+
+  resetSelection() {
+    this.selectedAnswerIds = [];
+    this.isSubmitted = false;
   }
 }
