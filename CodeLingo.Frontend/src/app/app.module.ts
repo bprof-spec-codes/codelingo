@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
 import { QuestionCountSelectorComponent } from './practice-starter/question-count-selector/question-count-selector.component';
 import { MultipleChoiceQuestionComponent } from './question-container/multiple-choice-question/multiple-choice-question.component';
+import { QuestionContainerComponent } from './question-container/question-container.component';
+import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { MultipleChoiceQuestionComponent } from './question-container/multiple-c
     DifficultySelectorComponent,
     PracticeStarterComponent,
     QuestionCountSelectorComponent,
-    MultipleChoiceQuestionComponent
+    MultipleChoiceQuestionComponent,
+    QuestionContainerComponent,
+    QuestionProgressComponent
   ],
   imports: [
     BrowserModule,
