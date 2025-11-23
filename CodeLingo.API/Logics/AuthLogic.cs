@@ -31,5 +31,45 @@ namespace CodeLingo.API.Logics
             var result = _passwordHasher.VerifyHashedPassword(user, passwordHash, password);
             return result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded;
         }
+
+        public async Task<User?> GetUserByUsernameAsync(string username)
+        {
+            return await _userManager.FindByNameAsync(username);
+        }
+
+        public async Task<bool> UsernameExistsAsync(string username)
+        {
+            return await _userManager.FindByNameAsync(username) != null;
+        }
+
+        public async Task<IList<string>> GetUserRolesAsync(User user)
+        {
+            return await _userManager.GetRolesAsync(user);
+        }
+
+        public async Task<bool> IsInRoleAsync(User user, string role)
+        {
+            return await _userManager.IsInRoleAsync(user, role);
+        }
+
+        public async Task<IdentityResult> CreateUserAsync(User user, string password)
+        {
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (result.Succeeded)
+            {
+                // Assign default User role
+                await _userManager.AddToRoleAsync(user, AppRoles.User);
+            }
+
+            return result;
+        }
+
+        public async Task<IdentityResult> AddToRoleAsync(User user, string role)
+        {
+            return await _userManager.AddToRoleAsync(user, role);
+        }
+
+
     }
 }
