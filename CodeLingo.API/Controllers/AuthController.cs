@@ -1,5 +1,6 @@
 ﻿using CodeLingo.API.Logics;
 using CodeLingo.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using static CodeLingo.API.DTOs.Auth.AuthDtos;
@@ -126,6 +127,26 @@ namespace CodeLingo.API.Controllers
                 AccessToken = accessToken,
                 ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
             });
+        }
+
+        // Admin endpoint to promote user to admin role
+        [Authorize(Roles = AppRoles.Admin)]
+        [HttpPost("promote-to-admin/{userId}")]
+        public async Task<IActionResult> PromoteToAdmin(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { error = "User not found" });
+            }
+
+            var result = await _authLogic.AddToRoleAsync(user, AppRoles.Admin);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { error = "Failed to promote user to admin" });
+            }
+
+            return Ok(new { message = $"User {user.UserName} promoted to admin successfully" });
         }
     }
 }
