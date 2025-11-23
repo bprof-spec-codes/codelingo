@@ -27,11 +27,13 @@ export class AuthMockInterceptor implements HttpInterceptor {
     const { url, method, body } = req;
 
     if (url.endsWith('/auth/register') && method === 'POST') {
-      return of(body).pipe(delay(500));
+      return this.handleRegister(body); // call private method
     }
+
     if (url.endsWith('/auth/login') && method === 'POST') {
-      return of(body).pipe(delay(400));
+      return this.handleLogin(body);
     }
+
     if (url.endsWith('/auth/token/refresh') && method === 'POST') {
       return this.handleRefresh(body);
     }

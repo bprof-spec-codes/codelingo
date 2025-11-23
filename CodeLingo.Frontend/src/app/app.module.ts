@@ -22,6 +22,9 @@ import { QuestionCountSelectorComponent } from './practice-starter/question-coun
 import { LoginComponent } from './login/login.component';
 import { AuthMockInterceptor } from './interceptors/auth-mock.interceptor';
 import { RegisterComponent } from './register/register.component';
+import { MultipleChoiceQuestionComponent } from './question-container/multiple-choice-question/multiple-choice-question.component';
+import { QuestionContainerComponent } from './question-container/question-container.component';
+import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,10 @@ import { RegisterComponent } from './register/register.component';
     QuestionCountSelectorComponent,
     LoginComponent,
     RegisterComponent,
+    QuestionCountSelectorComponent,
+    MultipleChoiceQuestionComponent,
+    QuestionContainerComponent,
+    QuestionProgressComponent
   ],
   imports: [
     BrowserModule,

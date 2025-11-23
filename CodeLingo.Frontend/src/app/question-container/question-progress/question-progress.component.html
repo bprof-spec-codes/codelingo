@@ -1,0 +1,18 @@
+<div class="progress-container">
+  <div class="progress-item">
+    <span class="label">Question</span>
+    <span class="value">{{ currentIndex }} / {{ totalQuestions }}</span>
+  </div>
+
+  <!-- <div class="progress-item">
+    <span class="label">Score</span>
+    <span class="value">{{ currentScore }}</span>
+  </div> -->
+
+  <div class="progress-bar">
+    <div
+      class="progress-fill"
+      [style.width.%]="(currentIndex / totalQuestions) * 100"
+    ></div>
+  </div>
+</div>
