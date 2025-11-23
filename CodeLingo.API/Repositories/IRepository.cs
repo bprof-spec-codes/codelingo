@@ -1,4 +1,4 @@
-﻿namespace CodeLingo.API.Repositories
+namespace CodeLingo.API.Repositories
 {
     public interface IRepository<T>
     {

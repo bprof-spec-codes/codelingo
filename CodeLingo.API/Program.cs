@@ -1,4 +1,4 @@
-﻿using CodeLingo.API.Data;
+using CodeLingo.API.Data;
 using CodeLingo.API.Logics;
 using CodeLingo.API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
 using static CodeLingo.API.Models.Enums;
+using System.Text.Json;
+using CodeLingo.API.Repositories;
+using CodeLingo.API.Logics;
 
 namespace CodeLingo.API
 {
@@ -21,7 +24,14 @@ namespace CodeLingo.API
 
             // EF Core + ConnectionString
             //var cs = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb"));
+            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb").UseLazyLoadingProxies());
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<SessionQuestionRepository>();
+            builder.Services.AddScoped<QuestionRepository>();
+            builder.Services.AddScoped<IMultipleChoiceQuestionRepository, MultipleChoiceQuestionRepository>();
+            builder.Services.AddScoped<SessionLogic>();
+            builder.Services.AddScoped<AnswerEvaluationLogic>();
+            builder.Services.AddHostedService<SessionCleanUpLogic>();
 
             // Identity Configuration
             builder.Services.AddIdentity<User, IdentityRole>(options =>
@@ -90,7 +100,7 @@ namespace CodeLingo.API
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát [web:129] inmemory miatt kikommentezve
+                //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát inmemory miatt kikommentezve
 
                 // Create roles
                 foreach (var role in AppRoles.AllRoles)
