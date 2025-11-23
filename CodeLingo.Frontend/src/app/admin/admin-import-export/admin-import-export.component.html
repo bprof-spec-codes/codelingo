@@ -1,17 +1,67 @@
 <div class="py-4 bg-dark text-white rounded shadow-sm mb-4">
-    <div class="row">
-        <div class="col-12 col-md-6 mb-3 mb-md-0">
-            <h3 class="text-light mt-2 mb-2">Import questions</h3>
-            <p class="text-white-50 small">
-                Here you can import questions to the database.
-            </p>
-        </div>
+  <div class="row">
 
-        <div class="col-12 col-md-6">
-            <h3 class="text-light mt-2 mb-2">Export questions</h3>
-            <p class="text-white-50 small">
-                Here you can export questions from the database.
-            </p>
-        </div>
+    <div class="col-12 col-md-6 mb-3 mb-md-0">
+      <h3 class="text-light mt-2 mb-2">Import questions</h3>
+      <p class="text-white-50 small">
+        Here you can import questions to the database (CSV or Aiken).
+      </p>
+
+      <div class="mb-2">
+        <label class="form-label small">File</label>
+        <input
+          type="file"
+          class="form-control form-control-sm bg-dark text-white border-secondary"
+          (change)="onImportFileSelected($event)"
+          accept=".csv,.txt,.aiken"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        (click)="onImport()"
+        [disabled]="!selectedImportFile || isImporting"
+      >
+        {{ isImporting ? 'Importing...' : 'Import' }}
+      </button>
+
+      <div *ngIf="importError" class="alert alert-danger mt-2 p-2 small">
+        {{ importError }}
+      </div>
     </div>
+
+    <div class="col-12 col-md-6">
+      <h3 class="text-light mt-2 mb-2">Export questions</h3>
+      <p class="text-white-50 small">
+        Here you can export all questions.
+      </p>
+
+      <div class="mb-2">
+        <label class="form-label small">Format</label>
+        <select
+          class="form-select form-select-sm bg-dark text-white border-secondary"
+          [(ngModel)]="exportFormat"
+          name="exportFormat"
+        >
+          <option value="json">JSON</option>
+          <option value="csv">CSV</option>
+          <option value="aiken">Aiken</option>
+        </select>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        (click)="onExport()"
+        [disabled]="isExporting"
+      >
+        {{ isExporting ? 'Exporting...' : 'Export' }}
+      </button>
+
+      <div *ngIf="exportError" class="alert alert-danger mt-2 p-2 small">
+        {{ exportError }}
+      </div>
+    </div>
+  </div>
 </div>
