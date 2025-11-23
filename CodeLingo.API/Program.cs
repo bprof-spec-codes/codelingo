@@ -22,7 +22,9 @@ namespace CodeLingo.API
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<SessionQuestionRepository>();
             builder.Services.AddScoped<QuestionRepository>();
+            builder.Services.AddScoped<IMultipleChoiceQuestionRepository, MultipleChoiceQuestionRepository>();
             builder.Services.AddScoped<SessionLogic>();
+            builder.Services.AddScoped<AnswerEvaluationLogic>();
             builder.Services.AddHostedService<SessionCleanUpLogic>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
