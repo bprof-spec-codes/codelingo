@@ -19,6 +19,9 @@ import { LanguageSelectorComponent } from './practice-starter/language-selector/
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
 import { QuestionCountSelectorComponent } from './practice-starter/question-count-selector/question-count-selector.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ProfileInfoComponent } from './profile/components/profile-info/profile-info.component';
+import { AvatarUploadComponent } from './profile/components/avatar-upload/avatar-upload.component';
 import { LoginComponent } from './login/login.component';
 import { AuthMockInterceptor } from './interceptors/auth-mock.interceptor';
 import { RegisterComponent } from './register/register.component';
@@ -38,8 +41,10 @@ import { QuestionProgressComponent } from './question-container/question-progres
     LeaderboardComponent,
     PracticeStarterComponent,
     LanguageSelectorComponent,
-    PracticeStarterComponent,
     DifficultySelectorComponent,
+    ProfileComponent,
+    ProfileInfoComponent,
+    AvatarUploadComponent
     PracticeStarterComponent,
     QuestionCountSelectorComponent,
     LoginComponent,
