@@ -8,18 +8,16 @@ import { AdminService } from '../../services/admin.service';
   styleUrl: './admin-import-export.component.scss'
 })
 export class AdminImportExportComponent {
-
+// IMPORT
   selectedImportFile: File | null = null;
-  importFormat: '' | 'csv' | 'aiken' = '';
+  importFormat: '' | 'csv' | 'aiken' = ''; // üres = auto detect
   importBatchSize = 100;
   importValidateOnly = false;
-  importAsync = false;
   isImporting = false;
-
-  importReport: any | null = null; 
-  importJob: any | null = null;   
   importError: string | null = null;
+  importReport: any = null; // szerver válasza (200 OK)
 
+  // EXPORT
   exportFormat: 'csv' | 'json' | 'aiken' = 'json';
   exportLanguage = '';
   exportDifficulty = '';
@@ -31,7 +29,7 @@ export class AdminImportExportComponent {
 
   constructor(private service: AdminService) { }
 
-  // IMPORT
+  // ===== IMPORT =====
 
   onImportFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -51,25 +49,19 @@ export class AdminImportExportComponent {
     this.isImporting = true;
     this.importError = null;
     this.importReport = null;
-    this.importJob = null;
 
     this.service
       .importQuestions(
         this.selectedImportFile,
         this.importFormat || undefined,
-        this.importAsync,
+        false, // async = false, szinkron feldolgozás
         this.importBatchSize,
         this.importValidateOnly
       )
       .subscribe({
         next: (res: any) => {
           this.isImporting = false;
-
-          if (res && res.jobId) {
-            this.importJob = res;
-          } else {
-            this.importReport = res;
-          }
+          this.importReport = res;
         },
         error: (err) => {
           this.isImporting = false;
@@ -78,18 +70,48 @@ export class AdminImportExportComponent {
       });
   }
 
-  refreshImportJobStatus(): void {
-    if (!this.importJob?.jobId) {
-      return;
-    }
+  // ===== EXPORT =====
 
-    this.service.getImportJobStatus(this.importJob.jobId).subscribe({
-      next: (job: any) => {
-        this.importJob = job;
-      },
-      error: (err) => {
-        this.importError = err?.error?.error || 'Could not refresh import job status.';
-      }
-    });
+  onExport(): void {
+    this.isExporting = true;
+    this.exportError = null;
+
+    this.service
+      .exportQuestions({
+        format: this.exportFormat,
+        language: this.exportLanguage || undefined,
+        difficulty: this.exportDifficulty || undefined,
+        type: this.exportType || undefined,
+        fromDate: this.exportFromDate || undefined,
+        toDate: this.exportToDate || undefined,
+        async: false // közvetlen letöltés
+      })
+      .subscribe({
+        next: (blob: Blob) => {
+          this.isExporting = false;
+          const extension =
+            this.exportFormat === 'csv'
+              ? 'csv'
+              : this.exportFormat === 'aiken'
+              ? 'txt'
+              : 'json';
+
+          const filename = `questions-export.${extension}`;
+          this.downloadBlob(blob, filename);
+        },
+        error: (err) => {
+          this.isExporting = false;
+          this.exportError = err?.error?.error || 'Export failed.';
+        }
+      });
+  }
+
+  private downloadBlob(blob: Blob, filename: string): void {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 }
