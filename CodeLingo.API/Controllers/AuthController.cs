@@ -101,5 +101,31 @@ namespace CodeLingo.API.Controllers
                 ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
             });
         }
+
+        [HttpPost("token/refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Unauthorized(new { error = "Invalid or expired refresh token" });
+            }
+
+            // Validate refresh token
+            var refreshToken = await _authLogic.GetRefreshTokenAsync(request.RefreshToken);
+
+            if (refreshToken == null || !refreshToken.IsActive)
+            {
+                return Unauthorized(new { error = "Invalid or expired refresh token" });
+            }
+
+            // Generate new access token
+            var accessToken = await _authLogic.GenerateJwtTokenAsync(refreshToken.User);
+
+            return Ok(new TokenResponseDto
+            {
+                AccessToken = accessToken,
+                ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
+            });
+        }
     }
 }
