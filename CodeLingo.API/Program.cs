@@ -1,8 +1,13 @@
 ﻿using CodeLingo.API.Data;
+using CodeLingo.API.Logics;
 using CodeLingo.API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static CodeLingo.API.Models.Enums;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json;
+using static CodeLingo.API.Models.Enums;
 
 namespace CodeLingo.API
 {
@@ -17,6 +22,49 @@ namespace CodeLingo.API
             // EF Core + ConnectionString
             //var cs = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb"));
+
+            // Identity Configuration
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
+
+                // User settings
+                options.User.RequireUniqueEmail = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            // Register AuthLogic
+            builder.Services.AddScoped<AuthLogic>();
+
+            // JWT Authentication
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
+                };
+            });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,8 +86,40 @@ namespace CodeLingo.API
             // Apply migrations + seed on startup
             using (var scope = app.Services.CreateScope())
             {
+                var services = scope.ServiceProvider;
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát [web:129] inmemory miatt kikommentezve
+
+                // Create roles
+                foreach (var role in AppRoles.AllRoles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
+
+                // Create default admin user
+                var adminUsername = "admin";
+                var adminUser = await userManager.FindByNameAsync(adminUsername);
+                if (adminUser == null)
+                {
+                    adminUser = new User
+                    {
+                        UserName = adminUsername,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                        IsActive = true
+                    };
+                    var result = await userManager.CreateAsync(adminUser, "Codelingo123!");
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(adminUser, AppRoles.Admin);
+                        await userManager.AddToRoleAsync(adminUser, AppRoles.User);
+                    }
+                }
 
                 // Seed only if empty
                 if (!await db.ProgrammingLanguages.AnyAsync() && !await db.Questions.AnyAsync())
@@ -151,6 +231,8 @@ namespace CodeLingo.API
 
             app.UseHttpsRedirection();
             app.UseCors();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
