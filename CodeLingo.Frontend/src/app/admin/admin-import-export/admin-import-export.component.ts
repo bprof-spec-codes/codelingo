@@ -8,19 +8,17 @@ import { AdminService } from '../../services/admin.service';
   styleUrl: './admin-import-export.component.scss'
 })
 export class AdminImportExportComponent {
-  // Import állapot
+
   selectedImportFile: File | null = null;
   isImporting = false;
   importError: string | null = null;
 
-  // Export állapot
   exportFormat: 'csv' | 'json' | 'aiken' = 'json';
   isExporting = false;
   exportError: string | null = null;
 
   constructor(private service: AdminService) {}
 
-  // Fájl kiválasztása importhoz
   onImportFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -31,7 +29,6 @@ export class AdminImportExportComponent {
     }
   }
 
-  // Import indítása (szinkron, default paraméterekkel)
   onImport(): void {
     if (!this.selectedImportFile) {
       this.importError = 'Please select a file.';
@@ -54,7 +51,6 @@ export class AdminImportExportComponent {
       });
   }
 
-  // Export indítása (választható formátummal)
   onExport(): void {
     this.isExporting = true;
     this.exportError = null;

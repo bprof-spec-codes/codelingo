@@ -93,8 +93,6 @@ export class AdminService {
         }
       });
     }
-
-    // Expecting binary file response
     return this.http.get(`${this.baseUrl}/questions/export`, { params: httpParams, responseType: 'blob' });
   }
 }
