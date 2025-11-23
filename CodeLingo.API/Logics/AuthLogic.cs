@@ -20,5 +20,16 @@ namespace CodeLingo.API.Logics
             _roleManager = roleManager;
             _passwordHasher = passwordHasher;
         }
+
+        public string HashPassword(User user, string password)
+        {
+            return _passwordHasher.HashPassword(user, password);
+        }
+
+        public bool VerifyPassword(User user, string password, string passwordHash)
+        {
+            var result = _passwordHasher.VerifyHashedPassword(user, passwordHash, password);
+            return result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded;
+        }
     }
 }
