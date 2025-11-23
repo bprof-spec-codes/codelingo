@@ -97,4 +97,12 @@ export class AdminService {
     // Expecting binary file response
     return this.http.get(`${this.baseUrl}/questions/export`, { params: httpParams, responseType: 'blob' });
   }
+  getImportJobStatus(jobId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/questions/import/${jobId}/status`);
+  }
+
+  /** Export job státusz lekérdezése */
+  getExportJobStatus(jobId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/questions/export/${jobId}/status`);
+  }
 }
