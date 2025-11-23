@@ -1,4 +1,17 @@
 .placeholder-white::placeholder {
-  color: #555555;
-  opacity: 0.7;
+    color: #555555;
+    opacity: 0.7;
+}
+
+.placeholder-white::-webkit-input-placeholder {
+    color: #555555;
+    opacity: 0.7;
+}
+
+.placeholder-white:-ms-input-placeholder {
+    color: #555555;
+}
+
+.placeholder-white::-ms-input-placeholder {
+    color: #555555;
 }
