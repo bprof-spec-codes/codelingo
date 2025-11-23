@@ -3,7 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DemoComponent } from './demo/demo.component';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClientModule,
+  provideHttpClient,
+} from '@angular/common/http';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -18,6 +22,12 @@ import { QuestionCountSelectorComponent } from './practice-starter/question-coun
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileInfoComponent } from './profile/components/profile-info/profile-info.component';
 import { AvatarUploadComponent } from './profile/components/avatar-upload/avatar-upload.component';
+import { LoginComponent } from './login/login.component';
+import { AuthMockInterceptor } from './interceptors/auth-mock.interceptor';
+import { RegisterComponent } from './register/register.component';
+import { MultipleChoiceQuestionComponent } from './question-container/multiple-choice-question/multiple-choice-question.component';
+import { QuestionContainerComponent } from './question-container/question-container.component';
+import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 
 @NgModule({
   declarations: [
@@ -32,20 +42,29 @@ import { AvatarUploadComponent } from './profile/components/avatar-upload/avatar
     PracticeStarterComponent,
     LanguageSelectorComponent,
     DifficultySelectorComponent,
-    QuestionCountSelectorComponent,
     ProfileComponent,
     ProfileInfoComponent,
     AvatarUploadComponent
+    PracticeStarterComponent,
+    QuestionCountSelectorComponent,
+    LoginComponent,
+    RegisterComponent,
+    QuestionCountSelectorComponent,
+    MultipleChoiceQuestionComponent,
+    QuestionContainerComponent,
+    QuestionProgressComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [
-    provideHttpClient()
+    provideHttpClient(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthMockInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

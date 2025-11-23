@@ -28,20 +28,20 @@
                             <img src="assets/brand/codelingo_logo_light.svg" alt="CodeLingo" class="logo mb-4">
 
                             <!-- welcome text -->
-                            <h1 class="hero-title" *ngIf="!isLoggedIn">Master coding with CodeLingo</h1>
-                            <h1 class="hero-title" *ngIf="isLoggedIn">Welcome back, {{ username }}!</h1>
+                            <h1 class="hero-title" *ngIf="!(isLoggedIn$ | async)">Master coding with CodeLingo</h1>
+                            <h1 class="hero-title" *ngIf="isLoggedIn$ | async">Welcome back, {{ username }}!</h1>
 
-                            <p class="hero-subtitle" *ngIf="!isLoggedIn"> Learn, practice, and improve your coding
+                            <p class="hero-subtitle" *ngIf="!(isLoggedIn$ | async)"> Learn, practice, and improve your coding
                                 skills
                                 with interactive challenges and instant feedback. </p>
-                            <p class="hero-subtitle" *ngIf="isLoggedIn">
+                            <p class="hero-subtitle" *ngIf="isLoggedIn$ | async">
                                 Continue your coding journey.<br>
                                 Current rank: {{ userRank }} </p>
 
                             <!-- action buttons -->
-                            <div *ngIf="!isLoggedIn" class="cta-buttons">
+                            <div *ngIf="!(isLoggedIn$ | async)" class="cta-buttons">
                                 <div class="button-group">
-                                    <button class="btn btn-primary btn-lg" (click)="signUp()">
+                                    <button class="btn btn-primary btn-lg" (click)="signUp()" routerLink="/register">
                                         Sign Up
                                     </button>
                                     <button class="btn btn-outline-primary btn-lg" (click)="tryCodeLingo()">
@@ -49,12 +49,11 @@
                                     </button>
                                 </div>
                                 <p class="login-link">
-                                    Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log
-                                        In</a>
+                                    Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log In</a>
                                 </p>
                             </div>
 
-                            <div *ngIf="isLoggedIn" class="cta-buttons">
+                            <div *ngIf="isLoggedIn$ | async" class="cta-buttons">
                                 <button class="btn btn-primary btn-lg" (click)="startPractice()">Start Practice
                                 </button>
                             </div>
@@ -111,7 +110,7 @@ console.log(fibonacci(10)); // 55</code></pre>
         </section>
 
         <!-- getting started section -->
-        <section class="getting-started-section" *ngIf="!isLoggedIn">
+        <section class="getting-started-section" *ngIf="!isLoggedIn$" id="getting-started">
             <div class="container">
                 <h2 class="section-title text-center mb-5">Ready to Start Your Coding Journey?</h2>
 
@@ -129,8 +128,8 @@ console.log(fibonacci(10)); // 55</code></pre>
                     <button class="btn btn-primary btn-lg" (click)="signUp()">
                         Sign Up
                     </button>
-                    <button class="btn btn-outline-primary btn-lg" (click)="tryCodeLingo()">
-                        Try CodeLingo
+                    <button class="btn btn-outline-primary btn-lg" (click)="login()">
+                        Log In
                     </button>
                 </div>
             </div>

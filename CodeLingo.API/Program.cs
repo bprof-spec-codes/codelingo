@@ -3,6 +3,8 @@ using CodeLingo.API.Models;
 using Microsoft.EntityFrameworkCore;
 using static CodeLingo.API.Models.Enums;
 using System.Text.Json;
+using CodeLingo.API.Repositories;
+using CodeLingo.API.Logics;
 
 namespace CodeLingo.API
 {
@@ -16,8 +18,14 @@ namespace CodeLingo.API
 
             // EF Core + ConnectionString
             //var cs = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb"));
-
+            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb").UseLazyLoadingProxies());
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<SessionQuestionRepository>();
+            builder.Services.AddScoped<QuestionRepository>();
+            builder.Services.AddScoped<IMultipleChoiceQuestionRepository, MultipleChoiceQuestionRepository>();
+            builder.Services.AddScoped<SessionLogic>();
+            builder.Services.AddScoped<AnswerEvaluationLogic>();
+            builder.Services.AddHostedService<SessionCleanUpLogic>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -39,7 +47,7 @@ namespace CodeLingo.API
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát [web:129] inmemory miatt kikommentezve
+                //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát inmemory miatt kikommentezve
 
                 // Seed only if empty
                 if (!await db.ProgrammingLanguages.AnyAsync() && !await db.Questions.AnyAsync())
