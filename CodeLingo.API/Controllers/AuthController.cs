@@ -63,5 +63,43 @@ namespace CodeLingo.API.Controllers
                 ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
             });
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Unauthorized(new { error = "Invalid credentials" });
+            }
+
+            // Find user by username
+            var user = await _authLogic.GetUserByUsernameAsync(request.Username);
+
+            if (user == null)
+            {
+                return Unauthorized(new { error = "Invalid credentials" });
+            }
+
+            // Verify password using UserManager
+            var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+
+            if (!passwordValid || !user.IsActive)
+            {
+                return Unauthorized(new { error = "Invalid credentials" });
+            }
+
+            // Generate tokens
+            var accessToken = await _authLogic.GenerateJwtTokenAsync(user);
+            var refreshToken = await _authLogic.GenerateRefreshTokenAsync(user.Id);
+
+            return Ok(new AuthResponseDto
+            {
+                Message = "Login successful",
+                UserId = user.Id,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token,
+                ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
+            });
+        }
     }
 }
