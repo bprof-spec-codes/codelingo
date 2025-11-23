@@ -1,10 +1,15 @@
 ﻿using CodeLingo.API.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeLingo.API.Data
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+    public class AppDbContext : IdentityDbContext<User>
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
         // Define all DbSet properties for the models
         public DbSet<User> Users => Set<User>();
         public DbSet<Progress> Progresses => Set<Progress>();
@@ -13,6 +18,8 @@ namespace CodeLingo.API.Data
         public DbSet<Session> Sessions => Set<Session>();
         public DbSet<SessionQuestion> SessionQuestions => Set<SessionQuestion>();
         public DbSet<Question> Questions => Set<Question>();
+        public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
 
         // FIX: Added the missing DbSet property
         public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions => Set<MultipleChoiceQuestion>();
@@ -21,6 +28,17 @@ namespace CodeLingo.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // --- Configuration for RefreshToken entity ---
+            modelBuilder.Entity<RefreshToken>(e =>
+            {
+                e.HasOne(rt => rt.User)
+                    .WithMany(u => u.RefreshTokens)
+                    .HasForeignKey(rt => rt.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasIndex(rt => rt.Token).IsUnique();
+            });
 
             // --- Configuration for Question entity ---
             modelBuilder.Entity<Question>(e =>
