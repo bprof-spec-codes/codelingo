@@ -1,22 +1,10 @@
 import { AnswerOption } from "./answer-option";
-import { QuestionMetadata } from "./question-metadata";
+import { BaseQuestion, QuestionType } from "./base-question";
 
-export interface MultipleChoiceQuestion {
-    id: string;
-    type: string;
-    language: string;
-    difficulty: string;
-    title: string;
-    questionText: string;
-    explanation: string;
-    tags: string[];
+export interface MultipleChoiceQuestion extends BaseQuestion {
+    type: 'MC';
     options: AnswerOption[];
     correctAnswerIds: string[];
     allowMultipleSelection: boolean;
     shuffleOptions: boolean;
-    metadata: QuestionMetadata;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string;
-    isActive: boolean;
 }
