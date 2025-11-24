@@ -58,13 +58,9 @@
             </div>
 
             <div class="form-group">
-                <label for="explanation" class="form-label">Explanation *</label>
+                <label for="explanation" class="form-label">Explanation</label>
                 <textarea id="explanation" class="form-control" formControlName="explanation" rows="3"
                     placeholder="Explain the correct answer"></textarea>
-                <small class="form-error"
-                    *ngIf="questionForm.get('explanation')?.invalid && questionForm.get('explanation')?.touched">
-                    Explanation is required
-                </small>
             </div>
 
             <div class="form-group">
@@ -73,41 +69,31 @@
                     placeholder="Enter tags separated by commas (e.g., loops, arrays, basics)" />
                 <small class="form-text">Separate multiple tags with commas</small>
             </div>
-
-            <div class="form-group">
-                <label for="estimatedTime" class="form-label">Estimated Time (seconds) *</label>
-                <input type="number" id="estimatedTime" class="form-control" formControlName="estimatedTimeSeconds"
-                    min="5" max="600" />
-                <small class="form-error"
-                    *ngIf="questionForm.get('estimatedTimeSeconds')?.invalid && questionForm.get('estimatedTimeSeconds')?.touched">
-                    Time must be between 5 and 600 seconds
-                </small>
-            </div>
         </div>
 
 
-        <!-- question settings section -->
+        <!-- metadata section -->
         <div class="form-section">
             <h3 class="section-title">
-                <i class="bi bi-gear"></i>
-                Question Settings
+                <i class="bi bi-tags"></i>
+                Metadata (Optional)
             </h3>
 
-            <div class="settings-group">
-                <div class="checkbox-group">
-                    <input type="checkbox" id="allowMultiple" formControlName="allowMultipleSelection" />
-                    <label for="allowMultiple">Allow Multiple Selection</label>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category" class="form-label">Category</label>
+                    <input type="text" id="category" class="form-control" formControlName="category" />
                 </div>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="shuffleOptions" formControlName="shuffleOptions" />
-                    <label for="shuffleOptions">Shuffle Options</label>
+                <div class="form-group">
+                    <label for="topic" class="form-label">Topic</label>
+                    <input type="text" id="topic" class="form-control" formControlName="topic" />
                 </div>
+            </div>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="isActive" formControlName="isActive" />
-                    <label for="isActive">Active Question</label>
-                </div>
+            <div class="form-group">
+                <label for="source" class="form-label">Source</label>
+                <input type="text" id="source" class="form-control" formControlName="source" />
             </div>
         </div>
 
@@ -125,14 +111,6 @@
                     <div class="option-header">
                         <span class="option-number">Option {{ i + 1 }}</span>
                         <div class="option-actions">
-                            <button type="button" class="btn-icon" (click)="moveOptionUp(i)" [disabled]="i === 0"
-                                title="Move up">
-                                <i class="bi bi-arrow-up"></i>
-                            </button>
-                            <button type="button" class="btn-icon" (click)="moveOptionDown(i)"
-                                [disabled]="i === options.length - 1" title="Move down">
-                                <i class="bi bi-arrow-down"></i>
-                            </button>
                             <button type="button" class="btn-icon btn-danger" (click)="removeOption(i)"
                                 [disabled]="options.length <= 2" title="Remove option">
                                 <i class="bi bi-trash"></i>
@@ -153,9 +131,6 @@
                             *ngIf="optionControl.get('text')?.invalid && optionControl.get('text')?.touched">
                             Option text is required
                         </small>
-
-                        <input type="text" class="form-control" formControlName="imageUrl"
-                            placeholder="Image URL (optional)" />
                     </div>
                 </div>
             </div>

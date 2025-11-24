@@ -113,43 +113,6 @@
         margin-bottom: $space-4;
     }
 
-
-
-    // question settings section
-    .settings-group {
-        display: flex;
-        flex-direction: column;
-        gap: $space-4;
-    }
-
-    .checkbox-group {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: $space-1;
-
-        .checkbox-label-wrapper {
-            display: flex;
-            align-items: center;
-            gap: $space-2;
-        }
-
-        input[type="checkbox"] {
-            width: 1.2rem;
-            height: 1.2rem;
-            cursor: pointer;
-            accent-color: $primary-400;
-        }
-
-        label {
-            color: $light;
-            font-weight: $font-weight-semibold;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-    }
-
-
     // answer options section
     .options-container {
         display: flex;

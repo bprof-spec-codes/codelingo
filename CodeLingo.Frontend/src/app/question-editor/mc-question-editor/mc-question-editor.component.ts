@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MultipleChoiceQuestion } from '../../models/multiple-choice-question';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AnswerOption } from '../../models/answer-option';
+import { McQuestionCreateDto } from '../../dtos/mc-question-create-dto';
+import { OptionDto } from '../../dtos/option-dto';
+
 
 @Component({
   selector: 'app-mc-question-editor',
@@ -11,16 +12,14 @@ import { AnswerOption } from '../../models/answer-option';
 })
 export class McQuestionEditorComponent implements OnInit {
 
-  @Input() existingQuestion?: MultipleChoiceQuestion;
+  @Input() existingQuestion?: McQuestionCreateDto;
   @Input() languages: string[] = [];
   @Input() difficulties: string[] = [];
 
-  @Output() questionSubmitted = new EventEmitter<MultipleChoiceQuestion>();
+  @Output() questionSubmitted = new EventEmitter<McQuestionCreateDto>();
   @Output() cancelled = new EventEmitter<void>();
 
   questionForm!: FormGroup;
-  questionId: string = '';
-  version: number = 1;
 
   constructor(private fb: FormBuilder) { }
 
@@ -32,8 +31,6 @@ export class McQuestionEditorComponent implements OnInit {
     } else {
       this.initializeNewQuestion();
     }
-
-    this.setupMultipleSelectionListener();
   }
 
   initializeForm(): void {
@@ -42,12 +39,11 @@ export class McQuestionEditorComponent implements OnInit {
       language: ['', Validators.required],
       difficulty: ['', Validators.required],
       questionText: ['', Validators.required],
-      explanation: ['', Validators.required],
+      explanation: [''],
       tagsInput: [''],
-      estimatedTimeSeconds: [30, [Validators.required, Validators.min(5), Validators.max(600)]],
-      allowMultipleSelection: [false],
-      shuffleOptions: [true],
-      isActive: [true],
+      category: [''],
+      topic: [''],
+      source: [''],
       options: this.fb.array([], Validators.minLength(2))
     });
   }
@@ -56,13 +52,10 @@ export class McQuestionEditorComponent implements OnInit {
     return this.questionForm.get('options') as FormArray;
   }
 
-  createOptionFormGroup(option?: AnswerOption): FormGroup {
+  createOptionFormGroup(option?: any): FormGroup {
     return this.fb.group({
-      id: [option?.id || this.generateOptionId()],
       text: [option?.text || '', Validators.required],
-      imageUrl: [option?.imageUrl || ''],
-      order: [option?.order || 1],
-      isCorrect: [false]
+      isCorrect: [option?.isCorrect || false]
     });
   }
 
@@ -70,11 +63,10 @@ export class McQuestionEditorComponent implements OnInit {
   loadExistingQuestion(): void {
     if (!this.existingQuestion) return;
 
-    this.questionId = this.existingQuestion.id;
-    this.version = this.existingQuestion.metadata.version + 1;
-
     // parse tags
-    const tagsInput = this.existingQuestion.tags.join(', ');
+    const tagsInput = Array.isArray(this.existingQuestion.tags) 
+      ? this.existingQuestion.tags.join(', ') 
+      : '';
 
     // patch form values
     this.questionForm.patchValue({
@@ -82,128 +74,42 @@ export class McQuestionEditorComponent implements OnInit {
       language: this.existingQuestion.language,
       difficulty: this.existingQuestion.difficulty,
       questionText: this.existingQuestion.questionText,
-      explanation: this.existingQuestion.explanation,
+      explanation: this.existingQuestion.explanation || '',
       tagsInput: tagsInput,
-      estimatedTimeSeconds: this.existingQuestion.metadata.estimatedTimeSeconds,
-      allowMultipleSelection: this.existingQuestion.allowMultipleSelection,
-      shuffleOptions: this.existingQuestion.shuffleOptions,
-      isActive: this.existingQuestion.isActive
+      category: this.existingQuestion.metadata?.category || '',
+      topic: this.existingQuestion.metadata?.topic || '',
+      source: this.existingQuestion.metadata?.source || ''
     });
 
     // load options
-    this.existingQuestion.options.forEach(option => {
-      const optionGroup = this.createOptionFormGroup(option);
-      const isCorrect = this.existingQuestion!.correctAnswerIds.includes(option.id);
-      optionGroup.patchValue({ isCorrect });
-      this.options.push(optionGroup);
-    });
-  }
-
-  generateOptionId(): string {
-    return 'opt-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    if (this.existingQuestion.options && Array.isArray(this.existingQuestion.options)) {
+      this.existingQuestion.options.forEach((option: any) => {
+        const optionGroup = this.createOptionFormGroup(option);
+        this.options.push(optionGroup);
+      });
+    }
   }
 
   // new question
   initializeNewQuestion(): void {
-    this.questionId = this.generateId();
     this.addNewOption();
     this.addNewOption();
-  }
-
-  generateId(): string {
-    return 'mc-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
   }
 
   addNewOption(): void {
     const newOption = this.createOptionFormGroup();
-    newOption.patchValue({ order: this.options.length + 1 });
     this.options.push(newOption);
   }
 
   removeOption(index: number): void {
     if (this.options.length > 2) {
       this.options.removeAt(index);
-
-      this.updateOrders();
     }
-  }
-
-  moveOptionUp(index: number): void {
-    if (index > 0) {
-      const currentOption = this.options.at(index).value;
-      const previousOption = this.options.at(index - 1).value;
-
-      this.options.at(index).patchValue({
-        text: previousOption.text,
-        imageUrl: previousOption.imageUrl,
-        id: previousOption.id,
-        isCorrect: previousOption.isCorrect
-      });
-
-      this.options.at(index - 1).patchValue({
-        text: currentOption.text,
-        imageUrl: currentOption.imageUrl,
-        id: currentOption.id,
-        isCorrect: currentOption.isCorrect
-      });
-
-      this.updateOrders();
-    }
-  }
-
-  moveOptionDown(index: number): void {
-    if (index < this.options.length - 1) {
-      const currentOption = this.options.at(index).value;
-      const nextOption = this.options.at(index + 1).value;
-
-      this.options.at(index).patchValue({
-        text: nextOption.text,
-        imageUrl: nextOption.imageUrl,
-        id: nextOption.id,
-        isCorrect: nextOption.isCorrect
-      });
-
-      this.options.at(index + 1).patchValue({
-        text: currentOption.text,
-        imageUrl: currentOption.imageUrl,
-        id: currentOption.id,
-        isCorrect: currentOption.isCorrect
-      });
-
-      this.updateOrders();
-    }
-  }
-
-  updateOrders(): void {
-    this.options.controls.forEach((control, idx) => {
-      control.patchValue({ order: idx + 1 });
-    });
   }
 
   toggleCorrectAnswer(index: number): void {
-    const allowMultiple = this.questionForm.get('allowMultipleSelection')?.value;
     const currentIsCorrect = this.options.at(index).get('isCorrect')?.value;
-
-    if (!allowMultiple) {
-      // single selection: uncheck all others
-      this.options.controls.forEach((control, idx) => {
-        control.patchValue({ isCorrect: idx === index ? !currentIsCorrect : false });
-      });
-    } else {
-      // multiple selection: toggle current
-      this.options.at(index).patchValue({ isCorrect: !currentIsCorrect });
-    }
-    this.updateOrders();
-  }
-
-  setupMultipleSelectionListener(): void {
-    this.questionForm.get('allowMultipleSelection')?.valueChanges.subscribe(allowMultiple => {
-      if (!allowMultiple) {
-        this.options.controls.forEach(control => {
-          control.patchValue({ isCorrect: false });
-        });
-      }
-    });
+    this.options.at(index).patchValue({ isCorrect: !currentIsCorrect });
   }
 
   cancel(): void {
@@ -211,14 +117,11 @@ export class McQuestionEditorComponent implements OnInit {
   }
 
   isFormValid(): boolean {
-    const correctAnswerIds = this.getCorrectAnswerIds();
-    return this.questionForm.valid && correctAnswerIds.length > 0;
+    return this.questionForm.valid && this.hasCorrectAnswer();
   }
 
-  getCorrectAnswerIds(): string[] {
-    return this.options.controls
-      .filter(control => control.get('isCorrect')?.value)
-      .map(control => control.get('id')?.value);
+  hasCorrectAnswer(): boolean {
+    return this.options.controls.some(control => control.get('isCorrect')?.value);
   }
 
   submitQuestion(): void {
@@ -230,40 +133,26 @@ export class McQuestionEditorComponent implements OnInit {
 
     const formValue = this.questionForm.value;
     const tags = this.parseTags();
-    const correctAnswerIds = this.getCorrectAnswerIds();
 
-    const options: AnswerOption[] = formValue.options.map((opt: any) => ({
-      id: opt.id,
+    const options: OptionDto[] = formValue.options.map((opt: any) => ({
       text: opt.text,
-      imageUrl: opt.imageUrl || undefined,
-      order: opt.order
+      isCorrect: opt.isCorrect
     }));
 
-    const question: MultipleChoiceQuestion = {
-      id: this.questionId,
-      type: 'mc',
+    const question: McQuestionCreateDto = {
+      type: 'MC',
       language: formValue.language,
       difficulty: formValue.difficulty,
       title: formValue.title,
       questionText: formValue.questionText,
-      explanation: formValue.explanation,
-      tags: tags,
-      options: options,
-      correctAnswerIds: correctAnswerIds,
-      allowMultipleSelection: formValue.allowMultipleSelection,
-      shuffleOptions: formValue.shuffleOptions,
-      metadata: {
-        version: this.version,
-        estimatedTimeSeconds: formValue.estimatedTimeSeconds,
-        pointValue: 10,
-        usageCount: this.existingQuestion?.metadata.usageCount || 0,
-        averageCorrectRate: this.existingQuestion?.metadata.averageCorrectRate || 0,
-        lastUsedAt: this.existingQuestion?.metadata.lastUsedAt
-      },
-      createdAt: this.existingQuestion?.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: this.existingQuestion?.createdBy || 'current-user',
-      isActive: formValue.isActive
+      explanation: formValue.explanation || undefined,
+      tags: tags.length > 0 ? tags : undefined,
+      metadata: (formValue.category || formValue.topic || formValue.source) ? {
+        category: formValue.category || undefined,
+        topic: formValue.topic || undefined,
+        source: formValue.source || undefined
+      } : undefined,
+      options: options
     };
 
     this.questionSubmitted.emit(question);
