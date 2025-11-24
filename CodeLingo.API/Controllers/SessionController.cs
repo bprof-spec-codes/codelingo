@@ -67,5 +67,14 @@ namespace CodeLingo.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("{id}/next")]
+        public ActionResult<NextQuestionResponseDto> GetNextQuestion(string id)
+        {
+            _logger.LogInformation("Next question requested for session {SessionId}", id);
+            var dto = sessionLogic.GetNextQuestion(id);
+            if (dto == null)
+                return NotFound(new { error = "Session not found or no more questions" });
+            return Ok(dto);
+        }
     }
 }
