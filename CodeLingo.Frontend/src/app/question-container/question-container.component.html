@@ -1,0 +1,64 @@
+<div class="question-container">
+  <div class="question-card">
+    <!-- PROGRESS -->
+    <app-question-progress
+      *ngIf="!isCompleted"
+      [currentIndex]="currentIndex"
+      [totalQuestions]="totalQuestions"
+    ></app-question-progress>
+
+    <!-- SESSION COMPLETED -->
+    <ng-container *ngIf="isCompleted; else showQuestion">
+      <div>
+        <h2>🎉 Session Completed!</h2>
+        <p>You answered all {{ totalQuestions }} questions.</p>
+
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-lg"
+          routerLink="/landing-page"
+        >
+          <i class="bi bi-arrow-left"></i>
+          Back to Home
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- SHOW QUESTION -->
+    <ng-template #showQuestion>
+      <ng-container [ngSwitch]="questionType">
+        <!-- Multiple Choice -->
+        <app-multiple-choice-question
+          #multipleChoiceComponent
+          *ngSwitchCase="'multiple_choice'"
+          [question]="questionData"
+          [isSubmitted]="
+            questionSubmitted || submittingAnswer || loadingQuestion
+          "
+          (answerSubmitted)="onAnswer($event)"
+        >
+        </app-multiple-choice-question>
+
+        <!-- Code Completion -->
+        <!-- TODO: Add code completion component here -->
+      </ng-container>
+
+      <!-- FEEDBACK BOX -->
+      <div
+        *ngIf="questionSubmitted"
+        class="feedback-box"
+        [ngClass]="{ correct: isCorrect, incorrect: !isCorrect }"
+      >
+        <i
+          class="bi"
+          [ngClass]="isCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"
+        ></i>
+        <span>{{ feedback }}</span>
+      </div>
+
+      <div *ngIf="loadingQuestion" class="loading-overlay">
+        <span>Loading next question...</span>
+      </div>
+    </ng-template>
+  </div>
+</div>
