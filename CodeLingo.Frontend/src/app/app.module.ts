@@ -14,6 +14,7 @@ import { LanguageSelectorComponent } from './practice-starter/language-selector/
 import { DifficultySelectorComponent } from './practice-starter/difficulty-selector/difficulty-selector.component';
 import { QuestionCountSelectorComponent } from './practice-starter/question-count-selector/question-count-selector.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { McQuestionEditorComponent } from './question-editor/mc-question-editor/mc-question-editor.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileInfoComponent } from './profile/components/profile-info/profile-info.component';
 import { AvatarUploadComponent } from './profile/components/avatar-upload/avatar-upload.component';
@@ -39,6 +40,7 @@ import { jwtInterceptor } from './jwt.interceptor';
     LanguageSelectorComponent,
     DifficultySelectorComponent,
     QuestionCountSelectorComponent,
+    McQuestionEditorComponent,
     ProfileComponent,
     ProfileInfoComponent,
     AvatarUploadComponent,
@@ -60,4 +62,3 @@ import { jwtInterceptor } from './jwt.interceptor';
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-
