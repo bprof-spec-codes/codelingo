@@ -34,6 +34,16 @@ namespace CodeLingo.API.DTOs.Question
             public bool IsCorrect { get; set; }
         }
 
+        public class AnswerDto
+        {
+            public bool IsCorrect { get; set; }
+            public string Feedback { get; set; }
+            public string CurrentIndex { get; set; }
+            public int Score { get; set; }
+            public int TotalQuestions { get; set; }
+            public bool IsCompleted { get; set; }
+        }
+
         public class CreateQuestionDto
         {
             [Required]
