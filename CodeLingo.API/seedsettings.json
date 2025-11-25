@@ -1,0 +1,353 @@
+[
+    {
+        "Type": "MultipleChoice",
+        "Language": "C#",
+        "Difficulty": "Easy",
+        "Title": "What is the base class for all types in C#?",
+        "QuestionText": "In C#, all types inherit directly or indirectly from a specific base class. What is the name of this class?",
+        "Explanation": "System.Object (or simply object) is the ultimate base class of all classes in the .NET Framework. It is the root of the type hierarchy.",
+        "Tags": [
+            "C#",
+            "Basics",
+            "Inheritance"
+        ],
+        "Metadata": {
+            "Topic": "Type System"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "System.Type"
+            },
+            {
+                "Id": "2",
+                "Text": "System.Object"
+            },
+            {
+                "Id": "3",
+                "Text": "System.Base"
+            },
+            {
+                "Id": "4",
+                "Text": "System.Root"
+            }
+        ],
+        "CorrectAnswerIds": [
+            "2"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "C#",
+        "Difficulty": "Medium",
+        "Title": "Which keyword is used to prevent a class from being inherited?",
+        "QuestionText": "If you want to restrict a class so that no other class can inherit from it, which keyword should you use in the class definition?",
+        "Explanation": "The 'sealed' keyword prevents a class from being inherited. It is often used to optimize performance or to ensure that the class's behavior cannot be altered.",
+        "Tags": [
+            "C#",
+            "Keywords",
+            "Inheritance"
+        ],
+        "Metadata": {
+            "Topic": "Keywords"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "static"
+            },
+            {
+                "Id": "2",
+                "Text": "abstract"
+            },
+            {
+                "Id": "3",
+                "Text": "sealed"
+            },
+            {
+                "Id": "4",
+                "Text": "private"
+            }
+        ],
+        "CorrectAnswerIds": [
+            "3"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "C#",
+        "Difficulty": "Hard",
+        "Title": "What is the difference between 'const' and 'readonly'?",
+        "QuestionText": "In C#, both 'const' and 'readonly' are used to define immutable fields. What is the key difference regarding when their values are set?",
+        "Explanation": "'const' fields are compile-time constants, meaning their value must be known at compile time. 'readonly' fields are run-time constants; they can be initialized in the declaration or in the constructor.",
+        "Tags": [
+            "C#",
+            "Keywords",
+            "Immutability"
+        ],
+        "Metadata": {
+            "Topic": "Keywords"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "No difference, they are synonyms."
+            },
+            {
+                "Id": "2",
+                "Text": "const is run-time, readonly is compile-time."
+            },
+            {
+                "Id": "3",
+                "Text": "const is compile-time, readonly is run-time."
+            },
+            {
+                "Id": "4",
+                "Text": "const can be static, readonly cannot."
+            }
+        ],
+        "CorrectAnswerIds": [
+            "3"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "JavaScript",
+        "Difficulty": "Easy",
+        "Title": "What is the result of '2' + 2 in JavaScript?",
+        "QuestionText": "JavaScript has dynamic typing and automatic type conversion. What is the result of the expression '2' + 2?",
+        "Explanation": "When the + operator is used with a string and a number, JavaScript converts the number to a string and performs concatenation. Thus, '2' + 2 results in the string '22'.",
+        "Tags": [
+            "JavaScript",
+            "Type Coercion",
+            "Operators"
+        ],
+        "Metadata": {
+            "Topic": "Type Coercion"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "4"
+            },
+            {
+                "Id": "2",
+                "Text": "\"22\""
+            },
+            {
+                "Id": "3",
+                "Text": "NaN"
+            },
+            {
+                "Id": "4",
+                "Text": "TypeError"
+            }
+        ],
+        "CorrectAnswerIds": [
+            "2"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "JavaScript",
+        "Difficulty": "Medium",
+        "Title": "What does 'typeof null' return?",
+        "QuestionText": "In JavaScript, the 'typeof' operator returns a string indicating the type of the operand. What does 'typeof null' return?",
+        "Explanation": "This is a long-standing bug in JavaScript. 'typeof null' returns 'object', even though null is a primitive value.",
+        "Tags": [
+            "JavaScript",
+            "Types",
+            "Quirks"
+        ],
+        "Metadata": {
+            "Topic": "Types"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "\"null\""
+            },
+            {
+                "Id": "2",
+                "Text": "\"undefined\""
+            },
+            {
+                "Id": "3",
+                "Text": "\"object\""
+            },
+            {
+                "Id": "4",
+                "Text": "\"number\""
+            }
+        ],
+        "CorrectAnswerIds": [
+            "3"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "JavaScript",
+        "Difficulty": "Hard",
+        "Title": "What is the output of [1, 2, 3] + [4, 5, 6]?",
+        "QuestionText": "When the + operator is applied to two arrays in JavaScript, what is the resulting value?",
+        "Explanation": "JavaScript converts both arrays to strings (e.g., \"1,2,3\" and \"4,5,6\") and then concatenates them, resulting in \"1,2,34,5,6\".",
+        "Tags": [
+            "JavaScript",
+            "Coercion",
+            "Arrays"
+        ],
+        "Metadata": {
+            "Topic": "Coercion"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "[1, 2, 3, 4, 5, 6]"
+            },
+            {
+                "Id": "2",
+                "Text": "\"1,2,34,5,6\""
+            },
+            {
+                "Id": "3",
+                "Text": "\"1,2,3,4,5,6\""
+            },
+            {
+                "Id": "4",
+                "Text": "NaN"
+            }
+        ],
+        "CorrectAnswerIds": [
+            "2"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "Python",
+        "Difficulty": "Easy",
+        "Title": "How do you start a comment in Python?",
+        "QuestionText": "Which character is used to indicate the start of a single-line comment in Python?",
+        "Explanation": "In Python, the hash character (#) is used to start a comment. Everything following it on the same line is ignored by the interpreter.",
+        "Tags": [
+            "Python",
+            "Syntax",
+            "Comments"
+        ],
+        "Metadata": {
+            "Topic": "Syntax"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "//"
+            },
+            {
+                "Id": "2",
+                "Text": "/*"
+            },
+            {
+                "Id": "3",
+                "Text": "#"
+            },
+            {
+                "Id": "4",
+                "Text": "--"
+            }
+        ],
+        "CorrectAnswerIds": [
+            "3"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "Python",
+        "Difficulty": "Medium",
+        "Title": "What is the output of print(2 ** 3)?",
+        "QuestionText": "Python uses the ** operator for exponentiation. What is the result of 2 ** 3?",
+        "Explanation": "2 ** 3 means 2 raised to the power of 3, which is 2 * 2 * 2 = 8.",
+        "Tags": [
+            "Python",
+            "Operators",
+            "Math"
+        ],
+        "Metadata": {
+            "Topic": "Operators"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "6"
+            },
+            {
+                "Id": "2",
+                "Text": "8"
+            },
+            {
+                "Id": "3",
+                "Text": "9"
+            },
+            {
+                "Id": "4",
+                "Text": "5"
+            }
+        ],
+        "CorrectAnswerIds": [
+            "2"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    },
+    {
+        "Type": "MultipleChoice",
+        "Language": "Python",
+        "Difficulty": "Hard",
+        "Title": "What is a decorator in Python?",
+        "QuestionText": "Decorators are a powerful feature in Python. What is their primary purpose?",
+        "Explanation": "A decorator is a function that takes another function and extends the behavior of the latter function without explicitly modifying it.",
+        "Tags": [
+            "Python",
+            "Advanced",
+            "Functions"
+        ],
+        "Metadata": {
+            "Topic": "Decorators"
+        },
+        "Options": [
+            {
+                "Id": "1",
+                "Text": "A class that inherits from another class."
+            },
+            {
+                "Id": "2",
+                "Text": "A function that modifies the behavior of another function."
+            },
+            {
+                "Id": "3",
+                "Text": "A variable that holds a constant value."
+            },
+            {
+                "Id": "4",
+                "Text": "A method to format strings."
+            }
+        ],
+        "CorrectAnswerIds": [
+            "2"
+        ],
+        "AllowMultipleSelection": false,
+        "ShuffleOptions": true
+    }
+]
