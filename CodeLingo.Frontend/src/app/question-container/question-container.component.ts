@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
 import { MultipleChoiceQuestionComponent } from './multiple-choice-question/multiple-choice-question.component';
 import { QuestionSessionService } from '../services/question-session.service';
@@ -14,8 +15,7 @@ export class QuestionContainerComponent implements OnInit {
   @ViewChild('multipleChoiceComponent')
   multipleChoiceComponent!: MultipleChoiceQuestionComponent;
 
-  sessionConfig: SessionConfig | null = null;
-
+  sessionId: string | null = null;
   loadingQuestion = false; // for fetching next question
   submittingAnswer = false; // for simulating POST /answer
 
@@ -23,78 +23,90 @@ export class QuestionContainerComponent implements OnInit {
   questionData!: MultipleChoiceQuestion;
   questionSubmitted: boolean = false;
 
-  questions: MultipleChoiceQuestion[] = [];
   currentIndex = 0;
-  totalQuestions = 3;
+  totalQuestions = 0;
   feedback: string | null = null;
   isCorrect: boolean | null = null;
   isCompleted = false;
 
-  constructor(private sessionService: QuestionSessionService) {}
+  constructor(
+    private sessionService: QuestionSessionService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    const config = this.sessionService.getConfig();
-    this.questions = this.sessionService.getQuestions();
-
-    console.log(this.questions);
-    
-    this.totalQuestions = this.questions.length;
+    this.sessionId = this.route.snapshot.paramMap.get('id');
+    if (!this.sessionId) {
+      this.router.navigate(['/practice/start']);
+      return;
+    }
     this.loadNextQuestion();
   }
 
   // Load next question
   loadNextQuestion() {
+    if (!this.sessionId) return;
+
     this.loadingQuestion = true;
     this.feedback = null;
     this.isCorrect = null;
     this.questionSubmitted = false;
 
-    setTimeout(() => {
-      this.currentIndex++;
-
-      if (this.currentIndex > this.totalQuestions) {
-        this.isCompleted = true;
+    this.sessionService.getNextQuestion(this.sessionId).subscribe({
+      next: (response) => {
         this.loadingQuestion = false;
-        return;
-      }
+        if (response.isCompleted) {
+          this.isCompleted = true;
+          return;
+        }
 
-      this.questionData = this.questions[this.currentIndex - 1];
-      this.multipleChoiceComponent?.resetSelection();
-      this.questionType = 'multiple_choice';
-      this.loadingQuestion = false;
-    }, 500); // simulate API delay
+        this.currentIndex = response.currentIndex;
+        this.totalQuestions = response.totalQuestions;
+
+        // Map backend question data to frontend model if necessary
+        // Assuming response.questionData matches MultipleChoiceQuestion structure for now
+        this.questionData = response.questionData;
+        this.questionType = response.questionType;
+
+        // Reset selection in child component
+        setTimeout(() => this.multipleChoiceComponent?.resetSelection());
+      },
+      error: (err) => {
+        this.loadingQuestion = false;
+        console.error('Error loading next question:', err);
+        // Handle error (e.g., show error message or navigate back)
+      }
+    });
   }
 
   // Handle MC answer
   onAnswer(selectedOptionIds: string[]) {
+    if (!this.sessionId) return;
+
     this.submittingAnswer = true;
     this.feedback = null;
     this.isCorrect = null;
 
-    setTimeout(() => {
-      this.submittingAnswer = false;
+    const payload = {
+      selectedOptionIds: selectedOptionIds
+    };
 
-      const correctIds = this.questionData.correctAnswerIds;
-      const allCorrect =
-        correctIds.length === selectedOptionIds.length &&
-        correctIds.every((id) => selectedOptionIds.includes(id));
+    this.sessionService.submitAnswer(this.sessionId, payload).subscribe({
+      next: (response) => {
+        this.submittingAnswer = false;
+        this.questionSubmitted = true;
+        this.isCorrect = response.isCorrect;
+        this.feedback = response.feedback;
 
-      this.isCorrect = allCorrect;
-      this.feedback = allCorrect
-        ? 'Correct!'
-        : `Incorrect. The correct answer${
-            correctIds.length > 1 ? 's are' : ' is'
-          }: ${correctIds
-            .map((id) => {
-              const option = this.questionData.options.find((o) => o.id === id);
-              return option?.text;
-            })
-            .join(', ')}`;
-
-      this.questionSubmitted = true;
-
-      // Automatically load next question after 2s
-      setTimeout(() => this.loadNextQuestion(), 2000);
-    }, 1200); // simulate network delay
+        // Automatically load next question after 2s
+        setTimeout(() => this.loadNextQuestion(), 2000);
+      },
+      error: (err) => {
+        this.submittingAnswer = false;
+        console.error('Error submitting answer:', err);
+        this.feedback = 'Error submitting answer. Please try again.';
+      }
+    });
   }
 }
