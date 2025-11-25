@@ -1,10 +1,13 @@
-﻿using CodeLingo.API.Logics;
+using CodeLingo.API.Logics;
 using CodeLingo.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
 using static CodeLingo.API.DTOs.Session.SessionDtos;
+
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace CodeLingo.API.Controllers
 {
@@ -27,14 +30,14 @@ namespace CodeLingo.API.Controllers
         {
             try
             {
-                var user = User; // This is ClaimsPrincipal
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (userId != session.UserId)
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userId))
                 {
-                    throw new Exception("You do not own this user");
+                    return Unauthorized(new { error = "User ID not found in token" });
                 }
-                _logger.LogInformation("Session creation started");
+                session.UserId = userId;
+
+                _logger.LogInformation("Session creation started for user {UserId}", userId);
                 StartSessionResponseDto response = sessionLogic.Create(session);
                 _logger.LogInformation("Session created");
                 return Ok(response);
@@ -82,7 +85,7 @@ namespace CodeLingo.API.Controllers
 
             try
             {
-                return Ok(answerEvaluationLogic.EvaluateAnswer(json));
+                return Ok(answerEvaluationLogic.EvaluateAnswer(json, sessionId));
             }
             catch(Exception ex)
             {

@@ -166,8 +166,11 @@ namespace CodeLingo.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            else
+            {
+                app.UseHttpsRedirection();
+            }
 
-            app.UseHttpsRedirection();
             app.UseCors();
 
             app.UseAuthentication();

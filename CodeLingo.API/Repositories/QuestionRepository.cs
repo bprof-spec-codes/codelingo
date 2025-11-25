@@ -62,7 +62,7 @@ namespace CodeLingo.API.Repositories
 
             // Step 3: Skip random offset and take N (translates to SQL with ROW_NUMBER() or OFFSET/FETCH)
             // Optional: Add .OrderBy(u => 
-            var randomQuestions = appDbContext.Questions
+            var randomQuestions = questionList
                 .OrderBy(u => u.Id) // Helps distribute if IDs are sequential
             .Skip(skip)
             .Take(count)

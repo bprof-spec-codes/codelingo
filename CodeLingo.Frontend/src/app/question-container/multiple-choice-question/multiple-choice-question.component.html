@@ -34,9 +34,8 @@
 
     <!-- answer options -->
     <div class="answer-options">
-        <div *ngFor="let option of getSortedOptions()" class="answer-card"
-            [class.selected]="isOptionSelected(option.id)" [class.disabled]="isSubmitted"
-            (click)="toggleOption(option.id)">
+        <div *ngFor="let option of sortedOptions" class="answer-card" [class.selected]="isOptionSelected(option.id)"
+            [class.disabled]="isSubmitted" (click)="toggleOption(option.id)">
 
             <div class="answer-selector">
                 <input [type]="question.allowMultipleSelection ? 'checkbox' : 'radio'" [name]="question.id"
@@ -55,10 +54,7 @@
 
     <!-- submit section -->
     <div class="submit-section">
-        <button type="button"
-            class="btn btn-submit"
-            [disabled]="!canSubmit()"
-            (click)="submitAnswer()">
+        <button type="button" class="btn btn-submit" [disabled]="!canSubmit()" (click)="submitAnswer()">
             <i class="bi bi-check-circle-fill"></i>
             Submit Answer
         </button>
@@ -84,3 +80,4 @@
             </p>
         </div>
     </div>
+</ng-template>

@@ -8,21 +8,23 @@ namespace CodeLingo.API.Logics
     public class AnswerEvaluationLogic
     {
         IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
+        SessionQuestionRepository sessionQuestionRepository;
 
-        public AnswerEvaluationLogic(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository)
+        public AnswerEvaluationLogic(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository, SessionQuestionRepository sessionQuestionRepository)
         {
-            this.multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;  
+            this.multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
+            this.sessionQuestionRepository = sessionQuestionRepository;
         }
 
-        public AnswerDto EvaluateAnswer(JsonElement body)
+        public AnswerDto EvaluateAnswer(JsonElement body, string sessionId)
         {
             if (body.TryGetProperty("questionType", out JsonElement questionTypeElement))
             {
                 string questionType = questionTypeElement.GetString();
 
-                if (questionType == "MultipleChoiceQuestion")
+                if (questionType == "MultipleChoice" || questionType == "MultipleChoiceQuestion")
                 {
-                    return this.EvaluateMultipleChoiceAnswer(body);
+                    return this.EvaluateMultipleChoiceAnswer(body, sessionId);
                 }
                 else if (questionType == "TrueFalse")
                 {
@@ -31,31 +33,38 @@ namespace CodeLingo.API.Logics
             }
             throw new Exception("There is no questionType field or the value is not valid");
         }
-        public AnswerDto EvaluateMultipleChoiceAnswer(JsonElement body)
+        public AnswerDto EvaluateMultipleChoiceAnswer(JsonElement body, string sessionId)
         {
             if (body.TryGetProperty("questionId", out JsonElement questionIdElement) && body.TryGetProperty("answerIds", out JsonElement answerIdElements))
             {
                 string questionId = questionIdElement.GetString();
-                List<int> answerIds = answerIdElements.EnumerateArray()
-                    .Select(answerId => answerId.GetInt32())
+                List<string> answerIds = answerIdElements.EnumerateArray()
+                    .Select(answerId => answerId.ToString())
                     .ToList();
 
                 MultipleChoiceQuestion multipleChoiceQuestion = multipleChoiceQuestionRepository.Read(questionId);
-                List<int> correctAnswers = JsonSerializer.Deserialize<List<int>>(multipleChoiceQuestion.CorrectAnswerIds);
+                List<string> correctAnswers = JsonSerializer.Deserialize<List<string>>(multipleChoiceQuestion.CorrectAnswerIds);
 
                 int score = 0;
-                foreach (int answerId in answerIds)
+                foreach (string answerId in answerIds)
                 {
                     if (correctAnswers.Contains(answerId))
                     {
                         score++;
                     }
                 }
+
+                var sessionQuestion = sessionQuestionRepository.Read(sessionId, questionId);
+                if (sessionQuestion != null)
+                {
+                    sessionQuestion.Answered = true;
+                    sessionQuestionRepository.SaveChanges();
+                }
                 AnswerDto answerDto = new AnswerDto();
-                answerDto.IsCorrect = score == correctAnswers.Count;
-                answerDto.Feedback = answerDto.IsCorrect ? "All given answers are corret" : "Not all gives answers are corret";
+                answerDto.IsCorrect = score == correctAnswers.Count && answerIds.Count == correctAnswers.Count;
+                answerDto.Feedback = answerDto.IsCorrect ? "Correct!" : "Incorrect. Please try again.";
                 answerDto.Score = score;
-                answerDto.TotalQuestions = correctAnswers.Count;
+                answerDto.TotalQuestions = 1; // This seems to be used as "Total Correct Answers" in this context? Or just 1 question?
                 answerDto.IsCompleted = false;
                 answerDto.CurrentIndex = "";
 

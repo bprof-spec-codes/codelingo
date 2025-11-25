@@ -1,4 +1,5 @@
 ﻿using CodeLingo.API.Models;
+using System.Text.Json;
 using CodeLingo.API.Repositories;
 using static CodeLingo.API.DTOs.Session.SessionDtos;
 using static CodeLingo.API.Models.Enums;
@@ -10,11 +11,14 @@ namespace CodeLingo.API.Logics
         private ISessionRepository repository;
         private IQuestionRepository questionRepository;
         private SessionQuestionRepository sessionQuestionRepository;
-        public SessionLogic(ISessionRepository repository, IQuestionRepository questionRepository, SessionQuestionRepository sessionQuestionRepository)
+        private IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
+
+        public SessionLogic(ISessionRepository repository, IQuestionRepository questionRepository, SessionQuestionRepository sessionQuestionRepository, IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository)
         {
                 this.repository = repository;
                 this.questionRepository = questionRepository;
                 this.sessionQuestionRepository = sessionQuestionRepository;
+                this.multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
         }
 
         public StartSessionResponseDto Create(StartSessionRequestDto session)
@@ -107,17 +111,53 @@ namespace CodeLingo.API.Logics
                 };
             }
 
+            object questionData = null;
+            var tags = JsonSerializer.Deserialize<string[]>(next.Question.Tags ?? "[]");
+            var metadata = JsonSerializer.Deserialize<object>(next.Question.Metadata ?? "{}");
+
+            if (next.Question.Type == QuestionType.MultipleChoice)
+            {
+                var mcQuestion = multipleChoiceQuestionRepository.Read(next.QuestionId);
+                if (mcQuestion != null)
+                {
+                    questionData = new
+                    {
+                        next.Question.Id,
+                        Type = "MC",
+                        next.Question.Title,
+                        next.Question.QuestionText,
+                        next.Question.Explanation,
+                        next.Question.Language,
+                        Difficulty = next.Question.Difficulty.ToString().ToLower(),
+                        Tags = tags,
+                        Metadata = metadata,
+                        Options = JsonSerializer.Deserialize<List<SessionQuestionOptionDto>>(mcQuestion.Options ?? "[]", new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
+                        mcQuestion.AllowMultipleSelection,
+                        mcQuestion.ShuffleOptions
+                    };
+                }
+            }
+            
+            if (questionData == null)
+            {
+                 questionData = new
+                {
+                    next.Question.Id,
+                    next.Question.Title,
+                    next.Question.QuestionText,
+                    next.Question.Explanation,
+                    next.Question.Language,
+                    next.Question.Difficulty,
+                    Tags = tags,
+                    Metadata = metadata
+                };
+            }
+
             return new NextQuestionResponseDto
             {
                 QuestionId = next.QuestionId,
                 QuestionType = next.Question.Type.ToString(),
-                QuestionData = new
-                {
-                    next.Question.Title,
-                    next.Question.QuestionText,
-                    next.Question.Explanation,
-                    Tags = next.Question.Tags,
-                },
+                QuestionData = questionData,
                 CurrentIndex = answered,
                 TotalQuestions = total,
                 IsCompleted = false,

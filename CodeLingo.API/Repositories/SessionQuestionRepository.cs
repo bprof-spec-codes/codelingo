@@ -1,4 +1,4 @@
-﻿using CodeLingo.API.Data;
+using CodeLingo.API.Data;
 using CodeLingo.API.Models;
 
 namespace CodeLingo.API.Repositories
@@ -14,9 +14,13 @@ namespace CodeLingo.API.Repositories
         {
             this.appDbContext.SessionQuestions.Add(sessionQuestion);
         }
-        public List<SessionQuestion> GetAll()
+        public SessionQuestion? Read(string sessionId, string questionId)
         {
-            return this.appDbContext.SessionQuestions.ToList();
+            return appDbContext.SessionQuestions.FirstOrDefault(sq => sq.SessionId == sessionId && sq.QuestionId == questionId);
+        }
+        public void SaveChanges()
+        {
+            appDbContext.SaveChanges();
         }
     }
 }

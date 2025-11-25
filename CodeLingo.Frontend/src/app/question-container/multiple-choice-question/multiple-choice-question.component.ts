@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { MultipleChoiceQuestion } from '../../models/multiple-choice-question';
 import { AnswerOption } from '../../models/answer-option';
 
@@ -8,7 +8,7 @@ import { AnswerOption } from '../../models/answer-option';
   templateUrl: './multiple-choice-question.component.html',
   styleUrl: './multiple-choice-question.component.scss',
 })
-export class MultipleChoiceQuestionComponent {
+export class MultipleChoiceQuestionComponent implements OnChanges {
   @Input() question!: MultipleChoiceQuestion;
   @Input() isSubmitted: boolean = false;
 
@@ -66,6 +66,7 @@ export class MultipleChoiceQuestionComponent {
   // }
 
   selectedAnswerIds: string[] = [];
+  sortedOptions: AnswerOption[] = [];
 
   // toggle option selection
   toggleOption(optionId: string): void {
@@ -97,8 +98,24 @@ export class MultipleChoiceQuestionComponent {
     return this.selectedAnswerIds.includes(optionId);
   }
 
+  ngOnChanges() {
+    console.log('MultipleChoiceQuestionComponent: question input changed', this.question);
+    if (this.question && this.question.options) {
+      console.log('Options:', this.question.options);
+      this.updateSortedOptions();
+    } else {
+      console.warn('Options are missing or undefined!');
+    }
+  }
+
   // sort and optionally shuffle options
-  getSortedOptions(): AnswerOption[] {
+  updateSortedOptions(): void {
+    if (!this.question || !this.question.options) {
+      console.warn('updateSortedOptions: question or options missing');
+      this.sortedOptions = [];
+      return;
+    }
+
     const sorted = [...this.question.options].sort((a, b) => a.order - b.order);
 
     if (this.question.shuffleOptions) {
@@ -108,7 +125,8 @@ export class MultipleChoiceQuestionComponent {
       }
     }
 
-    return sorted;
+    console.log('updateSortedOptions set sortedOptions:', sorted);
+    this.sortedOptions = sorted;
   }
 
   // check if submission is allowed

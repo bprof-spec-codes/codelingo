@@ -6,8 +6,7 @@ namespace CodeLingo.API.DTOs.Session
     {
         public class StartSessionRequestDto
         {
-            [Required]
-            public string UserId { get; set; }
+            public string? UserId { get; set; }
 
             [Required]
             public string Language { get; set; }
@@ -35,6 +34,14 @@ namespace CodeLingo.API.DTOs.Session
             public int TotalQuestions { get; set; }
             public bool IsCompleted { get; set; }
             public object Metadata { get; set; }
+        }
+
+        public class SessionQuestionOptionDto
+        {
+            public string Id { get; set; }
+            public string Text { get; set; }
+            public string? ImageUrl { get; set; }
+            public int Order { get; set; }
         }
 
         public class SubmitAnswerRequestDto

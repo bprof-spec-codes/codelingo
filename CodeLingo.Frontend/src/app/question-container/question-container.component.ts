@@ -89,7 +89,9 @@ export class QuestionContainerComponent implements OnInit {
     this.isCorrect = null;
 
     const payload = {
-      selectedOptionIds: selectedOptionIds
+      questionType: this.questionType,
+      questionId: this.questionData.id,
+      answerIds: selectedOptionIds
     };
 
     this.sessionService.submitAnswer(this.sessionId, payload).subscribe({
