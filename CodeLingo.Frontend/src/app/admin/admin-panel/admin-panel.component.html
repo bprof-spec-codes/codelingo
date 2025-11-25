@@ -30,7 +30,7 @@
   <div class="container px-4 pb-4">
     <app-admin-edit
     [question]="question" 
-    (save)="onQuestionCreated($event)" >></app-admin-edit>
+    (save)="onQuestionCreated($event)"></app-admin-edit>
 
     <app-admin-list [questions$]="questions$" (questionUpdated)="onQuestionUpdated($event)"
       (delete)="onQuestionDelete($event)"></app-admin-list>

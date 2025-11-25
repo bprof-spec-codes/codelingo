@@ -8,6 +8,12 @@ export interface QuestionMetadata {
   topic?: string;
   source?: string;
 }
+export interface QuestionListResponseDto {
+  items: Question[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+}
 
 export interface BaseQuestion {
   type: QuestionType;
@@ -51,8 +57,17 @@ export interface CodeCompletionQuestion extends BaseQuestion {
 
   starterCode: string;
   correctAnswer: string;
-  hints: string[];
-  constraints: string[];
+  hints?: string[];
+  constraints?: CodeConstraints;
+}
+
+export interface CodeConstraints {
+  maxLines?: number;
+  maxCharacters?: number;
+  forbiddenKeywords?: string[];
+
+  // allowedKeywords?: string[];
+  // timeout?: number;
 }
 
 /* Összefoglaló*/

@@ -1,33 +1,32 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import { Question } from '../models/question';
+import { Question, QuestionListResponseDto } from '../models/question';
 import { Language } from '../models/language';
+/*
 const MOCK_LANGUAGES: Language[] = [
   new Language('lang-1', 'TypeScript', '5.6', '2025-01-01T10:00:00Z', '2025-01-10T12:00:00Z'),
   new Language('lang-2', 'JavaScript', 'ES2023', '2025-01-05T09:30:00Z', '2025-01-15T14:20:00Z'),
   new Language('lang-3', 'C#', '12.0', '2025-02-01T08:00:00Z', '2025-02-03T16:45:00Z'),
   new Language('lang-4', 'Python', '3.13', '2025-03-10T11:15:00Z', '2025-03-20T18:30:00Z')
 ];
+*/
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private baseUrl = `${environment.apiUrl}/admin`;
+  private baseUrl = `${environment.apiUrl}admin`;
 
   constructor(private http: HttpClient) { }
 
-  // Languages
-  private languagesStore: Language[] = [...MOCK_LANGUAGES];
-  private languagesSubject = new BehaviorSubject<Language[]>(this.languagesStore);
+  private languagesSubject = new BehaviorSubject<Language[]>([]);
   languages$ = this.languagesSubject.asObservable();
 
   getLanguages(): Observable<Language[]> {
-    // NEM megy ki HTTP-re, csak a subject-et adja vissza
-    return this.languages$;
-    //return this.http.get<Language[]>(`${this.baseUrl}/languages`);
+    return this.http.get<Language[]>(`${this.baseUrl}/languages`);
   }
+
 
   addLanguage(data: { name: string; version: string }): Observable<Language> {
     return this.http.post<any>(`${this.baseUrl}/languages`, data);
@@ -43,9 +42,13 @@ export class AdminService {
 
   // Questions
 
-  getQuestions(): Observable<Question[]> {
-    return this.http.get<Question[]>(`${this.baseUrl}/questions`);
-  }
+getQuestions(): Observable<Question[]> {
+  return this.http
+    .get<QuestionListResponseDto>(`${this.baseUrl}/questions`)
+    .pipe(
+      map(res => res.items) 
+    );
+}
 
   getQuestionById(id: string): Observable<Question> {
     return this.http.get<Question>(`${this.baseUrl}/questions/${id}`);
@@ -60,6 +63,7 @@ export class AdminService {
   }
 
   deleteQuestion(id: string): Observable<void> {
+    console.log(`${this.baseUrl}/questions/${id}`)
     return this.http.delete<void>(`${this.baseUrl}/questions/${id}`);
   }
   /** Import questions from CSV or Aiken file */

@@ -9,7 +9,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminListComponent } from './admin/admin-list/admin-list.component';
 import { AdminEditComponent } from './admin/admin-edit/admin-edit.component';
 import { AdminItemComponent } from './admin/admin-item/admin-item.component';

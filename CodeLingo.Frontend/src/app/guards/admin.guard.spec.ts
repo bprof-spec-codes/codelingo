@@ -14,7 +14,6 @@ describe('adminGuard', () => {
     const route: any = {} as any;
     const state: RouterStateSnapshot = { url } as RouterStateSnapshot;
 
-    // Angular 15+ functional guard, inject()-hez injection context kell:
     return TestBed.runInInjectionContext(() => adminGuard(route, state));
   }
 
@@ -51,7 +50,7 @@ describe('adminGuard', () => {
   });
 
   it('should redirect to /login when token payload cannot be decoded', () => {
-    // Olyan string, ami nem 3 részes JWT
+
     authServiceSpy.getAccessToken.and.returnValue('invalid-token');
 
     const result = runGuard('/admin');
@@ -63,7 +62,7 @@ describe('adminGuard', () => {
 
   it('should redirect to /forbidden when user is not admin', () => {
     const payload = {
-      role: 'user', // nem admin
+      role: 'user',
       exp: Math.floor(Date.now() / 1000) + 3600
     };
     const token = createToken(payload);
@@ -79,7 +78,7 @@ describe('adminGuard', () => {
   it('should redirect to /login when token is expired', () => {
     const payload = {
       roles: ['admin'],
-      exp: Math.floor(Date.now() / 1000) - 10 // lejárt
+      exp: Math.floor(Date.now() / 1000) - 10
     };
     const token = createToken(payload);
     authServiceSpy.getAccessToken.and.returnValue(token);
