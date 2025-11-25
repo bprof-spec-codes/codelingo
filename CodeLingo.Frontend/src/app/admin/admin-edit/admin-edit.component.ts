@@ -8,6 +8,12 @@ import {
 } from '../../models/question';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+interface CodeConstraints {
+  maxLines?: number;
+  maxCharacters?: number;
+  forbiddenKeywords?: string[];
+}
+
 @Component({
   selector: 'app-admin-edit',
   standalone: false,
@@ -15,8 +21,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
   styleUrl: './admin-edit.component.scss'
 })
 export class AdminEditComponent implements OnInit {
-  @Input() question?: Question; // meglévő kérdés, vagy undefined = create
-  @Output() save = new EventEmitter<Question>(); // értesítés a szülőnek
+  @Input() question?: Question;
+  @Output() save = new EventEmitter<Question>();
   @Output() cancel = new EventEmitter<void>();
 
   QuestionType = QuestionType;
@@ -39,15 +45,13 @@ export class AdminEditComponent implements OnInit {
     this.questionForm = this.fb.group({
       type: [QuestionType.MultipleChoice, Validators.required],
       language: ['', Validators.required],
-      difficulty: ['medium', Validators.required],
+      difficulty: ['Medium', Validators.required], 
       title: ['', Validators.required],
       questionText: ['', Validators.required],
       explanation: [''],
 
-      // UI: egyszerű string, backend: string[]
       tags: [''],
 
-      // UI: string (pl. JSON), backend: QuestionMetadata objektum
       metadata: this.fb.group({
         category: [''],
         topic: [''],
@@ -56,12 +60,12 @@ export class AdminEditComponent implements OnInit {
 
       isActive: [true],
 
-      // MultipleChoice mezők (UI: stringek, backend: MultipleChoiceOption[])
+      // Multiple choice
       options: this.fb.array([]),
       correctAnswerIds: this.fb.array([]),
       shuffleOptions: [false],
 
-      // CodeCompletion mezők
+      // Code completion
       starterCode: [''],
       correctAnswer: [''],
       hints: this.fb.array([]),
@@ -70,7 +74,6 @@ export class AdminEditComponent implements OnInit {
   }
 
   patchForm(q: Question): void {
-    // alapmezők
     this.questionForm.patchValue({
       type: q.type,
       language: q.language,
@@ -83,13 +86,14 @@ export class AdminEditComponent implements OnInit {
         category: q.metadata?.category ?? '',
         topic: q.metadata?.topic ?? '',
         source: q.metadata?.source ?? ''
-      }
+      },
+      isActive: q.isActive ?? true
     });
 
-    const optionsFa = this.questionForm.get('options') as FormArray;
-    const correctFa = this.questionForm.get('correctAnswerIds') as FormArray;
-    const hintsFa = this.questionForm.get('hints') as FormArray;
-    const constraintsFa = this.questionForm.get('constraints') as FormArray;
+    const optionsFa = this.options;
+    const correctFa = this.correctAnswerIds;
+    const hintsFa = this.hints;
+    const constraintsFa = this.constraints;
 
     optionsFa.clear();
     correctFa.clear();
@@ -100,37 +104,41 @@ export class AdminEditComponent implements OnInit {
       const mc = q as MultipleChoiceQuestion;
 
       this.questionForm.patchValue({
-        shuffleOptions: mc.shuffleOptions
+        shuffleOptions: mc.shuffleOptions ?? false
       });
 
-      // options: MultipleChoiceOption[] → form: string[]
-      mc.options.forEach(opt => {
+      const options: MultipleChoiceOption[] = mc.options ?? [];
+
+      options.forEach(opt => {
         optionsFa.push(
           this.fb.group({
-            text: [opt.text, Validators.required],
-            isCorrect: [opt.isCorrect]
+            text: [opt.text ?? '', Validators.required],
+            isCorrect: [!!opt.isCorrect]
           })
         );
       });
+
 
     } else if (q.type === QuestionType.CodeCompletion) {
       const cc = q as CodeCompletionQuestion;
 
       this.questionForm.patchValue({
-        starterCode: cc.starterCode,
-        correctAnswer: cc.correctAnswer
+        starterCode: cc.starterCode ?? '',
+        correctAnswer: cc.correctAnswer ?? ''
       });
 
-      cc.hints.forEach(h => hintsFa.push(new FormControl(h)));
-      cc.constraints.forEach(c => constraintsFa.push(new FormControl(c)));
+      (cc.hints ?? []).forEach(h => hintsFa.push(new FormControl(h)));
+
+      const constraints: CodeConstraints | undefined = (cc as any).constraints;
+      const forbidden = constraints?.forbiddenKeywords ?? [];
+      forbidden.forEach((c: string) => constraintsFa.push(new FormControl(c)));
     }
   }
 
-  // Ha máshol még használnád:
   private setFormArray(controlName: string, items: string[]) {
     const fa = this.questionForm.get(controlName) as FormArray;
     fa.clear();
-    items.forEach(i => fa.push(new FormControl(i)));
+    (items ?? []).forEach((i: string) => fa.push(new FormControl(i)));
   }
 
   private createOptionGroup(opt?: MultipleChoiceOption): FormGroup {
@@ -164,7 +172,6 @@ export class AdminEditComponent implements OnInit {
   saveQuestion() {
     const raw = this.questionForm.value;
 
-    // tags: string → string[]
     const tags =
       typeof raw.tags === 'string' && raw.tags.trim().length > 0
         ? raw.tags
@@ -173,7 +180,6 @@ export class AdminEditComponent implements OnInit {
           .filter((t: string) => t.length > 0)
         : undefined;
 
-    // metadata: string (JSON) → objektum
     const metaGroup = raw.metadata;
     const hasMetadata = metaGroup && (metaGroup.category || metaGroup.topic || metaGroup.source);
 
@@ -188,8 +194,6 @@ export class AdminEditComponent implements OnInit {
     let q: Question;
 
     if (raw.type === QuestionType.MultipleChoice) {
-      const optionTexts: string[] = raw.options || [];
-      const correctAnswers: string[] = raw.correctAnswerIds || [];
       const optionGroups = (raw.options || []) as { text: string; isCorrect: boolean }[];
       const options: MultipleChoiceOption[] = optionGroups.map(o => ({
         text: o.text,
@@ -207,7 +211,6 @@ export class AdminEditComponent implements OnInit {
         tags,
         metadata,
         isActive: raw.isActive,
-
         options,
         shuffleOptions: raw.shuffleOptions,
 
@@ -216,6 +219,17 @@ export class AdminEditComponent implements OnInit {
         createdBy: this.question?.createdBy || 'admin'
       } as MultipleChoiceQuestion;
     } else {
+      const forbiddenKeywords: string[] = (raw.constraints || []) as string[];
+
+      const constraints: CodeConstraints | undefined =
+        forbiddenKeywords.length > 0
+          ? {
+            maxLines: 999,       
+            maxCharacters: 9999,
+            forbiddenKeywords
+          }
+          : undefined;
+
       q = {
         ...(this.question ?? {}),
         type: QuestionType.CodeCompletion,
@@ -231,7 +245,7 @@ export class AdminEditComponent implements OnInit {
         starterCode: raw.starterCode,
         correctAnswer: raw.correctAnswer,
         hints: raw.hints || [],
-        constraints: raw.constraints || [],
+        constraints,
 
         createdAt: this.question?.createdAt || new Date(),
         updatedAt: new Date(),
@@ -240,6 +254,6 @@ export class AdminEditComponent implements OnInit {
     }
 
     console.log(q);
-    this.save.emit(q); // szülő értesítése
+    this.save.emit(q);
   }
 }

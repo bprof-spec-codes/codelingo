@@ -11,20 +11,18 @@ import { CountUpModule } from 'ngx-countup';
   styleUrl: './admin-panel.component.scss'
 })
 
-//toDo: question pages, filter 
 
 export class AdminPanelComponent implements OnInit {
   questions$!: Observable<Question[]>;
   @Input() question!: Question;
   constructor(private adminService: AdminService) { }
   ngOnInit(): void {
-    //this.loadQuestions();
-    this.loadMockQuestions()
+    this.loadQuestions();
   }
-  loadQuestions():void{
-    this.questions$ =this.adminService.getQuestions()
+  loadQuestions(): void {
+    this.questions$ = this.adminService.getQuestions()
   }
-  loadMockQuestions() {
+  /*loadMockQuestions() {
 const mockQuestions: Question[] = [
   // MultipleChoice
   {
@@ -112,14 +110,36 @@ const mockQuestions: Question[] = [
 
     this.questions$ = of(mockQuestions);
   }
+    */
   onQuestionUpdated(updated: Question) {
-    this.adminService.updateQuestion(updated.id, updated)
+    this.adminService.updateQuestion(updated.id, updated).subscribe({
+      next: () => {
+        this.loadQuestions(); // lista újratöltése
+      },
+      error: err => {
+        console.error('Update failed', err);
+      }
+    });
   }
   onQuestionDelete(id: string) {
-    this.adminService.deleteQuestion(id)
+    this.adminService.deleteQuestion(id).subscribe({
+      next: () => {
+        this.loadQuestions(); // törlés után újratöltöd
+      },
+      error: err => {
+        console.error('Delete failed', err);
+      }
+    });
   }
-  onQuestionCreated(created: Question) {
-    this.adminService.createQuestion(created)
+ onQuestionCreated(created: Question) {
+    this.adminService.createQuestion(created).subscribe({
+      next: () => {
+        this.loadQuestions(); // létrehozás után is frissítesz
+      },
+      error: err => {
+        console.error('Create failed', err);
+      }
+    });
   }
 
 
