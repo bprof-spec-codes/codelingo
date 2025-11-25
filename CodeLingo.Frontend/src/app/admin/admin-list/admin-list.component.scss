@@ -1,0 +1,5 @@
+@use '../../../_variables.scss' as *;
+
+.custom-btn:hover {
+  color: $dark !important; /* szöveg sötét marad */
+}

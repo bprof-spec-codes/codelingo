@@ -1,0 +1,22 @@
+.file-input-dark::file-selector-button {
+  background-color: #181818;
+  color: #fff;
+  border: 1px solid #000000;   
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+}
+
+/* WebKit (Chrome régebbi, Safari) */
+.file-input-dark::-webkit-file-upload-button {
+  background-color: #181818;
+  color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+}
+
+.file-input-dark:hover::file-selector-button,
+.file-input-dark:hover::-webkit-file-upload-button {
+  background-color: #212529;  
+  color:#000000
+}

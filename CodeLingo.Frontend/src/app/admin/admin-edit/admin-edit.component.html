@@ -1,0 +1,229 @@
+<div class="py-4 bg-dark text-white rounded shadow-sm">
+
+  <h3 class="text-light mt-2 mb-2">{{ question ? 'Edit Question' : 'Create Question' }}</h3>
+  <p *ngIf="!question" class="text-white-50">
+    Fill the form below to create a new question.
+  </p>
+
+  <form [formGroup]="questionForm" (ngSubmit)="saveQuestion()">
+
+    <!-- Alapadatok -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Type</label>
+        <select formControlName="type" class="form-select bg-dark text-white border-secondary">
+          <option *ngFor="let t of (QuestionType | keyvalue)" [value]="t.value">{{ t.key }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Title</label>
+        <input
+          type="text"
+          formControlName="title"
+          class="form-control bg-dark text-white border-secondary placeholder-white"
+          placeholder="Short, descriptive question title (e.g. Array sorting basics)"
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Language</label>
+        <input
+          type="text"
+          formControlName="language"
+          class="form-control bg-dark text-white border-secondary placeholder-white"
+          placeholder="Programming language or technology (e.g. TypeScript, C#, SQL)"
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Difficulty</label>
+        <select formControlName="difficulty" class="form-select bg-dark text-white border-secondary">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Question Text</label>
+        <textarea
+          formControlName="questionText"
+          class="form-control bg-dark text-white border-secondary placeholder-white"
+          rows="3"
+          placeholder="Write the full question text here, including any code or context the learner needs."
+        ></textarea>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Explanation</label>
+        <textarea
+          formControlName="explanation"
+          class="form-control bg-dark text-white border-secondary placeholder-white"
+          rows="2"
+          placeholder="Explain why the correct answer is right and common mistakes or misconceptions."
+        ></textarea>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Tags (comma separated)</label>
+        <input
+          type="text"
+          formControlName="tags"
+          class="form-control bg-dark text-white border-secondary placeholder-white"
+          placeholder="e.g. arrays, loops, beginner, algorithms"
+        />
+      </div>
+
+      <!-- METADATA-->
+      <div formGroupName="metadata" class="col-md-6">
+        <label class="form-label d-block">Metadata</label>
+
+        <div class="mb-1">
+          <input
+            type="text"
+            formControlName="category"
+            class="form-control bg-dark text-white border-secondary mb-1 placeholder-white"
+            placeholder="High-level category (e.g. Data Structures, OOP, Databases)"
+          />
+        </div>
+        <div class="mb-1">
+          <input
+            type="text"
+            formControlName="topic"
+            class="form-control bg-dark text-white border-secondary mb-1 placeholder-white"
+            placeholder="More specific topic (e.g. Arrays, LINQ, Async/Await)"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            formControlName="source"
+            class="form-control bg-dark text-white border-secondary placeholder-white"
+            placeholder="Source or reference (e.g. Official docs, Blog post, Internal material)"
+          />
+        </div>
+      </div>
+
+      <div class="col-12 form-check mt-2 ms-2">
+        <input type="checkbox" formControlName="isActive" class="form-check-input" id="isActive" />
+        <label class="form-check-label" for="isActive">Active</label>
+      </div>
+    </div>
+
+    <!-- MultipleChoice mezők -->
+    <div *ngIf="questionForm.get('type')?.value === QuestionType.MultipleChoice" class="mb-3">
+      <h5 class="mb-2">Multiple Choice Options</h5>
+
+      <div formArrayName="options" class="mb-2">
+        <!-- options: FormArray<FormGroup> -->
+        <div
+          *ngFor="let opt of options.controls; let i = index"
+          [formGroupName]="i"
+          class="row g-1 align-items-center mb-1"
+        >
+          <div class="col">
+            <input
+              formControlName="text"
+              class="form-control bg-dark text-white border-secondary placeholder-white"
+              [placeholder]="'Option ' + (i + 1) + ' text'"
+            />
+          </div>
+
+          <div class="col-auto form-check ms-2">
+            <input
+              type="checkbox"
+              formControlName="isCorrect"
+              class="form-check-input"
+              [id]="'opt-correct-' + i"
+            />
+            <label class="form-check-label" [for]="'opt-correct-' + i">Correct</label>
+          </div>
+
+          <div class="col-auto">
+            <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeOption(i)">
+              Remove
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-outline-primary btn-sm mt-2" (click)="addOption()">
+          Add Option
+        </button>
+      </div>
+
+      <div class="form-check mt-1">
+        <input type="checkbox" formControlName="shuffleOptions" class="form-check-input" id="shuffleOptions" />
+        <label class="form-check-label" for="shuffleOptions">Shuffle options</label>
+      </div>
+    </div>
+
+    <!-- CodeCompletion mezők -->
+    <div *ngIf="questionForm.get('type')?.value === QuestionType.CodeCompletion" class="mb-3">
+      <h5 class="mb-2">Code Completion</h5>
+
+      <div class="mb-2">
+        <label class="form-label">Starter Code</label>
+        <textarea
+          formControlName="starterCode"
+          class="form-control bg-dark text-white border-secondary placeholder-white"
+          rows="3"
+          placeholder="Provide the initial code snippet the learner will see, with a missing part to complete."
+        ></textarea>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Correct Answer</label>
+        <textarea
+          formControlName="correctAnswer"
+          class="form-control bg-dark text-white border-secondary placeholder-white"
+          rows="3"
+          placeholder="Write the correct completion or final version of the code."
+        ></textarea>
+      </div>
+
+      <h6>Hints</h6>
+      <div formArrayName="hints" class="mb-2">
+        <div *ngFor="let h of hints.controls; let i = index" class="input-group mb-1">
+          <input
+            [formControlName]="i"
+            class="form-control bg-dark text-white border-secondary placeholder-white"
+            [placeholder]="'Hint ' + (i + 1) + ' (optional guidance for the learner)'"
+          />
+          <button type="button" class="btn btn-outline-danger" (click)="removeHint(i)">
+            Remove
+          </button>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addHint()">
+          Add Hint
+        </button>
+      </div>
+
+      <h6>Constraints</h6>
+      <div formArrayName="constraints" class="mb-2">
+        <div *ngFor="let c of constraints.controls; let i = index" class="input-group mb-1">
+          <input
+            [formControlName]="i"
+            class="form-control bg-dark text-white border-secondary placeholder-white"
+            [placeholder]="'Constraint ' + (i + 1) + ' (e.g. must use a loop, no recursion)'"
+          />
+          <button type="button" class="btn btn-outline-danger" (click)="removeConstraint(i)">
+            Remove
+          </button>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addConstraint()">
+          Add Constraint
+        </button>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-3 gap-2">
+      <button *ngIf="question" type="button" class="btn btn-danger" (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-success">
+        Save Question
+      </button>
+    </div>
+  </form>
+</div>

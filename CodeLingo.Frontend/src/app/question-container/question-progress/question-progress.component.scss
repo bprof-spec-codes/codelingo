@@ -1,0 +1,39 @@
+.progress-container {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: #2b2b2b;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .progress-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+
+    .label {
+      color: #bbb;
+    }
+
+    .value {
+      font-weight: 600;
+      color: #fff;
+    }
+  }
+
+  .progress-bar {
+    height: 8px;
+    width: 100%;
+    background: #444;
+    border-radius: 6px;
+    overflow: hidden;
+
+    .progress-fill {
+      height: 100%;
+      background: #13d460;
+      transition: width 0.4s ease;
+    }
+  }
+}
