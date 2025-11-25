@@ -9,16 +9,37 @@ namespace CodeLingo.API.Repositories
         private AppDbContext DbContext;
         public SessionRepository(AppDbContext dbContext)
         {
-                this.DbContext = dbContext;
+            this.DbContext = dbContext;
         }
         public void Create(Session entity)
         {
-            this.DbContext.Sessions.Add(entity);
+            using var transaction = DbContext.Database.BeginTransaction();
+            try
+            {
+                this.DbContext.Sessions.Add(entity);
+                this.DbContext.SaveChanges();
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+            }
+            
         }
 
         public void Delete(Session entity)
         {
-            this.DbContext.Sessions.Remove(entity);
+            using var transaction = DbContext.Database.BeginTransaction();
+            try
+            {
+                this.DbContext.Sessions.Remove(entity);
+                this.DbContext.SaveChanges();
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+            }
         }
 
         public List<Session> GetOutdatedSessions()
@@ -39,7 +60,16 @@ namespace CodeLingo.API.Repositories
 
         public void SaveChanges()
         {
-            this.DbContext.SaveChanges();
+            using var transaction = DbContext.Database.BeginTransaction();
+            try
+            {
+                this.DbContext.SaveChanges();
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+            } 
         }
     }
 }

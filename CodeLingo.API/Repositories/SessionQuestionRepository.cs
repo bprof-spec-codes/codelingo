@@ -14,5 +14,9 @@ namespace CodeLingo.API.Repositories
         {
             this.appDbContext.SessionQuestions.Add(sessionQuestion);
         }
+        public List<SessionQuestion> GetAll()
+        {
+            return this.appDbContext.SessionQuestions.ToList();
+        }
     }
 }

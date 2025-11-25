@@ -30,6 +30,8 @@ namespace CodeLingo.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // --- Configuration for Session entity ---
+            modelBuilder.Entity<Session>(e => e.HasIndex(s => s.CreatedAt));
             // --- Configuration for RefreshToken entity ---
             modelBuilder.Entity<RefreshToken>(e =>
             {
@@ -40,7 +42,6 @@ namespace CodeLingo.API.Data
 
                 e.HasIndex(rt => rt.Token).IsUnique();
             });
-
             // --- Configuration for Question entity ---
             modelBuilder.Entity<Question>(e =>
             {
