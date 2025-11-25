@@ -19,7 +19,6 @@ namespace CodeLingo.API.Logics
 
         public StartSessionResponseDto Create(StartSessionRequestDto session)
         {
-            // TODO: Check that user ID is valid and return with 404 error if not present
             Session DatabaseSession = new Session();
             DatabaseSession.UserId = session.UserId;
             DatabaseSession.Language = session.Language;
