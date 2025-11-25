@@ -1,6 +1,8 @@
 ﻿using CodeLingo.API.Logics;
 using CodeLingo.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text.Json;
 using static CodeLingo.API.DTOs.Session.SessionDtos;
 
@@ -20,11 +22,18 @@ namespace CodeLingo.API.Controllers
             this.answerEvaluationLogic = answerEvaluationLogic;
         }
         [HttpPost("start")]
+        [Authorize]
         public ActionResult<StartSessionResponseDto> Create([FromBody] StartSessionRequestDto session)
         {
             try
             {
-                // TODO: Authentication fill user ID
+                var user = User; // This is ClaimsPrincipal
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId != session.UserId)
+                {
+                    throw new Exception("You do not own this user");
+                }
                 _logger.LogInformation("Session creation started");
                 StartSessionResponseDto response = sessionLogic.Create(session);
                 _logger.LogInformation("Session created");
@@ -38,27 +47,32 @@ namespace CodeLingo.API.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize]
         public void Update([FromBody] Session session) 
         { 
             this.sessionLogic.Update(session);
         }
 
         [HttpDelete("delete")]
+        [Authorize]
         public void Delete([FromBody] Session session) 
         { 
             this.sessionLogic.Delete(session);
         }
         [HttpGet("read")]
+        [Authorize]
         public Session Read(string id)
         {
             return this.sessionLogic.Read(id);
         }
         [HttpGet("read-all")]
+        [Authorize]
         public List<Session> ReadAll()
         {
            return this.sessionLogic.ReadAll();
         }
         [HttpPost("{sessionId}/answer")]
+        [Authorize]
         public IActionResult answer(string sessionId, [FromBody] JsonElement json)
         {
             if (!sessionLogic.IsValidSessionId(sessionId))
@@ -76,6 +90,7 @@ namespace CodeLingo.API.Controllers
             }
         }
         [HttpGet("{id}/next")]
+        [Authorize]
         public ActionResult<NextQuestionResponseDto> GetNextQuestion(string id)
         {
             _logger.LogInformation("Next question requested for session {SessionId}", id);
