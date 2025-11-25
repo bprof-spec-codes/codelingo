@@ -1,0 +1,114 @@
+<div class="container mt-4">
+    <h2>Create Code Completion Question</h2>
+    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" class="form-control" formControlName="title">
+            </div>
+            <div class="col-md-3">
+                <label for="language" class="form-label">Language</label>
+                <select id="language" class="form-select" formControlName="language">
+                    <option *ngFor="let lang of languages" [value]="lang">{{lang}}</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="difficulty" class="form-label">Difficulty</label>
+                <select id="difficulty" class="form-select" formControlName="difficulty">
+                    <option *ngFor="let diff of difficulties" [value]="diff">{{diff}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="questionText" class="form-label">Question Text</label>
+            <textarea id="questionText" class="form-control" rows="3" formControlName="questionText"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="explanation" class="form-label">Explanation</label>
+            <textarea id="explanation" class="form-control" rows="2" formControlName="explanation"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="tags" class="form-label">Tags (comma separated)</label>
+            <input type="text" id="tags" class="form-control" formControlName="tags">
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label">Starter Code</label>
+                <div #starterCodeEditor class="monaco-editor-container"></div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Solution Code</label>
+                <div #solutionCodeEditor class="monaco-editor-container"></div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h4>Test Cases</h4>
+            <div formArrayName="testCases">
+                <div *ngFor="let testCase of testCases.controls; let i=index" [formGroupName]="i" class="card mb-2">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title">Test Case {{i + 1}}</h5>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                (click)="removeTestCase(i)">Remove</button>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label class="form-label">Input</label>
+                                <input type="text" class="form-control" formControlName="input">
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Expected Output</label>
+                                <input type="text" class="form-control" formControlName="expectedOutput">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" formControlName="isHidden"
+                                        [id]="'hidden'+i">
+                                    <label class="form-check-label" [for]="'hidden'+i">Hidden</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" (click)="addTestCase()">Add Test Case</button>
+        </div>
+
+        <div class="mb-4" formGroupName="constraints">
+            <h4>Constraints</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Max Lines</label>
+                    <input type="number" class="form-control" formControlName="maxLines">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Max Characters</label>
+                    <input type="number" class="form-control" formControlName="maxCharacters">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Forbidden Keywords (comma separated)</label>
+                    <input type="text" class="form-control" formControlName="forbiddenKeywords">
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h4>Hints</h4>
+            <div formArrayName="hints">
+                <div *ngFor="let hint of hints.controls; let i=index" class="input-group mb-2">
+                    <input type="text" class="form-control" [formControlName]="i">
+                    <button class="btn btn-outline-danger" type="button" (click)="removeHint(i)">Remove</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" (click)="addHint()">Add Hint</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!questionForm.valid">Save Question</button>
+    </form>
+</div>

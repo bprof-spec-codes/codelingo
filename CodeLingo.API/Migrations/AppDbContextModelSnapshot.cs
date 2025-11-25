@@ -22,6 +22,52 @@ namespace CodeLingo.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CodeLingo.API.Models.Achievement", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Achievements");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.MultipleChoiceQuestion", b =>
+                {
+                    b.Property<string>("QuestionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("AllowMultipleSelection")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CorrectAnswerIds")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("Options")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<bool>("ShuffleOptions")
+                        .HasColumnType("bit");
+
+                    b.HasKey("QuestionId");
+
+                    b.ToTable("MultipleChoiceQuestions");
+                });
+
             modelBuilder.Entity("CodeLingo.API.Models.ProgrammingLanguage", b =>
                 {
                     b.Property<int>("Id")
@@ -42,53 +88,93 @@ namespace CodeLingo.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ShortCode")
+                        .IsUnique();
+
                     b.ToTable("ProgrammingLanguages");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.Progress", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Accuracy")
+                        .HasColumnType("float");
+
+                    b.Property<int>("CurrentLevel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastSessionAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Streak")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Xp")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Progresses");
                 });
 
             modelBuilder.Entity("CodeLingo.API.Models.Question", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CorrectOptionNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("HardnessLevel")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<int>("Difficulty")
                         .HasColumnType("int");
 
-                    b.Property<string>("Option1")
+                    b.Property<string>("Explanation")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("text");
 
-                    b.Property<string>("Option2")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Option3")
+                    b.Property<string>("Metadata")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("json");
 
-                    b.Property<string>("Option4")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("ProgrammingLanguageId")
+                    b.Property<int?>("ProgrammingLanguageId")
                         .HasColumnType("int");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("text");
+
+                    b.Property<string>("Tags")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -97,20 +183,242 @@ namespace CodeLingo.API.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("CodeLingo.API.Models.Session", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DesiredCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Status")
+                        .HasMaxLength(20)
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Sessions");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.SessionQuestion", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Answered")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("AnsweredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Correct")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PointsEarned")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("SessionQuestions");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.UserAchievement", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AchievementId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("DateClaimed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AchievementId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAchievements");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.MultipleChoiceQuestion", b =>
+                {
+                    b.HasOne("CodeLingo.API.Models.Question", "Question")
+                        .WithOne()
+                        .HasForeignKey("CodeLingo.API.Models.MultipleChoiceQuestion", "QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.Progress", b =>
+                {
+                    b.HasOne("CodeLingo.API.Models.User", "User")
+                        .WithOne("Progress")
+                        .HasForeignKey("CodeLingo.API.Models.Progress", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CodeLingo.API.Models.Question", b =>
                 {
-                    b.HasOne("CodeLingo.API.Models.ProgrammingLanguage", "ProgrammingLanguage")
+                    b.HasOne("CodeLingo.API.Models.ProgrammingLanguage", null)
                         .WithMany("Questions")
-                        .HasForeignKey("ProgrammingLanguageId")
+                        .HasForeignKey("ProgrammingLanguageId");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.Session", b =>
+                {
+                    b.HasOne("CodeLingo.API.Models.User", "User")
+                        .WithMany("Sessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.SessionQuestion", b =>
+                {
+                    b.HasOne("CodeLingo.API.Models.Question", "Question")
+                        .WithMany("SessionQuestions")
+                        .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ProgrammingLanguage");
+                    b.HasOne("CodeLingo.API.Models.Session", "Session")
+                        .WithMany("SessionQuestions")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Session");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.UserAchievement", b =>
+                {
+                    b.HasOne("CodeLingo.API.Models.Achievement", "Achievement")
+                        .WithMany("UserAchievements")
+                        .HasForeignKey("AchievementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CodeLingo.API.Models.User", "User")
+                        .WithMany("UserAchievements")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Achievement");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.Achievement", b =>
+                {
+                    b.Navigation("UserAchievements");
                 });
 
             modelBuilder.Entity("CodeLingo.API.Models.ProgrammingLanguage", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.Question", b =>
+                {
+                    b.Navigation("SessionQuestions");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.Session", b =>
+                {
+                    b.Navigation("SessionQuestions");
+                });
+
+            modelBuilder.Entity("CodeLingo.API.Models.User", b =>
+                {
+                    b.Navigation("Progress")
+                        .IsRequired();
+
+                    b.Navigation("Sessions");
+
+                    b.Navigation("UserAchievements");
                 });
 #pragma warning restore 612, 618
         }

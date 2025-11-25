@@ -1,6 +1,13 @@
 using CodeLingo.API.Data;
+using CodeLingo.API.Logics;
 using CodeLingo.API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using CodeLingo.API.Repositories;
+using Microsoft.OpenApi.Models;
 
 namespace CodeLingo.API
 {
@@ -13,13 +20,79 @@ namespace CodeLingo.API
             // Add services to the container.
 
             // EF Core + ConnectionString
-            var cs = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(cs));
+            //var cs = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb").UseLazyLoadingProxies());
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<SessionQuestionRepository>();
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+            builder.Services.AddScoped<IMultipleChoiceQuestionRepository, MultipleChoiceQuestionRepository>();
+            builder.Services.AddScoped<IQuestionService, QuestionService>();
+            builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+            builder.Services.AddScoped<SessionLogic>();
+            builder.Services.AddScoped<AnswerEvaluationLogic>();
+            builder.Services.AddHostedService<SessionCleanUpLogic>();
+
+            // Identity Configuration
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
+
+                // User settings
+                options.User.RequireUniqueEmail = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            // Register AuthLogic
+            builder.Services.AddScoped<AuthLogic>();
+
+            // JWT Authentication
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
+                };
+            });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
+
+                // Define the Bearer scheme (this enables the Authorize button)
+                c.AddSecurityDefinition("Bearer", new()
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+            });
 
             // CORS
             var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
@@ -36,55 +109,55 @@ namespace CodeLingo.API
             // Apply migrations + seed on startup
             using (var scope = app.Services.CreateScope())
             {
+                var services = scope.ServiceProvider;
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát [web:129]
+                //await db.Database.MigrateAsync(); // lÃ©trehozza/napra kÃ©szÃ­ti a sÃ©mÃ¡t inmemory miatt kikommentezve
 
-                // Seed only if empty
-                if (!await db.ProgrammingLanguages.AnyAsync() && !await db.Questions.AnyAsync()) // példa feltétel [web:122]
+                // Create roles
+                foreach (var role in AppRoles.AllRoles)
                 {
-                    var csharp = new ProgrammingLanguage { Name = "C#", ShortCode = "csharp" };
-                    var js = new ProgrammingLanguage { Name = "JavaScript", ShortCode = "js" };
-                    var py = new ProgrammingLanguage { Name = "Python", ShortCode = "py" };
-                    db.ProgrammingLanguages.AddRange(csharp, js, py);
-
-                    db.Questions.AddRange(
-                        new Question
-                        {
-                            ProgrammingLanguage = csharp,
-                            QuestionText = "Mi a kimenet? Console.WriteLine(5 + 3);",
-                            Option1 = "5",
-                            Option2 = "8",
-                            Option3 = "53",
-                            Option4 = "Fordítási hiba",
-                            CorrectOptionNumber = 2,
-                            HardnessLevel = HardnessLevel.Easy
-                        },
-                        new Question
-                        {
-                            ProgrammingLanguage = js,
-                            QuestionText = "Mi a typeof null JavaScriptben?",
-                            Option1 = "null",
-                            Option2 = "object",
-                            Option3 = "undefined",
-                            Option4 = "number",
-                            CorrectOptionNumber = 2,
-                            HardnessLevel = HardnessLevel.Medium
-                        },
-                        new Question
-                        {
-                            ProgrammingLanguage = py,
-                            QuestionText = "Mi a kimenet? print('3' * 2)",
-                            Option1 = "6",
-                            Option2 = "33",
-                            Option3 = "Hiba",
-                            Option4 = "None",
-                            CorrectOptionNumber = 2,
-                            HardnessLevel = HardnessLevel.Easy
-                        }
-                    );
-
-                    await db.SaveChangesAsync();
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
                 }
+
+                // Create default admin user
+                var adminUsername = "admin";
+                var adminUser = await userManager.FindByNameAsync(adminUsername);
+                if (adminUser == null)
+                {
+                    adminUser = new User
+                    {
+                        UserName = adminUsername,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                        IsActive = true
+                    };
+                    var result = await userManager.CreateAsync(adminUser, "Codelingo123!");
+                    if (!result.Succeeded)
+                    {
+                        // Handle error?
+                    }
+                }
+
+                // Ensure roles are assigned
+                if (adminUser != null)
+                {
+                    if (!await userManager.IsInRoleAsync(adminUser, AppRoles.Admin))
+                    {
+                        await userManager.AddToRoleAsync(adminUser, AppRoles.Admin);
+                    }
+                    if (!await userManager.IsInRoleAsync(adminUser, AppRoles.User))
+                    {
+                        await userManager.AddToRoleAsync(adminUser, AppRoles.User);
+                    }
+                }
+
+                // Seed data
+                await DbSeeder.SeedAsync(db);
             }
 
             // Configure the HTTP request pipeline.
@@ -96,6 +169,8 @@ namespace CodeLingo.API
 
             app.UseHttpsRedirection();
             app.UseCors();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

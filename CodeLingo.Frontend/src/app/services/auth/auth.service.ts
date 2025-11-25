@@ -13,7 +13,7 @@ import { RegisterRequest, AuthResponse, LoginRequest } from '../../models/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API_URL = '/auth';
+  private readonly API_URL = 'https://localhost:7107/api/auth';
   private readonly REFRESH_MARGIN = 30; // seconds
 
   private storage: Storage = localStorage;

@@ -1,0 +1,11 @@
+<div class="avatar-upload">
+    <div class="preview">
+        <img [src]="currentUrl || 'assets/default-avatar.png'" alt="Avatar Preview">
+    </div>
+    <div class="input-group">
+        <label for="avatarUrl">Profile Picture URL</label>
+        <input id="avatarUrl" type="text" [value]="currentUrl" (input)="onUrlChange($event)"
+            placeholder="https://example.com/avatar.jpg" class="form-control">
+        <small class="text-muted">Enter a URL for your profile picture</small>
+    </div>
+</div>
