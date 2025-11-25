@@ -14,7 +14,7 @@ export class PracticeStarterComponent implements OnInit {
   constructor(
     private router: Router,
     private sessionService: QuestionSessionService
-  ) {}
+  ) { }
 
   availableLanguages: string[] = [
     'JavaScript',
@@ -56,23 +56,21 @@ export class PracticeStarterComponent implements OnInit {
   }
 
   // start practice session with API call
-  async startSession(): Promise<void> {
+  startSession(): void {
     this.state.isLoading = true;
     this.state.error = null;
 
-    try {
-      // Simulate delay for API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      this.sessionService.createMockSession(this.config);
-
-      this.router.navigate(['/session/mock/questions']);
-    } catch (error) {
-      this.state.error = 'Failed to start practice session. Please try again.';
-      console.error('Error starting practice session:', error);
-    } finally {
-      this.state.isLoading = false;
-    }
+    this.sessionService.startSession(this.config).subscribe({
+      next: (response) => {
+        this.state.isLoading = false;
+        this.router.navigate([`/session/${response.sessionId}/questions`]);
+      },
+      error: (err) => {
+        this.state.isLoading = false;
+        this.state.error = 'Failed to start practice session. Please try again.';
+        console.error('Error starting practice session:', err);
+      },
+    });
   }
 
   get isStartButtonDisabled(): boolean {

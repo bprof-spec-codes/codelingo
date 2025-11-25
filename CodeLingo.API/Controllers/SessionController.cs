@@ -20,13 +20,21 @@ namespace CodeLingo.API.Controllers
             this.answerEvaluationLogic = answerEvaluationLogic;
         }
         [HttpPost("start")]
-        public StartSessionResponseDto Create([FromBody] StartSessionRequestDto session)
+        public ActionResult<StartSessionResponseDto> Create([FromBody] StartSessionRequestDto session)
         {
-            // TODO: Authentication fill user ID
-            _logger.LogInformation("Session creation started");
-            StartSessionResponseDto response = sessionLogic.Create(session);
-            _logger.LogInformation("Session created");
-            return response;
+            try
+            {
+                // TODO: Authentication fill user ID
+                _logger.LogInformation("Session creation started");
+                StartSessionResponseDto response = sessionLogic.Create(session);
+                _logger.LogInformation("Session created");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating session");
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpPut("update")]

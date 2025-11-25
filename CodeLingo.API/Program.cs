@@ -27,8 +27,10 @@ namespace CodeLingo.API
             builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb").UseLazyLoadingProxies());
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<SessionQuestionRepository>();
-            builder.Services.AddScoped<QuestionRepository>();
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddScoped<IMultipleChoiceQuestionRepository, MultipleChoiceQuestionRepository>();
+            builder.Services.AddScoped<IQuestionService, QuestionService>();
+            builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
             builder.Services.AddScoped<SessionLogic>();
             builder.Services.AddScoped<AnswerEvaluationLogic>();
             builder.Services.AddHostedService<SessionCleanUpLogic>();
@@ -124,9 +126,21 @@ namespace CodeLingo.API
                         IsActive = true
                     };
                     var result = await userManager.CreateAsync(adminUser, "Codelingo123!");
-                    if (result.Succeeded)
+                    if (!result.Succeeded)
+                    {
+                        // Handle error?
+                    }
+                }
+
+                // Ensure roles are assigned
+                if (adminUser != null)
+                {
+                    if (!await userManager.IsInRoleAsync(adminUser, AppRoles.Admin))
                     {
                         await userManager.AddToRoleAsync(adminUser, AppRoles.Admin);
+                    }
+                    if (!await userManager.IsInRoleAsync(adminUser, AppRoles.User))
+                    {
                         await userManager.AddToRoleAsync(adminUser, AppRoles.User);
                     }
                 }

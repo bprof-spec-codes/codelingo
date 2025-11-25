@@ -8,9 +8,9 @@ namespace CodeLingo.API.Logics
     public class SessionLogic
     {
         private ISessionRepository repository;
-        private QuestionRepository questionRepository;
+        private IQuestionRepository questionRepository;
         private SessionQuestionRepository sessionQuestionRepository;
-        public SessionLogic(ISessionRepository repository, QuestionRepository questionRepository, SessionQuestionRepository sessionQuestionRepository)
+        public SessionLogic(ISessionRepository repository, IQuestionRepository questionRepository, SessionQuestionRepository sessionQuestionRepository)
         {
                 this.repository = repository;
                 this.questionRepository = questionRepository;
@@ -23,7 +23,7 @@ namespace CodeLingo.API.Logics
             Session DatabaseSession = new Session();
             DatabaseSession.UserId = session.UserId;
             DatabaseSession.Language = session.Language;
-            DatabaseSession.Difficulty = (DifficultyLevel)Enum.Parse(typeof(DifficultyLevel),session.Difficulty);
+            DatabaseSession.Difficulty = (DifficultyLevel)Enum.Parse(typeof(DifficultyLevel), session.Difficulty, true);
             DatabaseSession.DesiredCount = session.RequestedQuestionCount;
 
             repository.Create(DatabaseSession);

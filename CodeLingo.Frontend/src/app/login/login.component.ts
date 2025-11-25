@@ -38,7 +38,7 @@ export class LoginComponent {
     this.authService.setRememberMe(rememberMe);
 
     const loginData: LoginRequest = {
-      usernameOrEmail: username,
+      username: username,
       password,
     };
 
@@ -48,7 +48,7 @@ export class LoginComponent {
         console.log('Login successful:', res);
         this.isLoading = false;
 
-        this.router.navigate(['/lading-page']);
+        this.router.navigate(['/landing-page']);
       },
       error: (err) => {
         console.error('Login error:', err);
