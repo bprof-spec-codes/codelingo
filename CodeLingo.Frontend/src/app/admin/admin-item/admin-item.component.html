@@ -1,0 +1,83 @@
+<div class="item-row rounded row align-items-center border-bottom small py-2 ">
+  <div class="col-2 text-truncate fw-bold text-primary">{{ question.title }}</div>
+  <div class="col-4 text-truncate">{{ question.questionText }}</div>
+  <div class="col-2">{{ question.difficulty }}</div>
+  <div class="col-2">{{ question.language }}</div>
+
+  <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+    <button class="btn btn-sm btn-outline-secondary" (click)="toggleDetails()">
+      <i [ngClass]="{ 'bi bi-chevron-down': !showDetails, 'bi bi-chevron-up': showDetails }"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés" (click)="startEdit()">
+      <i class="bi bi-pencil-square"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-danger d-none d-sm-inline" title="Törlés" (click)="deleteItem()">
+      <i class="bi bi-trash"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Lenyíló rész -->
+<div class="details py-2" [class.show]="showDetails">
+  <div class="content small">
+
+    <p><strong>Question:</strong> {{ question.questionText }}</p>
+    <p><strong>ID:</strong> {{ question.id }}</p>
+    <p><strong>Type:</strong> {{ question.type }}</p>
+    <p><strong>Explanation:</strong> {{ question.explanation }}</p>
+
+    <p><strong>Tags:</strong> {{ question.tags?.join(', ') }}</p>
+
+    <ng-container *ngIf="question.metadata as meta">
+      <p><strong>Category:</strong> {{ meta.category }}</p>
+      <p><strong>Topic:</strong> {{ meta.topic }}</p>
+      <p><strong>Source:</strong> {{ meta.source }}</p>
+    </ng-container>
+
+    <p><strong>Created:</strong> {{ question.createdAt | date }}</p>
+    <p><strong>Updated:</strong> {{ question.updatedAt | date }}</p>
+    <p><strong>Active:</strong> {{ question.isActive ? 'Yes' : 'No' }}</p>
+
+    <!-- MultipleChoice -->
+    <div *ngIf="mcQuestion as mc">
+      <p><strong>Options:</strong></p>
+      <ul>
+        <li *ngFor="let opt of mc.options">
+          {{ opt.text }}
+          <span *ngIf="opt.isCorrect">✔</span>
+        </li>
+      </ul>
+      <p><strong>Allow multiple:</strong> {{ mc.allowMultipleSelection ? 'Yes' : 'No' }}</p>
+      <p><strong>Shuffle options:</strong> {{ mc.shuffleOptions ? 'Yes' : 'No' }}</p>
+    </div>
+
+    <!-- CodeCompletion -->
+    <div *ngIf="ccQuestion as cc">
+      <p><strong>Starter code:</strong></p>
+      <pre>{{ cc.starterCode }}</pre>
+
+      <p><strong>Correct answer:</strong></p>
+      <pre>{{ cc.correctAnswer }}</pre>
+
+      <div *ngIf="cc.hints.length">
+        <p><strong>Hints:</strong></p>
+        <ul>
+          <li *ngFor="let h of cc.hints">{{ h }}</li>
+        </ul>
+      </div>
+
+      <div *ngIf="cc.constraints.length">
+        <p><strong>Constraints:</strong></p>
+        <ul>
+          <li *ngFor="let c of cc.constraints">{{ c }}</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="editing">
+    <app-admin-edit [question]="question" (save)="onSave($event)" (cancel)="editing = false">
+    </app-admin-edit>
+  </div>
+</div>

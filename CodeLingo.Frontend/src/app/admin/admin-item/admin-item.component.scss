@@ -1,0 +1,28 @@
+.details {
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.details.show {
+  height: auto;
+  overflow: visible;
+  opacity: 1;
+}
+/* Lenyíló tartalom stílus */
+.details .content {
+  background-color: #2a2a2a; /* világosabb a bg-dark-nál */
+  color: #f8f9fa;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+}
+.item-row {
+  background-color: #1b1b1b; /* sötétszürke */
+  color: #f8f9fa;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #242424; /* enyhe hover-hatás */
+  }
+}

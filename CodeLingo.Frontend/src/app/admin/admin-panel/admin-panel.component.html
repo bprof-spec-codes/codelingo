@@ -1,0 +1,43 @@
+<div class="bg-dark">
+  <div class="container px-4 py-4">
+    <h2 class="text-light mt-2 mb-2">Admin dashboard</h2>
+    <p class="text-white-50">Here is a report about questions, users, sessions.</p>
+
+    <!-- Reszponzív grid -->
+    <div class="row g-3 text-center mt-2">
+      <div class="col-12 col-md-4">
+        <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
+          <h5 class="text-primary">Total number of questions</h5>
+          <h3 class="text-light" [countUp]="56" [options]="{ duration: 2 }">0</h3>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
+          <h5 class="text-primary">Total users registered</h5>
+          <h3 class="text-light" [countUp]="251" [options]="{ duration: 2 }">0</h3>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
+          <h5 class="text-primary">Sessions this week</h5>
+          <h3 class="text-light" [countUp]="79" [options]="{ duration: 2 }">0</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container px-4 pb-4">
+    <app-admin-edit
+    [question]="question" 
+    (save)="onQuestionCreated($event)" >></app-admin-edit>
+
+    <app-admin-list [questions$]="questions$" (questionUpdated)="onQuestionUpdated($event)"
+      (delete)="onQuestionDelete($event)"></app-admin-list>
+    <app-admin-language-create></app-admin-language-create>
+    <app-admin-language-list></app-admin-language-list>
+    <app-admin-import-export></app-admin-import-export>
+  </div>
+  <!--Új létrehozás-->
+
+</div>

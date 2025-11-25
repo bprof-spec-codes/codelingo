@@ -8,6 +8,16 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminListComponent } from './admin/admin-list/admin-list.component';
+import { AdminEditComponent } from './admin/admin-edit/admin-edit.component';
+import { AdminItemComponent } from './admin/admin-item/admin-item.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CountUpModule } from 'ngx-countup';
+import { AdminLanguageCreateComponent } from './admin/admin-language-create/admin-language-create.component';
+import { AdminLanguageListComponent } from './admin/admin-language-list/admin-language-list.component';
+import { AdminImportExportComponent } from './admin/admin-import-export/admin-import-export.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { PracticeStarterComponent } from './practice-starter/practice-starter.component';
 import { LanguageSelectorComponent } from './practice-starter/language-selector/language-selector.component';
@@ -36,6 +46,13 @@ import { jwtInterceptor } from './jwt.interceptor';
     SidebarComponent,
     FooterComponent,
     LandingPageComponent,
+    AdminPanelComponent,
+    AdminListComponent,
+    AdminEditComponent,
+    AdminItemComponent,
+    AdminLanguageCreateComponent,
+    AdminLanguageListComponent,
+    AdminImportExportComponent,
     LeaderboardComponent,
     PracticeStarterComponent,
     LanguageSelectorComponent,
@@ -56,6 +73,7 @@ import { jwtInterceptor } from './jwt.interceptor';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    CountUpModule,
     ReactiveFormsModule,
   ],
   providers: [
