@@ -14,7 +14,8 @@ export class DifficultySelectorComponent {
 
 
   difficultyLevels: DifficultyLevel[] = [
-    { value: 'easy',
+    {
+      value: 'easy',
       label: 'Easy',
       description: 'Perfect for beginners. Basic concepts and syntax.',
       multiplier: 1

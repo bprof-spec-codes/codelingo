@@ -157,7 +157,15 @@ namespace CodeLingo.API
                 }
 
                 // Seed data
-                await DbSeeder.SeedAsync(db);
+                try
+                {
+                    await DbSeeder.SeedAsync(db);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
+                    Console.WriteLine(ex.StackTrace);
+                }
             }
 
             // Configure the HTTP request pipeline.

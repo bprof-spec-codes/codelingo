@@ -64,8 +64,8 @@ export class McQuestionEditorComponent implements OnInit {
     if (!this.existingQuestion) return;
 
     // parse tags
-    const tagsInput = Array.isArray(this.existingQuestion.tags) 
-      ? this.existingQuestion.tags.join(', ') 
+    const tagsInput = Array.isArray(this.existingQuestion.tags)
+      ? this.existingQuestion.tags.join(', ')
       : '';
 
     // patch form values
