@@ -29,6 +29,7 @@
 | Szín                                                      | HEX       | Name           |
 | --------------------------------------------------------- | --------- | -------------- |
 | ![#181818](https://singlecolorimage.com/get/181818/40x20) | `#181818` | color-dark-950 |
+| ![#181818](https://singlecolorimage.com/get/2d2d2d/40x20) | `#2d2d2d` | color-dark-925 |
 | ![#3d3d3d](https://singlecolorimage.com/get/3d3d3d/40x20) | `#3d3d3d` | color-dark-900 |
 | ![#454545](https://singlecolorimage.com/get/454545/40x20) | `#454545` | color-dark-800 |
 | ![#4f4f4f](https://singlecolorimage.com/get/4f4f4f/40x20) | `#4f4f4f` | color-dark-700 |

@@ -1,0 +1,156 @@
+<div class="mc-question-editor">
+    <div class="editor-header">
+        <h2>{{ existingQuestion ? 'Edit' : 'Create' }} Multiple Choice Question</h2>
+    </div>
+
+    <form [formGroup]="questionForm" class="question-form">
+        <!-- Basic Information Section -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-info-circle"></i>
+                Basic Information
+            </h3>
+
+            <div class="form-group">
+                <label for="title" class="form-label">Question Title *</label>
+                <input type="text" id="title" class="form-control" formControlName="title"
+                    placeholder="Enter a descriptive title" />
+                <small class="form-error"
+                    *ngIf="questionForm.get('title')?.invalid && questionForm.get('title')?.touched">
+                    Title is required
+                </small>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="language" class="form-label">Programming Language *</label>
+                    <select id="language" class="form-control" formControlName="language">
+                        <option value="" disabled>Select language</option>
+                        <option *ngFor="let lang of languages" [value]="lang">{{ lang }}</option>
+                    </select>
+                    <small class="form-error"
+                        *ngIf="questionForm.get('language')?.invalid && questionForm.get('language')?.touched">
+                        Language is required
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="difficulty" class="form-label">Difficulty *</label>
+                    <select id="difficulty" class="form-control" formControlName="difficulty">
+                        <option value="" disabled>Select difficulty</option>
+                        <option *ngFor="let diff of difficulties" [value]="diff">{{ diff }}</option>
+                    </select>
+                    <small class="form-error"
+                        *ngIf="questionForm.get('difficulty')?.invalid && questionForm.get('difficulty')?.touched">
+                        Difficulty is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="questionText" class="form-label">Question Text *</label>
+                <textarea id="questionText" class="form-control" formControlName="questionText" rows="4"
+                    placeholder="Enter the question that will be displayed to students"></textarea>
+                <small class="form-error"
+                    *ngIf="questionForm.get('questionText')?.invalid && questionForm.get('questionText')?.touched">
+                    Question text is required
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="explanation" class="form-label">Explanation</label>
+                <textarea id="explanation" class="form-control" formControlName="explanation" rows="3"
+                    placeholder="Explain the correct answer"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="tags" class="form-label">Tags</label>
+                <input type="text" id="tags" class="form-control" formControlName="tagsInput"
+                    placeholder="Enter tags separated by commas (e.g., loops, arrays, basics)" />
+                <small class="form-text">Separate multiple tags with commas</small>
+            </div>
+        </div>
+
+
+        <!-- metadata section -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-tags"></i>
+                Metadata (Optional)
+            </h3>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category" class="form-label">Category</label>
+                    <input type="text" id="category" class="form-control" formControlName="category" />
+                </div>
+
+                <div class="form-group">
+                    <label for="topic" class="form-label">Topic</label>
+                    <input type="text" id="topic" class="form-control" formControlName="topic" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="source" class="form-label">Source</label>
+                <input type="text" id="source" class="form-control" formControlName="source" />
+            </div>
+        </div>
+
+
+        <!-- answer options section -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="bi bi-list-check"></i>
+                Answer Options
+            </h3>
+
+            <div class="options-container" formArrayName="options">
+                <div *ngFor="let optionControl of options.controls; let i = index" class="option-card"
+                    [formGroupName]="i">
+                    <div class="option-header">
+                        <span class="option-number">Option {{ i + 1 }}</span>
+                        <div class="option-actions">
+                            <button type="button" class="btn-icon btn-danger" (click)="removeOption(i)"
+                                [disabled]="options.length <= 2" title="Remove option">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="option-content">
+                        <div class="correct-answer-checkbox">
+                            <input type="checkbox" [id]="'correct-' + i"
+                                [checked]="optionControl.get('isCorrect')?.value" (change)="toggleCorrectAnswer(i)" />
+                            <label [for]="'correct-' + i">Correct Answer</label>
+                        </div>
+
+                        <textarea class="form-control" formControlName="text" rows="2"
+                            placeholder="Enter answer option text"></textarea>
+                        <small class="form-error"
+                            *ngIf="optionControl.get('text')?.invalid && optionControl.get('text')?.touched">
+                            Option text is required
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-add-option" (click)="addNewOption()">
+                <i class="bi bi-plus-circle"></i>
+                Add Another Option
+            </button>
+        </div>
+
+
+        <!-- form actions -->
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="cancel()">
+                Cancel
+            </button>
+            <button type="button" class="btn btn-primary" (click)="submitQuestion()">
+                {{ existingQuestion ? 'Update' : 'Create' }} Question
+            </button>
+        </div>
+
+    </form>
+</div>

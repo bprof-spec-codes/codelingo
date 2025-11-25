@@ -1,0 +1,28 @@
+<div class="profile-container">
+  <div class="header">
+    <h1>User Profile</h1>
+    <button *ngIf="!isEditing && user" (click)="toggleEditMode()" class="btn btn-primary">Edit Profile</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    Loading profile...
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="user && !isLoading">
+    <app-profile-info
+      [user]="user"
+      [isEditing]="isEditing"
+      [isSaving]="isSaving"
+      (save)="onSave($event)"
+      (cancel)="onCancel()">
+    </app-profile-info>
+  </div>
+</div>
