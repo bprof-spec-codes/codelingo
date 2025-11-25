@@ -110,7 +110,7 @@ console.log(fibonacci(10)); // 55</code></pre>
         </section>
 
         <!-- getting started section -->
-        <section class="getting-started-section" *ngIf="!isLoggedIn$" id="getting-started">
+        <section class="getting-started-section" *ngIf="!(isLoggedIn$ | async)" id="getting-started">
             <div class="container">
                 <h2 class="section-title text-center mb-5">Ready to Start Your Coding Journey?</h2>
 
