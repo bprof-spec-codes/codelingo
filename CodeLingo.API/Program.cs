@@ -6,11 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.Text.Json;
-using static CodeLingo.API.Models.Enums;
-using System.Text.Json;
 using CodeLingo.API.Repositories;
-using CodeLingo.API.Logics;
+using Microsoft.OpenApi.Models;
 
 namespace CodeLingo.API
 {
@@ -81,7 +78,21 @@ namespace CodeLingo.API
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = "My API", Version = "v1" });
+
+                // Define the Bearer scheme (this enables the Authorize button)
+                c.AddSecurityDefinition("Bearer", new()
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+            });
 
             // CORS
             var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
