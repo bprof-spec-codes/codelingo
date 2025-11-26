@@ -1,55 +1,73 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-    <div class="container">
-        <!-- Logo balra -->
-        <a class="navbar-brand" href="#">
-            <img src="/assets/brand/codelingo_logo_black.svg" alt="Logo" routerLink="/" width="256">
-        </a>
+  <div class="container">
+    <!-- Logo left -->
+    <a class="navbar-brand" routerLink="/" (click)="closeMobileMenu()">
+      <img src="/assets/brand/codelingo_logo_black.svg" alt="Logo" width="256" />
+    </a>
 
-        <!-- Hamburger menü mobilra -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <!-- Hamburger menu for mobile -->
+    <button class="navbar-toggler" type="button" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <!-- Menüpontok és gombok -->
-        <div class="collapse navbar-collapse position-relative" id="navbarContent">
-            <!-- Menüpontok középre -->
-            <ul class="navbar-nav mx-auto d-flex gap-4">
-                <li class="nav-item">
-                    <a class="nav-link active" routerLink="/" href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-house-door-fill" viewBox="0 0 16 16">
-                            <path
-                                d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
-                        </svg>
-                        Főoldal</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/" href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
-                            <path
-                                d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
-                        </svg>
-                        Gyakorlás</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/" href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-star-fill" viewBox="0 0 16 16">
-                            <path
-                                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                        </svg>
-                        Ranglista</a>
-                </li>
-            </ul>
+    <!-- Menu items and buttons -->
+    <div class="collapse navbar-collapse position-relative" [class.show]="isMobileMenuOpen" id="navbarContent">
+      <!-- Centered menu links -->
+      <ul class="navbar-nav mx-auto d-flex gap-4">
+        <li class="nav-item">
+          <a class="nav-link active" routerLink="/" (click)="closeMobileMenu()">
+            <i class="bi bi-house-door-fill"></i>
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/practice/start" [class.disabled]="!(isLoggedIn$ | async)"
+            [attr.aria-disabled]="!(isLoggedIn$ | async)" (click)="closeMobileMenu()">
+            <i class="bi bi-arrow-right-circle-fill"></i>
+            Practice
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/leaderboard" (click)="closeMobileMenu()">
+            <i class="bi bi-star-fill"></i>
+            Leaderboard
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isAdmin$ | async">
+          <a class="nav-link" routerLink="/admin" (click)="closeMobileMenu()">
+            <i class="bi bi-speedometer2"></i>
+            Admin
+          </a>
+        </li>
+      </ul>
 
-            <!-- Jobb oldali gombok -->
-            <div class="d-flex">
-                <button class="btn btn-outline-dark me-2" routerLink="/">Bejelentkezés</button>
-                <button class="btn btn-secondary text-white me-2" routerLink="/">Regisztráció</button>
+      <!-- Right side buttons -->
+      <div class="d-flex align-items-center">
+        <ng-container *ngIf="!(isLoggedIn$ | async)">
+          <button class="btn btn-outline-dark me-2" routerLink="login" (click)="closeMobileMenu()">
+            Login
+          </button>
+          <button class="btn btn-secondary text-white" routerLink="register" (click)="closeMobileMenu()">
+            Registration
+          </button>
+        </ng-container>
 
-            </div>
-        </div>
+        <ng-container *ngIf="isLoggedIn$ | async">
+          <a routerLink="/profile" class="text-decoration-none text-dark me-3 profile-link" title="Profile"
+            (click)="closeMobileMenu()">
+            <ng-container *ngIf="profilePictureUrl$ | async as profilePicture; else defaultIcon">
+              <img [src]="profilePicture" alt="Profile" class="profile-picture" />
+            </ng-container>
+            <ng-template #defaultIcon>
+              <i class="bi bi-person-circle fs-3"></i>
+            </ng-template>
+          </a>
+          <button class="btn btn-outline-dark" (click)="logout(); closeMobileMenu()">
+            Logout
+          </button>
+        </ng-container>
+      </div>
     </div>
+  </div>
 </nav>

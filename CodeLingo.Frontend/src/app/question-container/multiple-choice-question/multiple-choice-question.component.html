@@ -1,0 +1,83 @@
+<div class="multiple-choice-question" *ngIf="question; else noQuestion">
+
+    <!-- header -->
+    <div class="question-header">
+        <h2 class="question-title">{{ question.title }}</h2>
+        <div class="question-meta">
+            <span class="meta-item">
+                <i class="bi bi-code-square"></i>
+                {{ question.language | uppercase }}
+            </span>
+            <span class="meta-item difficulty" [ngClass]="'difficulty-' + question.difficulty">
+                <i class="bi bi-bar-chart-fill"></i>
+                {{ question.difficulty | titlecase }}
+            </span>
+            <span class="meta-item">
+                <i class="bi bi-clock"></i>
+                {{ question.metadata.estimatedTimeSeconds }}s
+            </span>
+        </div>
+    </div>
+
+    <!-- question text -->
+    <div class="question-text">
+        <p>{{ question.questionText }}</p>
+    </div>
+
+    <!-- selection info -->
+    <div class="selection-info">
+        <i class="bi" [ngClass]="question.allowMultipleSelection ? 'bi-check-square' : 'bi-circle'"></i>
+        <span *ngIf="question.allowMultipleSelection">Select all that apply</span>
+        <span *ngIf="!question.allowMultipleSelection">Select one answer</span>
+    </div>
+
+
+    <!-- answer options -->
+    <div class="answer-options">
+        <div *ngFor="let option of sortedOptions" class="answer-card" [class.selected]="isOptionSelected(option.id)"
+            [class.disabled]="isSubmitted" (click)="toggleOption(option.id)">
+
+            <div class="answer-selector">
+                <input [type]="question.allowMultipleSelection ? 'checkbox' : 'radio'" [name]="question.id"
+                    [id]="option.id" [value]="option.id" [checked]="isOptionSelected(option.id)"
+                    [disabled]="isSubmitted" (click)="$event.stopPropagation()">
+            </div>
+
+            <div class="answer-content">
+                <span class="answer-text">
+                    {{ option.text }}
+                </span>
+                <img *ngIf="option.imageUrl" [src]="option.imageUrl" [alt]="option.text" class="answer-image">
+            </div>
+        </div>
+    </div>
+
+    <!-- submit section -->
+    <div class="submit-section">
+        <button type="button" class="btn btn-submit" [disabled]="!canSubmit()" (click)="submitAnswer()">
+            <i class="bi bi-check-circle-fill"></i>
+            Submit Answer
+        </button>
+
+        <p class="submit-hint" *ngIf="!isSubmitted && selectedAnswerIds.length === 0">
+            <i class="bi bi-info-circle"></i>
+            Please select {{ question.allowMultipleSelection ? 'at least one option' : 'an option' }} to continue
+        </p>
+
+        <p class="submit-success" *ngIf="isSubmitted">
+            <i class="bi bi-check-circle-fill"></i>
+            Answer submitted successfully
+        </p>
+    </div>
+</div>
+
+<ng-template #noQuestion>
+    <div class="no-question">
+        <div class="no-question-content">
+            <i class="bi bi-question-circle"></i>
+            <h3>No Question Available</h3>
+            <p>There is currently no question to display. Please try again or contact support if the problem persists.
+            </p>
+        </div>
+    </div>
+</ng-template>

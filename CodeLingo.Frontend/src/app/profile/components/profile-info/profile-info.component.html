@@ -1,0 +1,83 @@
+<div class="profile-info">
+    <!-- View Mode -->
+    <div *ngIf="!isEditing" class="view-mode">
+        <div class="avatar-section">
+            <ng-container *ngIf="user.profilePictureUrl; else defaultIcon">
+                <img [src]="user.profilePictureUrl" alt="Profile Picture" class="avatar">
+            </ng-container>
+            <ng-template #defaultIcon>
+                <i class="bi bi-person-circle default-avatar-icon"></i>
+            </ng-template>
+        </div>
+        <div class="details-section">
+            <div class="detail-item">
+                <label>Username</label>
+                <p>{{ user.username }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Email</label>
+                <p>{{ user.email }}</p>
+            </div>
+            <div class="detail-item">
+                <label>First Name</label>
+                <p>{{ user.firstName }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Last Name</label>
+                <p>{{ user.lastName }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <form *ngIf="isEditing" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="edit-mode">
+        <div class="avatar-section">
+            <app-avatar-upload [currentUrl]="profileForm.get('profilePictureUrl')?.value"
+                (urlChange)="onAvatarChange($event)">
+            </app-avatar-upload>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username" type="text" formControlName="username" class="form-control"
+                [class.is-invalid]="profileForm.get('username')?.invalid && profileForm.get('username')?.touched">
+            <div class="invalid-feedback" *ngIf="profileForm.get('username')?.errors?.['required']">Username is required
+            </div>
+            <div class="invalid-feedback" *ngIf="profileForm.get('username')?.errors?.['minlength']">Username must be at
+                least 3 characters</div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" class="form-control"
+                [class.is-invalid]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+            <div class="invalid-feedback" *ngIf="profileForm.get('email')?.errors?.['required']">Email is required</div>
+            <div class="invalid-feedback" *ngIf="profileForm.get('email')?.errors?.['email']">Invalid email format</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="firstName">First Name</label>
+                <input id="firstName" type="text" formControlName="firstName" class="form-control"
+                    [class.is-invalid]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched">
+                <div class="invalid-feedback" *ngIf="profileForm.get('firstName')?.errors?.['required']">First name is
+                    required</div>
+            </div>
+
+            <div class="form-group col">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" type="text" formControlName="lastName" class="form-control"
+                    [class.is-invalid]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched">
+                <div class="invalid-feedback" *ngIf="profileForm.get('lastName')?.errors?.['required']">Last name is
+                    required</div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isSaving">
+                {{ isSaving ? 'Saving...' : 'Save Changes' }}
+            </button>
+        </div>
+    </form>
+</div>

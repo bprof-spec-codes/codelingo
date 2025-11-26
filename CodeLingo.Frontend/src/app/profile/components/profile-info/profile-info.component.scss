@@ -1,0 +1,139 @@
+.profile-info {
+    .avatar-section {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #f0f0f0;
+        }
+
+        .default-avatar-icon {
+            font-size: 120px;
+            color: #6c757d;
+        }
+    }
+
+    .view-mode {
+        .details-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+
+            @media (max-width: 600px) {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-item {
+                label {
+                    display: block;
+                    font-weight: 600;
+                    color: #666;
+                    margin-bottom: 0.25rem;
+                    font-size: 0.9rem;
+                }
+
+                p {
+                    margin: 0;
+                    font-size: 1.1rem;
+                    color: #333;
+                }
+            }
+        }
+    }
+
+    .edit-mode {
+        .form-group {
+            margin-bottom: 1.5rem;
+
+            label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 1rem;
+                transition: border-color 0.2s;
+
+                &:focus {
+                    outline: none;
+                    border-color: #007bff;
+                }
+
+                &.is-invalid {
+                    border-color: #dc3545;
+                }
+            }
+
+            .invalid-feedback {
+                color: #dc3545;
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+            }
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+
+            @media (max-width: 600px) {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .col {
+                flex: 1;
+            }
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+
+            .btn {
+                padding: 0.75rem 1.5rem;
+                border-radius: 4px;
+                font-weight: 500;
+                cursor: pointer;
+                border: none;
+                font-size: 1rem;
+
+                &.btn-secondary {
+                    background-color: #e9ecef;
+                    color: #333;
+
+                    &:hover {
+                        background-color: #dde2e6;
+                    }
+                }
+
+                &.btn-primary {
+                    background-color: #007bff;
+                    color: white;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+
+                    &:disabled {
+                        background-color: #a0cfff;
+                        cursor: not-allowed;
+                    }
+                }
+            }
+        }
+    }
+}

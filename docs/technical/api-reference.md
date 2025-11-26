@@ -22,6 +22,7 @@ Ez a dokumentum tartalmazza az összes API endpoint specifikációját a CodeLin
 - `string`: accessToken (JWT)
 - `string`: refreshToken
 - `integer`: expiresIn
+- `boolean`: isAdmin
 
 **400 Bad Request:**
 - `string`: error
@@ -46,6 +47,7 @@ Felhasználó bejelentkeztetése és JWT token generálása.
 - `string`: accessToken (JWT)
 - `string`: refreshToken
 - `integer`: expiresIn
+- `boolean`: isAdmin
 
 **401 Unauthorized:**
 - `string`: error ("Invalid credentials")
@@ -63,6 +65,7 @@ JWT token frissítése refresh token segítségével.
 **200 OK:**
 - `string`: accessToken (JWT)
 - `integer`: expiresIn
+- `boolean`: isAdmin
 
 **401 Unauthorized:**
 - `string`: error ("Invalid or expired refresh token")

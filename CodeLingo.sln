@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeLingo.API", "CodeLingo.API\CodeLingo.API.csproj", "{7CEDE8DC-A8EA-4244-8081-74C7E94FC5C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeLingo.API", "CodeLingo.API\CodeLingo.API.csproj", "{7CEDE8DC-A8EA-4244-8081-74C7E94FC5C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeLingo.Tests", "CodeLingo.Tests\CodeLingo.Tests.csproj", "{3E054A11-FA9E-413A-ABF8-D2B883C896DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7CEDE8DC-A8EA-4244-8081-74C7E94FC5C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CEDE8DC-A8EA-4244-8081-74C7E94FC5C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CEDE8DC-A8EA-4244-8081-74C7E94FC5C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E054A11-FA9E-413A-ABF8-D2B883C896DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E054A11-FA9E-413A-ABF8-D2B883C896DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E054A11-FA9E-413A-ABF8-D2B883C896DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E054A11-FA9E-413A-ABF8-D2B883C896DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

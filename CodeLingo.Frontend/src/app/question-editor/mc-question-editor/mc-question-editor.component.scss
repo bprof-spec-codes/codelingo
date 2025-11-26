@@ -1,0 +1,294 @@
+@import '../../../variables';
+
+
+.mc-question-editor {
+    background-color: $dark-900;
+    border-radius: 12px;
+    padding: $space-5;
+    border: 2px solid $secondary-400;
+
+    .editor-header {
+        margin-bottom: $space-5;
+
+        h2 {
+            color: $primary-400;
+            font-weight: $font-weight-bold;
+            font-size: 1.8rem;
+            margin: 0;
+        }
+    }
+
+    .question-form {
+        display: flex;
+        flex-direction: column;
+        gap: $space-5;
+    }
+
+    .form-section {
+        background-color: $dark-800;
+        border: 1px solid $secondary-400;
+        border-radius: 8px;
+        padding: $space-4;
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: $space-2;
+            color: $primary-400;
+            font-weight: $font-weight-semibold;
+            font-size: 1.2rem;
+            margin-bottom: $space-4;
+
+            i {
+                font-size: 1.3rem;
+            }
+        }
+    }
+
+    .form-group {
+        margin-bottom: $space-4;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            color: $secondary-200;
+            font-weight: $font-weight-semibold;
+            margin-bottom: $space-2;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: $space-3;
+            background-color: $dark-900;
+            border: 2px solid $secondary-400;
+            border-radius: 8px;
+            color: $light;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+
+            &:focus {
+                outline: none;
+                border-color: $primary-400;
+                background-color: $dark-800;
+            }
+
+            &::placeholder {
+                color: $secondary-300;
+            }
+
+            &.ng-invalid.ng-touched {
+                border-color: $danger-500;
+            }
+
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-text {
+            display: block;
+            margin-top: $space-2;
+            color: $secondary-300;
+            font-size: 0.85rem;
+        }
+
+        .form-error {
+            display: block;
+            margin-top: $space-2;
+            color: $danger-500;
+            font-size: 0.85rem;
+        }
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: $space-4;
+        margin-bottom: $space-4;
+    }
+
+    // answer options section
+    .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: $space-3;
+        margin-bottom: $space-4;
+    }
+
+    .option-card {
+        background-color: $dark-900;
+        border: 2px solid $secondary-400;
+        border-radius: 8px;
+        padding: $space-3;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: $primary-400;
+        }
+
+        .option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $space-3;
+          
+
+            .option-number {
+                color: $primary-400;
+                font-weight: $font-weight-semibold;
+                font-size: 0.9rem;
+            }
+
+            .option-actions {
+                display: flex;
+                gap: $space-2;
+            }
+        }
+
+        .option-content {
+            display: flex;
+            flex-direction: column;
+            gap: $space-2;
+
+            .form-control {
+                background-color: #d4d4d4;
+                &.ng-invalid.ng-touched {
+                    border-radius: 8px;
+                    border: 2px solid;
+                    border-color: $danger-500;
+                }
+            }
+
+            .correct-answer-checkbox {
+                display: flex;
+                align-items: center;
+                gap: $space-2;
+                margin-bottom: $space-2;
+
+                input[type="checkbox"] {
+                    width: 1.2rem;
+                    height: 1.2rem;
+                    cursor: pointer;
+                    accent-color: $primary-400;
+                }
+
+                label {
+                    color: $secondary-200;
+                    font-weight: $font-weight-semibold;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                }
+            }
+
+            .form-error {
+                margin-bottom: $space-2;
+                color: $danger-500;
+            }
+        }
+    }
+
+    .btn-icon {
+        background: transparent;
+        border: 1px solid $secondary-400;
+        border-radius: 6px;
+        padding: $space-1 $space-2;
+        color: $light;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+            border-color: $primary-400;
+            color: $primary-400;
+        }
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        &.btn-danger {
+            &:hover:not(:disabled) {
+                border-color: $danger-500;
+                color: $danger-500;
+            }
+        }
+    }
+
+    .btn-add-option {
+        width: 100%;
+        padding: $space-3;
+        background-color: $dark-800;
+        border: 2px dashed $secondary-400;
+        border-radius: 8px;
+        color: $primary-400;
+        font-weight: $font-weight-semibold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $space-2;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: $primary-400;
+            background-color: rgba($primary-400, 0.05);
+        }
+
+        i {
+            font-size: 1.2rem;
+        }
+    }
+
+    // form actions
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: $space-3;
+        padding-top: $space-4;
+        border-top: 1px solid $secondary-400;
+
+        .btn {
+            padding: $space-3 $space-5;
+            border-radius: 8px;
+            font-weight: $font-weight-semibold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+
+            &.btn-secondary {
+                background-color: $dark-800;
+                color: $light;
+                border: 2px solid $secondary-400;
+
+                &:hover {
+                    border-color: $light;
+                    background-color: $dark-700;
+                }
+            }
+
+            &.btn-primary {
+                background-color: $primary-400;
+                color: $dark;
+                border: 2px solid $primary-400;
+
+                &:hover:not(:disabled) {
+                    background-color: $primary-300;
+                    border-color: $primary-300;
+                }
+
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+}

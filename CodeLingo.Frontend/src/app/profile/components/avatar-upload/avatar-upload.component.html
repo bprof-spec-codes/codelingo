@@ -1,0 +1,16 @@
+<div class="avatar-upload">
+    <div class="preview">
+        <ng-container *ngIf="currentUrl; else defaultIcon">
+            <img [src]="currentUrl" alt="Avatar Preview" (error)="onImageError($event)">
+        </ng-container>
+        <ng-template #defaultIcon>
+            <i class="bi bi-person-circle default-icon"></i>
+        </ng-template>
+    </div>
+    <div class="input-group">
+        <label for="avatarUrl">Profile Picture URL</label>
+        <input id="avatarUrl" type="text" [value]="currentUrl" (input)="onUrlChange($event)"
+            placeholder="https://example.com/avatar.jpg" class="form-control">
+        <small class="text-muted">Enter a URL for your profile picture</small>
+    </div>
+</div>
