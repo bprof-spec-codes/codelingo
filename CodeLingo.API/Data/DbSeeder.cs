@@ -12,9 +12,9 @@ namespace CodeLingo.API.Data
             // Seed Programming Languages
             if (!context.ProgrammingLanguages.Any())
             {
-                var csharp = new ProgrammingLanguage { Name = "C#", ShortCode = "csharp" };
-                var js = new ProgrammingLanguage { Name = "JavaScript", ShortCode = "js" };
-                var py = new ProgrammingLanguage { Name = "Python", ShortCode = "py" };
+                var csharp = new ProgrammingLanguage { Name = "C#", ShortCode = "csharp", Version = "12.0" };
+                var js = new ProgrammingLanguage { Name = "JavaScript", ShortCode = "js", Version = "ES6" };
+                var py = new ProgrammingLanguage { Name = "Python", ShortCode = "py", Version = "3.12" };
                 context.ProgrammingLanguages.AddRange(csharp, js, py);
                 await context.SaveChangesAsync();
             }
@@ -22,16 +22,22 @@ namespace CodeLingo.API.Data
             // Check if we already have questions
             if (context.Questions.Any())
             {
+                Console.WriteLine("DbSeeder: Questions already exist. Skipping.");
                 return;
             }
 
             var seedDataPath = "seedsettings.json";
+            Console.WriteLine($"DbSeeder: Looking for seed file at: {Path.GetFullPath(seedDataPath)}");
+            
             if (!File.Exists(seedDataPath))
             {
+                Console.WriteLine("DbSeeder: Seed file not found!");
                 return;
             }
 
             var jsonString = await File.ReadAllTextAsync(seedDataPath);
+            Console.WriteLine($"DbSeeder: Read {jsonString.Length} chars from seed file.");
+
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -41,8 +47,11 @@ namespace CodeLingo.API.Data
 
             if (seedData == null || !seedData.Any())
             {
+                Console.WriteLine("DbSeeder: Deserialized data is empty or null.");
                 return;
             }
+            
+            Console.WriteLine($"DbSeeder: Found {seedData.Count} items to seed.");
 
             foreach (var item in seedData)
             {
