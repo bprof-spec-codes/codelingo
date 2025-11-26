@@ -149,7 +149,7 @@ describe('AdminEditComponent', () => {
     expect(q.starterCode).toBe('print()');
     expect(q.correctAnswer).toBe('print("ok")');
     expect(q.hints).toEqual(['hint1']);
-    expect(q.constraints).toEqual(['constraint1']);
+    expect(q.constraints?.forbiddenKeywords).toEqual(['constraint1']);
   });
 
   it('should emit cancel on onCancel', () => {

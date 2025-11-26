@@ -1,82 +1,90 @@
 <div class="text-light mt-4">
-        <h3 class="text-light mt-2 mb-2">Languages</h3>
-        <p class="text-white-50">
-            This section displays all supported programming languages. You can view details, edit,
-            or delete individual languages directly from the interface.
-        </p>
+    <h3 class="text-light mt-2 mb-2">Languages</h3>
+    <p class="text-white-50">
+        This section displays all supported programming languages. You can view details, edit,
+        or delete individual languages directly from the interface.
+    </p>
 
-        <!-- Fejléc -->
-        <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
-            <div class="col-2">Name</div>
-            <div class="col-4">Version</div>
-            <div class="col-2 d-none d-sm-block">Created</div>
-            <div class="col-2 d-none d-sm-block">Updated</div>
-            <div class="col-2 text-end d-none d-sm-block"></div>
-        </div>
-
-        <!-- Listaelemek -->
-        <ng-container *ngIf="languages$ | async as languages; else loading">
-            <div class="item-row rounded row align-items-center border-bottom small py-2"
-                *ngFor="let lang of languages">
-                <!-- NEM szerkesztett állapot -->
-                <ng-container *ngIf="editingLanguage?.id !== lang.id; else editRow">
-                    <div class="col-2 text-truncate fw-bold text-primary">
-                        {{ lang.name }}
-                    </div>
-                    <div class="col-4 text-truncate">
-                        {{ lang.version }}
-                    </div>
-
-                    <div class="col-2 d-none d-sm-block">
-                        {{ lang.createdAt | date }}
-                    </div>
-                    <div class="col-2 d-none d-sm-block">
-                        {{ lang.updatedAt | date }}
-                    </div>
-
-                    <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
-                        <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés"
-                            (click)="onEdit(lang)">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger d-none d-sm-inline" title="Törlés"
-                            (click)="onDelete(lang)">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </ng-container>
-
-                <!-- SZERKESZTETT állapot -->
-                <ng-template #editRow>
-                    <div class="col-2">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="editModel.name"
-                            placeholder="Name" />
-                    </div>
-                    <div class="col-4">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="editModel.version"
-                            placeholder="Version" />
-                    </div>
-
-                    <div class="col-2 d-none d-sm-block">
-                        {{ lang.createdAt | date }}
-                    </div>
-                    <div class="col-2 d-none d-sm-block">
-                        {{ lang.updatedAt | date }}
-                    </div>
-
-                    <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
-                        <button class="btn btn-sm btn-success" title="Mentés" (click)="onSaveEdit()">
-                            <i class="bi bi-check-lg"></i>
-                        </button>
-                        <button class="btn btn-sm btn-secondary" title="Mégse" (click)="onCancelEdit()">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
-                    </div>
-                </ng-template>
-            </div>
-        </ng-container>
-
-        <ng-template #loading>
-            <p class="text-muted small">Loading...</p>
-        </ng-template>
+    <!-- Fejléc -->
+    <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
+        <div class="col-2">Name</div>
+        <div class="col-2">Short Code</div>
+        <div class="col-2">Version</div>
+        <div class="col-2 d-none d-sm-block">Created</div>
+        <div class="col-2 d-none d-sm-block">Updated</div>
+        <div class="col-2 text-end d-none d-sm-block"></div>
     </div>
+
+    <!-- Listaelemek -->
+    <ng-container *ngIf="languages$ | async as languages; else loading">
+        <div class="item-row rounded row align-items-center border-bottom small py-2" *ngFor="let lang of languages">
+
+            <!-- VIEW MODE -->
+            <ng-container *ngIf="editingLanguage?.id !== lang.id">
+                <div class="col-2 text-truncate fw-bold text-primary">
+                    {{ lang.name }}
+                </div>
+                <div class="col-2 text-truncate">
+                    {{ lang.shortCode }}
+                </div>
+                <div class="col-2 text-truncate">
+                    {{ lang.version }}
+                </div>
+
+                <div class="col-2 d-none d-sm-block">
+                    {{ lang.createdAt | date }}
+                </div>
+                <div class="col-2 d-none d-sm-block">
+                    {{ lang.updatedAt | date }}
+                </div>
+
+                <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-warning d-none d-sm-inline" title="Szerkesztés"
+                        (click)="onEdit(lang)">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger d-none d-sm-inline" title="Törlés"
+                        (click)="onDelete(lang)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </ng-container>
+
+            <!-- EDIT MODE -->
+            <ng-container *ngIf="editingLanguage?.id === lang.id">
+                <div class="col-2">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="editModel.name"
+                        placeholder="Name" />
+                </div>
+                <div class="col-2">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="editModel.shortCode"
+                        placeholder="Short Code" />
+                </div>
+                <div class="col-2">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="editModel.version"
+                        placeholder="Version" />
+                </div>
+
+                <div class="col-2 d-none d-sm-block">
+                    {{ lang.createdAt | date }}
+                </div>
+                <div class="col-2 d-none d-sm-block">
+                    {{ lang.updatedAt | date }}
+                </div>
+
+                <div class="col-2 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+                    <button class="btn btn-sm btn-success" title="Mentés" (click)="onSaveEdit()">
+                        <i class="bi bi-check-lg"></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary" title="Mégse" (click)="onCancelEdit()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <ng-template #loading>
+        <p class="text-muted small">Loading...</p>
+    </ng-template>
+</div>

@@ -6,8 +6,6 @@ using System.Security.Claims;
 using System.Text.Json;
 using static CodeLingo.API.DTOs.Session.SessionDtos;
 
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 namespace CodeLingo.API.Controllers
 {

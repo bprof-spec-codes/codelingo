@@ -8,6 +8,7 @@ import { RegisterComponent } from './register/register.component';
 import { QuestionContainerComponent } from './question-container/question-container.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './guards/admin.guard';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing-page', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'session/:id/questions', component: QuestionContainerComponent },
   { path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard] },
+  { path: 'profile', component: ProfileComponent },
   { path: '**', redirectTo: 'landing-page', pathMatch: 'full' },
 ];
 
@@ -25,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

@@ -10,8 +10,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './admin-list.component.html',
   styleUrl: './admin-list.component.scss'
 })
-export class AdminListComponent{
-  @Input() questions$!: Observable<Question[]>;
+export class AdminListComponent {
+  @Input() questions: Question[] = [];
   @Output() questionUpdated = new EventEmitter<Question>();
   @Output() delete = new EventEmitter<string>();
   QuestionType = QuestionType;

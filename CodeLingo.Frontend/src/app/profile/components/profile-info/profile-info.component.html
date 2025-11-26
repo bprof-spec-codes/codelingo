@@ -2,7 +2,12 @@
     <!-- View Mode -->
     <div *ngIf="!isEditing" class="view-mode">
         <div class="avatar-section">
-            <img [src]="user.profilePictureUrl || 'assets/default-avatar.png'" alt="Profile Picture" class="avatar">
+            <ng-container *ngIf="user.profilePictureUrl; else defaultIcon">
+                <img [src]="user.profilePictureUrl" alt="Profile Picture" class="avatar">
+            </ng-container>
+            <ng-template #defaultIcon>
+                <i class="bi bi-person-circle default-avatar-icon"></i>
+            </ng-template>
         </div>
         <div class="details-section">
             <div class="detail-item">

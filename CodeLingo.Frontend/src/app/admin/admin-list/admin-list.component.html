@@ -12,7 +12,7 @@
     </div>
 
     <!-- Listaelemek -->
-    <div *ngFor="let q of questions$ | async as questions">
+    <div *ngFor="let q of questions">
         <app-admin-item [question]="q" (questionUpdated)="onItemUpdated($event)" (delete)="onItemDelete($event)">
         </app-admin-item>
     </div>

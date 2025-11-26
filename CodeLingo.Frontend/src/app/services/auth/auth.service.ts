@@ -23,6 +23,11 @@ export class AuthService {
   );
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
+  private isAdminSubject = new BehaviorSubject<boolean>(
+    this.hasAdminRole()
+  );
+  isAdmin$ = this.isAdminSubject.asObservable();
+
   private refreshTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private http: HttpClient, private router: Router) {
@@ -47,7 +52,9 @@ export class AuthService {
 
   logout(): void {
     this.clearAuthData();
+    this.clearAuthData();
     this.isLoggedInSubject.next(false);
+    this.isAdminSubject.next(false);
     this.router.navigate(['/login']);
   }
 
@@ -74,14 +81,18 @@ export class AuthService {
   }
 
   private handleAuthSuccess(response: AuthResponse, updateLogin = true): void {
-    const { accessToken, refreshToken, expiresIn } = response;
+    const { accessToken, refreshToken, expiresIn, isAdmin } = response;
     const expiryTime = Date.now() + expiresIn * 1000;
 
     this.storage.setItem('accessToken', accessToken);
     if (refreshToken) this.storage.setItem('refreshToken', refreshToken);
     this.storage.setItem('tokenExpiry', expiryTime.toString());
+    this.storage.setItem('isAdmin', String(isAdmin));
 
-    if (updateLogin) this.isLoggedInSubject.next(true);
+    if (updateLogin) {
+      this.isLoggedInSubject.next(true);
+      this.isAdminSubject.next(isAdmin);
+    }
     this.scheduleTokenRefresh();
   }
 
@@ -104,7 +115,9 @@ export class AuthService {
 
   private autoLogout(redirect: boolean = true): void {
     this.clearAuthData();
+    this.clearAuthData();
     this.isLoggedInSubject.next(false);
+    this.isAdminSubject.next(false);
     if (redirect) {
       this.router.navigate(['/login']);
     }
@@ -114,6 +127,7 @@ export class AuthService {
     this.storage.removeItem('accessToken');
     this.storage.removeItem('refreshToken');
     this.storage.removeItem('tokenExpiry');
+    this.storage.removeItem('isAdmin');
     clearTimeout(this.refreshTimer);
   }
 
@@ -129,6 +143,10 @@ export class AuthService {
     const token = this.getAccessToken();
     const expiry = Number(this.storage.getItem('tokenExpiry'));
     return !!token && expiry > Date.now();
+  }
+
+  public hasAdminRole(): boolean {
+    return this.storage.getItem('isAdmin') === 'true';
   }
 
   private handleError(error: HttpErrorResponse) {

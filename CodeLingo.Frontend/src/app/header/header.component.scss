@@ -1,6 +1,26 @@
-a, button{
+a,
+button {
     font-weight: 600;
 }
-button{
+
+button {
     border-radius: 24px;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #333;
+    transition: transform 0.2s ease;
+}
+
+.profile-link:hover .profile-picture {
+    transform: scale(1.1);
+}
+
+.profile-link:hover i {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
 }

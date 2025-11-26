@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace CodeLingo.API.Controllers
 {
-    [Route("admin/questions")]
+    [Route("api/admin/questions")]
     [ApiController]
     [Authorize(Roles = "Admin")]
     public class AdminQuestionsController : ControllerBase

@@ -28,6 +28,8 @@ namespace CodeLingo.API
             builder.Services.AddScoped<IMultipleChoiceQuestionRepository, MultipleChoiceQuestionRepository>();
             builder.Services.AddScoped<IQuestionService, QuestionService>();
             builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+            builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
+            builder.Services.AddScoped<ILanguageService, LanguageService>();
             builder.Services.AddScoped<SessionLogic>();
             builder.Services.AddScoped<AnswerEvaluationLogic>();
             builder.Services.AddHostedService<SessionCleanUpLogic>();

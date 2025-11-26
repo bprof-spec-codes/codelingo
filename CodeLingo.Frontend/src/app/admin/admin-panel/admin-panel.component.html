@@ -3,41 +3,114 @@
     <h2 class="text-light mt-2 mb-2">Admin dashboard</h2>
     <p class="text-white-50">Here is a report about questions, users, sessions.</p>
 
-    <!-- Reszponzív grid -->
+    <!-- Statistics Grid -->
     <div class="row g-3 text-center mt-2">
       <div class="col-12 col-md-4">
         <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
           <h5 class="text-primary">Total number of questions</h5>
-          <h3 class="text-light" [countUp]="56" [options]="{ duration: 2 }">0</h3>
+          <h3 class="text-light" [countUp]="totalQuestionsCount" [options]="{ duration: 2 }">0</h3>
         </div>
       </div>
 
       <div class="col-12 col-md-4">
         <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
           <h5 class="text-primary">Total users registered</h5>
-          <h3 class="text-light" [countUp]="251" [options]="{ duration: 2 }">0</h3>
+          <h3 class="text-light" [countUp]="totalUsersCount" [options]="{ duration: 2 }">0</h3>
         </div>
       </div>
 
       <div class="col-12 col-md-4">
         <div class="bg-dark rounded-2 px-4 py-4 border border-primary h-100">
           <h5 class="text-primary">Sessions this week</h5>
-          <h3 class="text-light" [countUp]="79" [options]="{ duration: 2 }">0</h3>
+          <h3 class="text-light" [countUp]="sessionsThisWeekCount" [options]="{ duration: 2 }">0</h3>
         </div>
       </div>
     </div>
-  </div>
-  <div class="container px-4 pb-4">
-    <app-admin-edit
-    [question]="question" 
-    (save)="onQuestionCreated($event)"></app-admin-edit>
 
-    <app-admin-list [questions$]="questions$" (questionUpdated)="onQuestionUpdated($event)"
-      (delete)="onQuestionDelete($event)"></app-admin-list>
-    <app-admin-language-create></app-admin-language-create>
-    <app-admin-language-list></app-admin-language-list>
-    <app-admin-import-export></app-admin-import-export>
-  </div>
-  <!--Új létrehozás-->
+    <div class="container px-4 pb-4">
 
+      <!-- Create Question Section -->
+      <div class="card bg-dark border-primary mb-3 mt-4">
+        <div class="card-header bg-dark border-primary d-flex justify-content-between align-items-center"
+          (click)="isCreateQuestionExpanded = !isCreateQuestionExpanded" style="cursor: pointer;">
+          <h5 class="text-primary mb-0">Create Question</h5>
+          <i class="bi" [class.bi-chevron-down]="!isCreateQuestionExpanded"
+            [class.bi-chevron-up]="isCreateQuestionExpanded"></i>
+        </div>
+        <div class="card-body" *ngIf="isCreateQuestionExpanded">
+          <app-admin-edit [question]="question" (save)="onQuestionCreated($event)"></app-admin-edit>
+        </div>
+      </div>
+
+      <!-- Questions List Section -->
+      <div class="card bg-dark border-primary mb-3">
+        <div class="card-header bg-dark border-primary d-flex justify-content-between align-items-center"
+          (click)="isQuestionsListExpanded = !isQuestionsListExpanded" style="cursor: pointer;">
+          <h5 class="text-primary mb-0">Questions List</h5>
+          <i class="bi" [class.bi-chevron-down]="!isQuestionsListExpanded"
+            [class.bi-chevron-up]="isQuestionsListExpanded"></i>
+        </div>
+        <div class="card-body" *ngIf="isQuestionsListExpanded">
+          <app-admin-list [questions]="questions" (questionUpdated)="onQuestionUpdated($event)"
+            (delete)="onQuestionDelete($event)"></app-admin-list>
+
+          <!-- Pagination Controls -->
+          <nav aria-label="Page navigation" class="mt-4" *ngIf="totalPages > 1">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage - 1)">Previous</a>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link">Page {{ currentPage }} of {{ totalPages }} (Total: {{ totalItems }})</span>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage + 1)">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Create Language Section -->
+      <div class="card bg-dark border-primary mb-3">
+        <div class="card-header bg-dark border-primary d-flex justify-content-between align-items-center"
+          (click)="isCreateLanguageExpanded = !isCreateLanguageExpanded" style="cursor: pointer;">
+          <h5 class="text-primary mb-0">Create Language</h5>
+          <i class="bi" [class.bi-chevron-down]="!isCreateLanguageExpanded"
+            [class.bi-chevron-up]="isCreateLanguageExpanded"></i>
+        </div>
+        <div class="card-body" *ngIf="isCreateLanguageExpanded">
+          <app-admin-language-create></app-admin-language-create>
+        </div>
+      </div>
+
+      <!-- Languages List Section -->
+      <div class="card bg-dark border-primary mb-3">
+        <div class="card-header bg-dark border-primary d-flex justify-content-between align-items-center"
+          (click)="isLanguagesListExpanded = !isLanguagesListExpanded" style="cursor: pointer;">
+          <h5 class="text-primary mb-0">Languages List</h5>
+          <i class="bi" [class.bi-chevron-down]="!isLanguagesListExpanded"
+            [class.bi-chevron-up]="isLanguagesListExpanded"></i>
+        </div>
+        <div class="card-body" *ngIf="isLanguagesListExpanded">
+          <app-admin-language-list></app-admin-language-list>
+        </div>
+      </div>
+
+      <!-- Import/Export Section -->
+      <div class="card bg-dark border-primary mb-3">
+        <div class="card-header bg-dark border-primary d-flex justify-content-between align-items-center"
+          (click)="isImportExportExpanded = !isImportExportExpanded" style="cursor: pointer;">
+          <h5 class="text-primary mb-0">Import / Export</h5>
+          <i class="bi" [class.bi-chevron-down]="!isImportExportExpanded"
+            [class.bi-chevron-up]="isImportExportExpanded"></i>
+        </div>
+        <div class="card-body" *ngIf="isImportExportExpanded">
+          <app-admin-import-export></app-admin-import-export>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </div>

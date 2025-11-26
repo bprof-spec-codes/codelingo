@@ -19,6 +19,7 @@ describe('AuthService', () => {
     expiresIn: 3600,
     message: 'ok',
     userId: '123',
+    isAdmin: false
   };
 
   // ---------------- Mock Storage -----------------
@@ -61,7 +62,7 @@ describe('AuthService', () => {
 
   // -------------------------------------------------------------------------------------------
   it('should login and store tokens', () => {
-    const body: LoginRequest = { usernameOrEmail: 'john', password: '123' };
+    const body: LoginRequest = { username: 'john', password: '123' };
 
     service.login(body).subscribe((res) => {
       expect(res).toEqual(mockResponse);
@@ -69,7 +70,7 @@ describe('AuthService', () => {
 
     const req = httpMock.expectOne('/auth/login');
     expect(req.request.method).toBe('POST');
-    expect(req.request.body.usernameOrEmail).toBe('john');
+    expect(req.request.body.username).toBe('john');
 
     req.flush(mockResponse);
 
@@ -105,7 +106,7 @@ describe('AuthService', () => {
 
   // -------------------------------------------------------------------------------------------
   it('should update isLoggedIn$ to true on login', (done) => {
-    const body: LoginRequest = { usernameOrEmail: 'john', password: '123' };
+    const body: LoginRequest = { username: 'john', password: '123' };
 
     service.isLoggedIn$.subscribe((val) => {
       if (val === true) {
@@ -193,7 +194,7 @@ describe('AuthService', () => {
   it('should handle error and return message string', () => {
     let errorMsg = '';
 
-    service.login({ usernameOrEmail: 'john', password: '123' }).subscribe({
+    service.login({ username: 'john', password: '123' }).subscribe({
       error: (err) => (errorMsg = err),
     });
 

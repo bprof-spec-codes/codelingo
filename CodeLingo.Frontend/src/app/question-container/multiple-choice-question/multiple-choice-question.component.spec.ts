@@ -46,7 +46,7 @@ describe('MultipleChoiceQuestionComponent', () => {
       declarations: [MultipleChoiceQuestionComponent],
       imports: [CommonModule]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MultipleChoiceQuestionComponent);
     component = fixture.componentInstance;
@@ -146,7 +146,7 @@ describe('MultipleChoiceQuestionComponent', () => {
     });
   });
 
-  describe('getSortedOptions', () => {
+  describe('sortedOptions', () => {
     beforeEach(() => {
       component.question = {
         ...mockQuestion,
@@ -161,7 +161,8 @@ describe('MultipleChoiceQuestionComponent', () => {
 
     it('should return options sorted by order when shuffleOptions is false', () => {
       component.question.shuffleOptions = false;
-      const sorted = component.getSortedOptions();
+      component.updateSortedOptions(); // Call update method
+      const sorted = component.sortedOptions; // Access property
       expect(sorted[0].id).toBe('opt-1');
       expect(sorted[1].id).toBe('opt-2');
       expect(sorted[2].id).toBe('opt-3');
@@ -170,7 +171,8 @@ describe('MultipleChoiceQuestionComponent', () => {
 
     it('should return all options when shuffleOptions is true', () => {
       component.question.shuffleOptions = true;
-      const sorted = component.getSortedOptions();
+      component.updateSortedOptions(); // Call update method
+      const sorted = component.sortedOptions; // Access property
       expect(sorted.length).toBe(4);
       // Check that all options are present
       const ids = sorted.map(opt => opt.id).sort();
@@ -179,7 +181,7 @@ describe('MultipleChoiceQuestionComponent', () => {
 
     it('should not modify the original options array', () => {
       const originalOptions = [...component.question.options];
-      component.getSortedOptions();
+      component.updateSortedOptions(); // Call update method
       expect(component.question.options).toEqual(originalOptions);
     });
   });
@@ -290,7 +292,8 @@ describe('MultipleChoiceQuestionComponent', () => {
         { id: 'opt-2', text: 'Option 2', order: 2, imageUrl: 'http://example.com/img2.png' }
       ];
       component.question = { ...mockQuestion, options: optionsWithImages };
-      const sorted = component.getSortedOptions();
+      component.updateSortedOptions();
+      const sorted = component.sortedOptions;
       expect(sorted[0].imageUrl).toBe('http://example.com/img1.png');
     });
   });

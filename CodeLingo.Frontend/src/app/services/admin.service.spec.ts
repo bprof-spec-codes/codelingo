@@ -28,19 +28,30 @@ describe('AdminService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('getLanguages should emit mock languages from BehaviorSubject (no HTTP)', (done) => {
+  it('getLanguages should GET from /admin/languages', () => {
     service.getLanguages().subscribe((langs: Language[]) => {
-      expect(langs.length).toBe(4);
+      console.log('getLanguages response:', langs);
+      expect(langs.length).toBe(1);
       expect(langs[0].name).toBe('TypeScript');
-      done();
     });
 
-    // biztos, hogy nem ment ki HTTP-re
-    httpMock.expectNone((req) => req.url.includes('/languages'));
+    const req = httpMock.expectOne((r) => r.url.includes('/admin/languages'));
+    expect(req.request.method).toBe('GET');
+
+    req.flush([
+      {
+        id: 1,
+        name: 'TypeScript',
+        shortCode: 'ts',
+        version: '5.6',
+        createdAt: '2025-01-01',
+        updatedAt: '2025-01-01'
+      }
+    ]);
   });
 
   it('addLanguage should POST to /admin/languages', () => {
-    const payload = { name: 'Go', version: '1.23' };
+    const payload = { name: 'Go', version: '1.23', shortCode: 'go' };
 
     service.addLanguage(payload).subscribe();
 
@@ -49,8 +60,10 @@ describe('AdminService', () => {
     expect(req.request.body).toEqual(payload);
 
     req.flush({
-      id: 'lang-5',
-      ...payload
+      id: 5,
+      ...payload,
+      createdAt: '2025-01-01',
+      updatedAt: '2025-01-01'
     });
   });
 

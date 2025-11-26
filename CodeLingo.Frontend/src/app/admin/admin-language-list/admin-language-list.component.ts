@@ -12,7 +12,7 @@ import { AdminService } from '../../services/admin.service';
 export class AdminLanguageListComponent {
   languages$!: Observable<Language[]>;
   editingLanguage: Language | null = null;
-  editModel: { name: string; version: string } = { name: '', version: '' };
+  editModel: { name: string; version: string; shortCode: string } = { name: '', version: '', shortCode: '' };
   constructor(private service: AdminService) {
 
   }
@@ -23,7 +23,8 @@ export class AdminLanguageListComponent {
     this.editingLanguage = { ...lang };
     this.editModel = {
       name: lang.name,
-      version: lang.version
+      version: lang.version,
+      shortCode: lang.shortCode
     };
   }
   onSaveEdit() {
@@ -33,7 +34,8 @@ export class AdminLanguageListComponent {
     const id = this.editingLanguage.id
     const payload = {
       name: this.editModel.name,
-      version: this.editModel.version
+      version: this.editModel.version,
+      shortCode: this.editModel.shortCode
     };
 
     this.service.updateLanguage(id, payload).subscribe({

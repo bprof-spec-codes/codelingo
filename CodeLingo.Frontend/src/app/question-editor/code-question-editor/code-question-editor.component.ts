@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import * as monaco from 'monaco-editor';
 import { QuestionType, DifficultyLevel, ProgrammingLanguage } from '../../models/base-question';
 import { CodeCompletionQuestion } from '../../models/code-completion-question';
+
+declare const monaco: any;
 
 @Component({
     selector: 'app-code-question-editor',
@@ -16,8 +17,8 @@ export class CodeQuestionEditorComponent implements OnInit, AfterViewInit, OnDes
     @ViewChild('starterCodeEditor') starterCodeEditorContainer!: ElementRef;
     @ViewChild('solutionCodeEditor') solutionCodeEditorContainer!: ElementRef;
 
-    private starterEditor!: monaco.editor.IStandaloneCodeEditor;
-    private solutionEditor!: monaco.editor.IStandaloneCodeEditor;
+    private starterEditor!: any;
+    private solutionEditor!: any;
 
     languages: ProgrammingLanguage[] = ['csharp', 'javascript', 'python', 'java', 'cpp', 'go'];
     difficulties: DifficultyLevel[] = [DifficultyLevel.EASY, DifficultyLevel.MEDIUM, DifficultyLevel.HARD];
@@ -48,7 +49,7 @@ export class CodeQuestionEditorComponent implements OnInit, AfterViewInit, OnDes
     }
 
     ngAfterViewInit(): void {
-        this.initMonaco();
+        this.loadMonaco();
     }
 
     ngOnDestroy(): void {
@@ -58,6 +59,26 @@ export class CodeQuestionEditorComponent implements OnInit, AfterViewInit, OnDes
         if (this.solutionEditor) {
             this.solutionEditor.dispose();
         }
+    }
+
+    private loadMonaco(): void {
+        if ((window as any).monaco) {
+            this.initMonaco();
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'assets/monaco/vs/loader.js';
+        script.onload = () => {
+            const require = (window as any).require;
+            if (require) {
+                require.config({ paths: { 'vs': 'assets/monaco/vs' } });
+                require(['vs/editor/editor.main'], () => {
+                    this.initMonaco();
+                });
+            }
+        };
+        document.body.appendChild(script);
     }
 
     private initMonaco(): void {

@@ -20,6 +20,7 @@ describe('LoginComponent', () => {
     refreshToken: 'fake-refresh-token',
     userId: 'user-123',
     message: 'ok',
+    isAdmin: false,
     ...overrides,
   });
 
@@ -91,7 +92,7 @@ describe('LoginComponent', () => {
 
     expect(authServiceSpy.setRememberMe).toHaveBeenCalledWith(true);
     expect(authServiceSpy.login).toHaveBeenCalledWith({
-      usernameOrEmail: 'john',
+      username: 'john',
       password: '123456',
     });
   });
