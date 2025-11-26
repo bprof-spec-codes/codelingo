@@ -61,7 +61,8 @@ namespace CodeLingo.API.Controllers
                 UserId = user.Id,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token,
-                ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
+                ExpiresIn = _authLogic.GetTokenExpiresInSeconds(),
+                IsAdmin = await _authLogic.IsInRoleAsync(user, AppRoles.Admin)
             });
         }
 
@@ -99,7 +100,8 @@ namespace CodeLingo.API.Controllers
                 UserId = user.Id,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token,
-                ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
+                ExpiresIn = _authLogic.GetTokenExpiresInSeconds(),
+                IsAdmin = await _authLogic.IsInRoleAsync(user, AppRoles.Admin)
             });
         }
 
@@ -125,7 +127,8 @@ namespace CodeLingo.API.Controllers
             return Ok(new TokenResponseDto
             {
                 AccessToken = accessToken,
-                ExpiresIn = _authLogic.GetTokenExpiresInSeconds()
+                ExpiresIn = _authLogic.GetTokenExpiresInSeconds(),
+                IsAdmin = await _authLogic.IsInRoleAsync(refreshToken.User, AppRoles.Admin)
             });
         }
 

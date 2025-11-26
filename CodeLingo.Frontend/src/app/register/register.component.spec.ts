@@ -75,6 +75,7 @@ describe('RegisterComponent', () => {
       accessToken: 'token',
       refreshToken: 'refresh',
       expiresIn: 3600,
+      isAdmin: false
     };
     authServiceSpy.register.and.returnValue(of(registerResponse));
 

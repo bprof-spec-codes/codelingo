@@ -21,6 +21,7 @@ export class AdminLanguageCreateComponent implements OnInit {
   ngOnInit(): void {
     this.languageForm = this.fb.group({
       name: ['', Validators.required],
+      shortCode: ['', Validators.required],
       version: ['', Validators.required]
     });
   }

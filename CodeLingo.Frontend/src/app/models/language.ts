@@ -1,9 +1,10 @@
 export class Language {
   constructor(
-    public id: string,
+    public id: number,
     public name: string,
+    public shortCode: string,
     public version: string,
     public createdAt: string,
-    public updatedAt: string  
-  ) {}
+    public updatedAt: string
+  ) { }
 }

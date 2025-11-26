@@ -31,6 +31,7 @@ namespace CodeLingo.API.DTOs.Auth
             public string AccessToken { get; set; }
             public string RefreshToken { get; set; }
             public int ExpiresIn { get; set; }
+            public bool IsAdmin { get; set; }
         }
 
         public class RefreshTokenRequestDto
@@ -43,6 +44,7 @@ namespace CodeLingo.API.DTOs.Auth
         {
             public string AccessToken { get; set; }
             public int ExpiresIn { get; set; }
+            public bool IsAdmin { get; set; }
         }
     }
 }

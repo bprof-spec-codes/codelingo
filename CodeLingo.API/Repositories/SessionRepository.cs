@@ -39,6 +39,16 @@ namespace CodeLingo.API.Repositories
             return this.DbContext.Sessions.ToList();
         }
 
+        public async Task<int> CountSessionsAsync(DateTime? since = null)
+        {
+            var query = this.DbContext.Sessions.AsQueryable();
+            if (since.HasValue)
+            {
+                query = query.Where(s => s.CreatedAt >= since.Value);
+            }
+            return await query.CountAsync();
+        }
+
         public void SaveChanges()
         {
             this.DbContext.SaveChanges();
