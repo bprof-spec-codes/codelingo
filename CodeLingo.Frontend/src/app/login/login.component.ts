@@ -15,6 +15,8 @@ export class LoginComponent {
   isLoading = false;
   serverError: string | null = null;
 
+  showPassword = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -60,6 +62,10 @@ export class LoginComponent {
             : 'Invalid credentials or server error. Please try again.';
       },
     });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   get username() {
