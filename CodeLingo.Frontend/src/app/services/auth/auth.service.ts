@@ -136,7 +136,10 @@ export class AuthService {
   }
 
   getAccessToken(): string | null {
-    return this.storage.getItem('accessToken');
+    return (
+      localStorage.getItem('accessToken') ??
+      sessionStorage.getItem('accessToken')
+    );
   }
 
   private getRefreshToken(): string | null {
@@ -150,7 +153,10 @@ export class AuthService {
   }
 
   public hasAdminRole(): boolean {
-    return this.storage.getItem('isAdmin') === 'true';
+    return (
+      localStorage.getItem('isAdmin') === 'true' ||
+      sessionStorage.getItem('isAdmin') === 'true'
+    );
   }
 
   private handleError(error: HttpErrorResponse) {
