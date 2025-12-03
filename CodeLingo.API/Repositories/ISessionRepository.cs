@@ -6,5 +6,6 @@ namespace CodeLingo.API.Repositories
     {
         public List<Session> GetOutdatedSessions();
         Task<int> CountSessionsAsync(DateTime? since = null);
+        Session ReadWithQuestions(string id);
     }
 }
