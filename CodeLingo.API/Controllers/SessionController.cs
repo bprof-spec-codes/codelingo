@@ -100,5 +100,51 @@ namespace CodeLingo.API.Controllers
                 return NotFound(new { error = "Session not found or no more questions" });
             return Ok(dto);
         }
+
+        [HttpPost("{id}/close")]
+        [Authorize]
+        public IActionResult CloseSession(string id, [FromBody] CloseSessionRequestDto? request)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _logger.LogWarning("Unauthorized close session attempt - missing user ID in token");
+                    return Unauthorized(new { error = "Missing or invalid authentication token" });
+                }
+
+                _logger.LogInformation("Closing session {SessionId} for user {UserId}", id, userId);
+
+                bool forceClose = request?.ForceClose ?? false;
+
+                var summary = sessionLogic.CloseSession(id, userId, forceClose);
+
+                _logger.LogInformation("Session {SessionId} closed successfully with status {Status}",
+                    id, summary.Status);
+
+                return Ok(summary);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogWarning("Session {SessionId} not found", id);
+                return NotFound(new { error = "Session not found" });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning(ex, "Forbidden: User attempted to close session {SessionId} they don't own", id);
+                return StatusCode(403, new { error = "Not authorized to close this session" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "Bad request closing session {SessionId}: {Message}", id, ex.Message);
+                return BadRequest(new { error = "Session already closed or invalid state" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Internal server error closing session {SessionId}", id);
+                return StatusCode(500, new { error = "Internal server error" });
+            }
+        }
     }
 }
