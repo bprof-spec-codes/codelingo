@@ -18,20 +18,25 @@ export class AuthService {
 
   private storage: Storage = localStorage;
 
-  private isLoggedInSubject = new BehaviorSubject<boolean>(
-    this.hasValidToken()
-  );
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  private isAdminSubject = new BehaviorSubject<boolean>(
-    this.hasAdminRole()
-  );
+  private isAdminSubject = new BehaviorSubject<boolean>(this.hasAdminRole());
   isAdmin$ = this.isAdminSubject.asObservable();
 
   private refreshTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private http: HttpClient, private router: Router) {
-    if (this.hasValidToken()) {
+    if (sessionStorage.getItem('accessToken')) {
+      this.storage = sessionStorage;
+    } else {
+      this.storage = localStorage;
+    }
+
+    const loggedIn = this.hasValidToken();
+    this.isLoggedInSubject.next(loggedIn);
+
+    if (loggedIn) {
       this.scheduleTokenRefresh();
     }
   }
@@ -51,7 +56,6 @@ export class AuthService {
   }
 
   logout(): void {
-    this.clearAuthData();
     this.clearAuthData();
     this.isLoggedInSubject.next(false);
     this.isAdminSubject.next(false);
@@ -77,7 +81,7 @@ export class AuthService {
   }
 
   setRememberMe(remember: boolean): void {
-    this.storage = remember ? this.storage : sessionStorage;
+    this.storage = remember ? localStorage : sessionStorage;
   }
 
   private handleAuthSuccess(response: AuthResponse, updateLogin = true): void {
@@ -115,9 +119,9 @@ export class AuthService {
 
   private autoLogout(redirect: boolean = true): void {
     this.clearAuthData();
-    this.clearAuthData();
     this.isLoggedInSubject.next(false);
     this.isAdminSubject.next(false);
+
     if (redirect) {
       this.router.navigate(['/login']);
     }
