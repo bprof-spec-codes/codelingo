@@ -16,6 +16,8 @@ export class RegisterComponent {
   serverError: string | null = null;
   successMessage: string | null = null;
 
+  showRegisterPassword = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -65,6 +67,10 @@ export class RegisterComponent {
         }
       },
     });
+  }
+
+  toggleRegisterPasswordVisibility() {
+    this.showRegisterPassword = !this.showRegisterPassword;
   }
 
   get username() {

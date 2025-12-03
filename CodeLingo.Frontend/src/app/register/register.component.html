@@ -62,20 +62,37 @@
         <!-- Password -->
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            formControlName="password"
-            placeholder="Create a strong password"
-            [class.is-invalid]="
-              password?.invalid && (password?.dirty || password?.touched)
-            "
-            required
-          />
+
+          <!-- Input + eye wrapper -->
+          <div class="position-relative">
+            <input
+              [type]="showRegisterPassword ? 'text' : 'password'"
+              class="form-control"
+              id="password"
+              formControlName="password"
+              placeholder="Create a strong password"
+              [class.is-invalid]="
+                password?.invalid && (password?.dirty || password?.touched)
+              "
+              required
+            />
+            <!-- Eye toggler -->
+            <button
+              type="button"
+              class="password-toggle-btn"
+              (click)="toggleRegisterPasswordVisibility()"
+              tabindex="-1"
+            >
+              <i
+                class="bi"
+                [ngClass]="showRegisterPassword ? 'bi-eye-slash' : 'bi-eye'"
+              ></i>
+            </button>
+          </div>
+
           <div
             *ngIf="password?.invalid && (password?.dirty || password?.touched)"
-            class="invalid-feedback"
+            class="invalid-feedback d-block"
           >
             <span *ngIf="password?.errors?.['required']"
               >Password is required.</span
@@ -83,9 +100,9 @@
             <span *ngIf="password?.errors?.['minlength']"
               >At least 8 characters required.</span
             >
-            <span *ngIf="password?.errors?.['pattern']">
-              Must include uppercase, lowercase, and a number.
-            </span>
+            <span *ngIf="password?.errors?.['pattern']"
+              >Must include uppercase, lowercase, and a number.</span
+            >
           </div>
         </div>
 
