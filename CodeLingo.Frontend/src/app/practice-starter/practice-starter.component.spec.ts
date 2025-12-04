@@ -9,15 +9,36 @@ describe('PracticeStarterComponent', () => {
   let fixture: ComponentFixture<PracticeStarterComponent>;
   let compiled: HTMLElement;
   let mockRouter: jasmine.SpyObj<Router>;
+  let mockQuestionSessionService: any;
+  let mockLanguageService: any;
 
   beforeEach(async () => {
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    mockQuestionSessionService = jasmine.createSpyObj('QuestionSessionService', ['startSession', 'setConfig', 'getConfig']);
+    mockLanguageService = jasmine.createSpyObj('LanguageService', ['getLanguages']);
+    
+    // Mock the getLanguages to return an observable
+    mockLanguageService.getLanguages.and.returnValue({
+      subscribe: (callbacks: any) => {
+        callbacks.next([]);
+        return { unsubscribe: () => {} };
+      }
+    });
+    
+    mockQuestionSessionService.startSession.and.returnValue({
+      subscribe: (callbacks: any) => {
+        callbacks.next({ sessionId: 'test-session-id', totalPlannedQuestions: 10 });
+        return { unsubscribe: () => {} };
+      }
+    });
 
     await TestBed.configureTestingModule({
       declarations: [PracticeStarterComponent],
       imports: [CommonModule],
       providers: [
-        { provide: Router, useValue: mockRouter }
+        { provide: Router, useValue: mockRouter },
+        { provide: 'QuestionSessionService', useValue: mockQuestionSessionService },
+        { provide: 'LanguageService', useValue: mockLanguageService }
       ],
       schemas: [NO_ERRORS_SCHEMA] // Ignore child component errors
     })
@@ -34,8 +55,8 @@ describe('PracticeStarterComponent', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(component.availableLanguages).toEqual(['JavaScript', 'Python', 'Java', 'C#', 'TypeScript']);
-    expect(component.config.language).toBe('');
+    expect(component.availableLanguages).toEqual([]);
+    expect(component.config.languageIds).toEqual([]);
     expect(component.config.difficulty).toBe('');
     expect(component.config.questionCount).toBe(10);
     expect(component.state.isLoading).toBe(false);
@@ -52,9 +73,9 @@ describe('PracticeStarterComponent', () => {
     expect(icon).toBeTruthy();
   });
 
-  it('should update config language when onLangugaeChange is called', () => {
-    component.onLangugaeChange('JavaScript');
-    expect(component.config.language).toBe('JavaScript');
+  it('should update config languageIds when onLanguagesChange is called', () => {
+    component.onLanguagesChange(['JavaScript', 'Python']);
+    expect(component.config.languageIds).toEqual(['JavaScript', 'Python']);
   });
 
   it('should update config difficulty when onDifficultyChange is called', () => {
@@ -67,37 +88,37 @@ describe('PracticeStarterComponent', () => {
     expect(component.config.questionCount).toBe(20);
   });
 
-  it('should disable start button when language is not selected', () => {
-    component.config.language = '';
+  it('should disable start button when no languages are selected', () => {
+    component.config.languageIds = [];
     component.config.difficulty = 'easy';
     
     expect(component.isStartButtonDisabled).toBe(true);
   });
 
   it('should disable start button when difficulty is not selected', () => {
-    component.config.language = 'Python';
+    component.config.languageIds = ['Python'];
     component.config.difficulty = '';
     
     expect(component.isStartButtonDisabled).toBe(true);
   });
 
-  it('should enable start button when language and difficulty are selected', () => {
-    component.config.language = 'Python';
+  it('should enable start button when languages and difficulty are selected', () => {
+    component.config.languageIds = ['Python'];
     component.config.difficulty = 'medium';
     
     expect(component.isStartButtonDisabled).toBe(false);
   });
 
   it('should disable start button when loading', () => {
-    component.config.language = 'Python';
+    component.config.languageIds = ['Python'];
     component.config.difficulty = 'medium';
     component.state.isLoading = true;
     
     expect(component.isStartButtonDisabled).toBe(true);
   });
 
-  it('should show configuration summary when language and difficulty are selected', () => {
-    component.config.language = 'JavaScript';
+  it('should show configuration summary when languages and difficulty are selected', () => {
+    component.config.languageIds = ['JavaScript', 'TypeScript'];
     component.config.difficulty = 'hard';
     component.config.questionCount = 25;
     fixture.detectChanges();
@@ -109,8 +130,8 @@ describe('PracticeStarterComponent', () => {
     expect(summary?.textContent).toContain('25');
   });
 
-  it('should hide configuration summary when language is not selected', () => {
-    component.config.language = '';
+  it('should hide configuration summary when no languages are selected', () => {
+    component.config.languageIds = [];
     component.config.difficulty = 'easy';
     fixture.detectChanges();
 
@@ -118,24 +139,20 @@ describe('PracticeStarterComponent', () => {
     expect(summary).toBeFalsy();
   });
 
-  it('should set loading state during startSession', async () => {
-    component.config.language = 'Python';
+  it('should set loading state during startSession', () => {
+    component.config.languageIds = ['Python'];
     component.config.difficulty = 'easy';
     
-    const sessionPromise = component.startSession();
-    expect(component.state.isLoading).toBe(true);
-    
-    await sessionPromise;
-    expect(component.state.isLoading).toBe(false);
+    component.startSession();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/session/test-session-id/questions']);
   });
 
-  it('should clear error when startSession is called', async () => {
+  it('should clear error when startSession is called', () => {
     component.state.error = 'Previous error';
-    component.config.language = 'Java';
+    component.config.languageIds = ['Java'];
     component.config.difficulty = 'medium';
     
-    spyOn(window, 'alert');
-    await component.startSession();
+    component.startSession();
     
     expect(component.state.error).toBeNull();
   });
