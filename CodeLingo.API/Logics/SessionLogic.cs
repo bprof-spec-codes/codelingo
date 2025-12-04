@@ -25,7 +25,8 @@ namespace CodeLingo.API.Logics
         {
             Session DatabaseSession = new Session();
             DatabaseSession.UserId = session.UserId;
-            DatabaseSession.Language = session.Language;
+            // Store selected languages as comma-separated string for backwards compatibility
+            DatabaseSession.Language = string.Join(", ", session.LanguageIds);
             DatabaseSession.Difficulty = (DifficultyLevel)Enum.Parse(typeof(DifficultyLevel), session.Difficulty, true);
             DatabaseSession.DesiredCount = session.RequestedQuestionCount;
 
@@ -33,7 +34,7 @@ namespace CodeLingo.API.Logics
 
             List<Question> questions = this.questionRepository.getRandomQuestions(
                 session.RequestedQuestionCount,
-                session.Language,
+                session.LanguageIds,
                 DatabaseSession.Difficulty
                 );
             List<SessionQuestion> sessionQuestions = new List<SessionQuestion>();
