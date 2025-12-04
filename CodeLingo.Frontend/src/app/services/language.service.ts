@@ -14,7 +14,7 @@ export interface Language {
   providedIn: 'root'
 })
 export class LanguageService {
-  private baseUrl = `${environment.apiUrl}/languages`;
+  private baseUrl = `${environment.apiUrl}/admin/languages`;
 
   constructor(private http: HttpClient) { }
 
