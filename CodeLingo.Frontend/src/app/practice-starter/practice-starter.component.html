@@ -83,7 +83,9 @@
                         </div>
                         <div class="summary-item">
                             <span class="summary-label">Questions:</span>
-                            <span class="summary-value">{{ config.questionCount }}</span>
+                            <span class="summary-value" [ngClass]="{'invalid-value': !isQuestionCountValid}">
+                                {{ isQuestionCountValid ? config.questionCount : 'Enter a valid number' }}
+                            </span>
                         </div>
                     </div>
                 </div>
