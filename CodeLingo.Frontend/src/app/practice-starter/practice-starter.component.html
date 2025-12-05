@@ -27,7 +27,8 @@
 
                 <!-- question count selector -->
                 <app-question-count-selector [selectedCount]="config.questionCount"
-                    (countChange)="onQuestionCountChange($event)">
+                    (countChange)="onQuestionCountChange($event)"
+                    (validChange)="onQuestionCountValidChange($event)">
                 </app-question-count-selector>
 
                 <!-- API Error -->
