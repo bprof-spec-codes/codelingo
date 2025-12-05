@@ -12,7 +12,7 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { AdminListComponent } from './admin/admin-list/admin-list.component';
 import { AdminEditComponent } from './admin/admin-edit/admin-edit.component';
 import { AdminItemComponent } from './admin/admin-item/admin-item.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { CountUpModule } from 'ngx-countup';
 import { AdminLanguageCreateComponent } from './admin/admin-language-create/admin-language-create.component';
 import { AdminLanguageListComponent } from './admin/admin-language-list/admin-language-list.component';
@@ -35,6 +35,7 @@ import { QuestionContainerComponent } from './question-container/question-contai
 import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
+import { provideToastr } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,9 @@ import { jwtInterceptor } from './jwt.interceptor';
   ],
   providers: [
     provideHttpClient(withInterceptors([jwtInterceptor])),
+    provideAnimations(),
+    provideToastr()
+
   ],
   bootstrap: [AppComponent],
 })
