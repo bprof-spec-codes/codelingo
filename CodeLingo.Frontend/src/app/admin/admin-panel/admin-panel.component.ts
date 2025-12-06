@@ -18,7 +18,7 @@ export class AdminPanelComponent implements OnInit {
 
   // Pagination
   currentPage = 1;
-  pageSize = 20;
+  pageSize = 10;
   totalItems = 0;
   totalPages = 0;
 
@@ -34,11 +34,23 @@ export class AdminPanelComponent implements OnInit {
   isLanguagesListExpanded = false;
   isImportExportExpanded = false;
 
+  // Filters
+  filters: any = {};
+  languages: any[] = [];
+
   constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.loadQuestions();
     this.loadStatistics();
+    this.loadLanguages();
+  }
+
+  loadLanguages(): void {
+    this.adminService.getLanguages().subscribe({
+      next: (langs) => this.languages = langs,
+      error: (err) => console.error('Failed to load languages', err)
+    });
   }
 
   loadStatistics(): void {
@@ -53,14 +65,33 @@ export class AdminPanelComponent implements OnInit {
   }
 
   loadQuestions(): void {
-    this.adminService.getQuestions(this.currentPage, this.pageSize).subscribe({
+    this.adminService.getQuestions(this.currentPage, this.pageSize, this.filters).subscribe({
       next: (res) => {
         this.questions = res.items;
-        this.totalItems = res.totalCount; // Ensure this matches DTO property name
+        this.totalItems = res.totalItems; // Ensure this matches DTO property name
         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
       },
       error: (err) => console.error('Failed to load questions', err)
     });
+  }
+
+  onFilterChange(filters: any) {
+    this.filters = filters;
+    this.currentPage = 1;
+    this.loadQuestions();
+  }
+
+  clearFilters() {
+    this.filters = {};
+    // You might need to reset the child component's filter state too, 
+    // but for now let's just reload. 
+    // To properly reset child inputs, we'd need a ViewChild or a shared service/state.
+    // Or we can just reload and let the user manually clear inputs if they want, 
+    // but the button should clear them.
+    // Actually, since filters are bound in AdminListComponent, clearing them here won't clear the inputs there
+    // unless we pass filters back down or use a ViewChild.
+    // For simplicity, I'll reload. Ideally, we should reset the inputs.
+    window.location.reload(); // Quick fix for clearing state, or implement proper state reset
   }
 
   onPageChange(page: number): void {
