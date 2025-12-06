@@ -1,50 +1,23 @@
 <div class="language-selector">
-    <label class="form-label">
+    <label for="language-select" class="form-label">
         <i class="bi bi-code-slash"></i>
-        Programming Languages
+        Programming Language
     </label>
 
-    <!-- Language checkboxes list -->
-    <div class="languages-list">
-        <div *ngFor="let language of languages" class="language-item">
-            <label class="language-checkbox">
-                <input 
-                    type="checkbox"
-                    [checked]="isSelected(language.name)"
-                    (change)="toggleLanguage(language.name)"
-                />
-                <span class="language-name">{{ language.name }}</span>
-            </label>
-        </div>
-    </div>
+    <select id="language-select"
+            class="form-select"
+            [(ngModel)]="selectedLanguage"
+            (ngModelChange)="languageChange.emit($event)"
+            required>
 
-    <!-- Selected languages badge bar -->
-    <div class="selected-languages-bar" 
-         [class.has-selection]="selectedLanguages.length > 0"
-         [class.no-selection]="selectedLanguages.length === 0">
-        
-        <div *ngIf="selectedLanguages.length === 0" class="no-selection-message">
-            <i class="bi bi-exclamation-triangle"></i>
-            Please select at least one language
-        </div>
+            <option value="" disabled>Choose a language...</option>
+            <option *ngFor="let language of languages" [value]="language">
+                {{language}}
+            </option>
+    </select>
 
-        <div *ngIf="selectedLanguages.length > 0" class="selected-badges">
-            <span class="selection-label">Selected:</span>
-            <span *ngFor="let language of selectedLanguages" class="language-badge">
-                {{ language }}
-                <button 
-                    type="button" 
-                    class="remove-badge" 
-                    (click)="removeLanguage(language)"
-                    [attr.aria-label]="'Remove ' + language">
-                    <i class="bi bi-x"></i>
-                </button>
-            </span>
-        </div>
-    </div>
-
-    <!-- Helper text -->
-    <small class="form-text">
-        Select one or more programming languages you want to practice.
-    </small>
+    <!--  helper text -->
+      <small class="form-text">
+        Select the programming language you want to practice.
+      </small>
 </div>

@@ -16,8 +16,6 @@ export class RegisterComponent {
   serverError: string | null = null;
   successMessage: string | null = null;
 
-  showRegisterPassword = false;
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -26,14 +24,7 @@ export class RegisterComponent {
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(/^(?=.*[A-Z]).+$/), // at least one uppercase
-        ],
-      ],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
@@ -74,10 +65,6 @@ export class RegisterComponent {
         }
       },
     });
-  }
-
-  toggleRegisterPasswordVisibility() {
-    this.showRegisterPassword = !this.showRegisterPassword;
   }
 
   get username() {

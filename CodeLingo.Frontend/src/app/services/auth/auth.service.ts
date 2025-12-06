@@ -18,25 +18,20 @@ export class AuthService {
 
   private storage: Storage = localStorage;
 
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private isLoggedInSubject = new BehaviorSubject<boolean>(
+    this.hasValidToken()
+  );
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  private isAdminSubject = new BehaviorSubject<boolean>(this.hasValidToken() && this.hasAdminRole());
+  private isAdminSubject = new BehaviorSubject<boolean>(
+    this.hasAdminRole()
+  );
   isAdmin$ = this.isAdminSubject.asObservable();
 
   private refreshTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private http: HttpClient, private router: Router) {
-    if (sessionStorage.getItem('accessToken')) {
-      this.storage = sessionStorage;
-    } else {
-      this.storage = localStorage;
-    }
-
-    const loggedIn = this.hasValidToken();
-    this.isLoggedInSubject.next(loggedIn);
-
-    if (loggedIn) {
+    if (this.hasValidToken()) {
       this.scheduleTokenRefresh();
     }
   }
@@ -56,6 +51,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.clearAuthData();
     this.clearAuthData();
     this.isLoggedInSubject.next(false);
     this.isAdminSubject.next(false);
@@ -81,22 +77,12 @@ export class AuthService {
   }
 
   setRememberMe(remember: boolean): void {
-    this.storage = remember ? localStorage : sessionStorage;
+    this.storage = remember ? this.storage : sessionStorage;
   }
 
   private handleAuthSuccess(response: AuthResponse, updateLogin = true): void {
     const { accessToken, refreshToken, expiresIn, isAdmin } = response;
     const expiryTime = Date.now() + expiresIn * 1000;
-
-    // Clear both storages to prevent conflicts
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('tokenExpiry');
-    localStorage.removeItem('isAdmin');
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('refreshToken');
-    sessionStorage.removeItem('tokenExpiry');
-    sessionStorage.removeItem('isAdmin');
 
     this.storage.setItem('accessToken', accessToken);
     if (refreshToken) this.storage.setItem('refreshToken', refreshToken);
@@ -129,45 +115,37 @@ export class AuthService {
 
   private autoLogout(redirect: boolean = true): void {
     this.clearAuthData();
+    this.clearAuthData();
     this.isLoggedInSubject.next(false);
     this.isAdminSubject.next(false);
-
     if (redirect) {
       this.router.navigate(['/login']);
     }
   }
 
   private clearAuthData(): void {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('tokenExpiry');
-    localStorage.removeItem('isAdmin');
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('refreshToken');
-    sessionStorage.removeItem('tokenExpiry');
-    sessionStorage.removeItem('isAdmin');
+    this.storage.removeItem('accessToken');
+    this.storage.removeItem('refreshToken');
+    this.storage.removeItem('tokenExpiry');
+    this.storage.removeItem('isAdmin');
     clearTimeout(this.refreshTimer);
   }
 
   getAccessToken(): string | null {
-    return (
-      localStorage.getItem('accessToken') ??
-      sessionStorage.getItem('accessToken')
-    );
+    return this.storage.getItem('accessToken');
   }
 
   private getRefreshToken(): string | null {
     return this.storage.getItem('refreshToken');
   }
 
-  public hasValidToken(): boolean {
+  private hasValidToken(): boolean {
     const token = this.getAccessToken();
     const expiry = Number(this.storage.getItem('tokenExpiry'));
     return !!token && expiry > Date.now();
   }
 
   public hasAdminRole(): boolean {
-    if (!this.hasValidToken()) return false;
     return this.storage.getItem('isAdmin') === 'true';
   }
 

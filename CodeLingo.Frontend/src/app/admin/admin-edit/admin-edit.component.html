@@ -112,41 +112,66 @@
           Add Option
         </button>
       </div>
+
+      <div class="form-check mt-1">
+        <input type="checkbox" formControlName="shuffleOptions" class="form-check-input" id="shuffleOptions" />
+        <label class="form-check-label" for="shuffleOptions">Shuffle options</label>
+      </div>
     </div>
 
-    <!-- Code Completion Section -->
     <div *ngIf="questionForm.get('type')?.value === QuestionType.CodeCompletion" class="mb-3">
-      <h5 class="mb-2">Code Completion Details</h5>
+      <h5 class="mb-2">Code Completion</h5>
 
-      <div class="mb-3">
-        <label class="form-label">Code Snippet (use _______ for blank)</label>
-        <textarea formControlName="codeSnippet" class="form-control bg-dark text-white border-secondary font-monospace"
-          rows="5" placeholder="e.g. console.log('Hello _______');"></textarea>
+      <div class="mb-2">
+        <label class="form-label">Starter Code</label>
+        <textarea formControlName="starterCode"
+          class="form-control bg-dark text-white border-secondary placeholder-white" rows="3"
+          placeholder="Provide the initial code snippet the learner will see, with a missing part to complete."></textarea>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Accepted Answers</label>
-        <div formArrayName="acceptedAnswers">
-          <div *ngFor="let ans of acceptedAnswers.controls; let i = index" class="row g-1 align-items-center mb-1">
-            <div class="col">
-              <input [formControlName]="i" class="form-control bg-dark text-white border-secondary"
-                [placeholder]="'Answer ' + (i + 1)" />
-            </div>
-            <div class="col-auto">
-              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeAcceptedAnswer(i)">
-                Remove
-              </button>
-            </div>
-          </div>
+      <div class="mb-2">
+        <label class="form-label">Correct Answer</label>
+        <textarea formControlName="correctAnswer"
+          class="form-control bg-dark text-white border-secondary placeholder-white" rows="3"
+          placeholder="Write the correct completion or final version of the code."></textarea>
+      </div>
+
+      <h6>Hints</h6>
+      <div formArrayName="hints" class="mb-2">
+        <div *ngFor="let h of hints.controls; let i = index" class="input-group mb-1">
+          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary placeholder-white"
+            [placeholder]="'Hint ' + (i + 1) + ' (optional guidance for the learner)'" />
+          <button type="button" class="btn btn-outline-danger" (click)="removeHint(i)">
+            Remove
+          </button>
         </div>
-        <button type="button" class="btn btn-outline-primary btn-sm mt-2" (click)="addAcceptedAnswer()">
-          Add Answer
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addHint()">
+          Add Hint
+        </button>
+      </div>
+
+      <h6>Constraints</h6>
+      <div formArrayName="constraints" class="mb-2">
+        <div *ngFor="let c of constraints.controls; let i = index" class="input-group mb-1">
+          <input [formControlName]="i" class="form-control bg-dark text-white border-secondary placeholder-white"
+            [placeholder]="'Constraint ' + (i + 1) + ' (e.g. must use a loop, no recursion)'" />
+          <button type="button" class="btn btn-outline-danger" (click)="removeConstraint(i)">
+            Remove
+          </button>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="addConstraint()">
+          Add Constraint
         </button>
       </div>
     </div>
 
-    <button type="submit" class="btn btn-success">
-      Save Question
-    </button>
+    <div class="d-flex justify-content-end mt-3 gap-2">
+      <button *ngIf="question" type="button" class="btn btn-danger" (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-success">
+        Save Question
+      </button>
+    </div>
   </form>
 </div>

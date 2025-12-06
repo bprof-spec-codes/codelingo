@@ -6,12 +6,6 @@ import { Feature } from '../models/feautre';
 import { AuthService } from '../services/auth/auth.service';
 import { Observable } from 'rxjs';
 
-import { ProfileService } from '../services/profile.service';
-import { UserStatsService } from '../services/user-stats.service';
-import { UserStatistics } from '../models/user';
-import { forkJoin, of } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-
 @Component({
   selector: 'app-landing-page',
   standalone: false,
@@ -21,12 +15,7 @@ import { catchError, switchMap, tap } from 'rxjs/operators';
 export class LandingPageComponent implements OnInit {
   isLoggedIn$!: Observable<boolean>;
 
-  constructor(
-    private router: Router,
-    private auth: AuthService,
-    private profileService: ProfileService,
-    private userStatsService: UserStatsService
-  ) { }
+  constructor(private router: Router, private auth: AuthService) {}
 
   // Component state
   state: ComponentState = {
@@ -34,9 +23,9 @@ export class LandingPageComponent implements OnInit {
     error: null,
   };
 
-  // Logged in user details
-  username: string = '';
-  userStats: UserStatistics | null = null;
+  // Logged in user details TODO: Replace with actual user data
+  username: string = 'JohnDoe';
+  userRank: number = 42;
 
   features: Feature[] = [
     {
@@ -85,32 +74,6 @@ export class LandingPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.auth.isLoggedIn$;
-
-    this.isLoggedIn$.pipe(
-      switchMap(isLoggedIn => {
-        if (isLoggedIn) {
-          this.state.isLoading = true;
-          return forkJoin({
-            profile: this.profileService.getProfile(),
-            stats: this.userStatsService.getStatistics()
-          }).pipe(
-            catchError(error => {
-              this.state.error = 'Failed to load user data';
-              this.state.isLoading = false;
-              return of(null);
-            })
-          );
-        } else {
-          return of(null);
-        }
-      })
-    ).subscribe(data => {
-      if (data) {
-        this.username = data.profile.username;
-        this.userStats = data.stats;
-      }
-      this.state.isLoading = false;
-    });
   }
 
   signUp(): void {

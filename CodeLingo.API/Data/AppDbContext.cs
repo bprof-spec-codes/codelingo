@@ -23,7 +23,6 @@ namespace CodeLingo.API.Data
 
         // FIX: Added the missing DbSet property
         public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions => Set<MultipleChoiceQuestion>();
-        public DbSet<CodeCompletionQuestion> CodeCompletionQuestions => Set<CodeCompletionQuestion>();
         public DbSet<ProgrammingLanguage> ProgrammingLanguages => Set<ProgrammingLanguage>();
         public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
@@ -63,7 +62,7 @@ namespace CodeLingo.API.Data
             {
                 e.HasKey(mcq => mcq.QuestionId);
                 e.HasOne(mcq => mcq.Question)
-                    .WithOne(q => q.MultipleChoiceQuestion)
+                    .WithOne()
                     .HasForeignKey<MultipleChoiceQuestion>(mcq => mcq.QuestionId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
@@ -101,16 +100,6 @@ namespace CodeLingo.API.Data
                 .WithMany(q => q.SessionQuestions)
                 .HasForeignKey(sq => sq.QuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            // --- Configuration for CodeCompletionQuestion (1-to-1) ---
-            modelBuilder.Entity<CodeCompletionQuestion>(e =>
-            {
-                e.HasKey(ccq => ccq.QuestionId);
-                e.HasOne(ccq => ccq.Question)
-                    .WithOne(q => q.CodeCompletionQuestion)
-                    .HasForeignKey<CodeCompletionQuestion>(ccq => ccq.QuestionId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
         }
     }
 }

@@ -3,36 +3,12 @@
     <p class="text-white-50">This section displays all questions in a list. You can view details, edit, or
         delete individual questions directly from the interface.</p>
 
-    <!-- Fejléc és Szűrők -->
-    <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50 align-items-end">
-        <div class="col-6 col-sm-2">
-            <label class="d-block mb-1">Title</label>
-            <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary"
-                [(ngModel)]="filters.title" (ngModelChange)="onFilterChange()" placeholder="Filter...">
-        </div>
-        <div class="col-6 col-sm-4">
-            <label class="d-block mb-1">Question</label>
-            <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary"
-                [(ngModel)]="filters.questionText" (ngModelChange)="onFilterChange()" placeholder="Filter...">
-        </div>
-        <div class="col-2 d-none d-sm-block">
-            <label class="d-block mb-1">Difficulty</label>
-            <select class="form-select form-select-sm bg-dark text-white border-secondary"
-                [(ngModel)]="filters.difficulty" (ngModelChange)="onFilterChange()">
-                <option value="">All</option>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-            </select>
-        </div>
-        <div class="col-2 d-none d-sm-block">
-            <label class="d-block mb-1">Language</label>
-            <select class="form-select form-select-sm bg-dark text-white border-secondary"
-                [(ngModel)]="filters.language" (ngModelChange)="onFilterChange()">
-                <option value="">All</option>
-                <option *ngFor="let lang of languages" [value]="lang.name">{{ lang.name }}</option>
-            </select>
-        </div>
+    <!-- Fejléc -->
+    <div class="row fw-bold border-bottom pb-2 mb-2 small text-white-50">
+        <div class="col-6 col-sm-2">Title</div>
+        <div class="col-6 col-sm-4">Question</div>
+        <div class="col-2 d-none d-sm-block">Difficulty</div>
+        <div class="col-2 d-none d-sm-block">Language</div>
     </div>
 
     <!-- Listaelemek -->

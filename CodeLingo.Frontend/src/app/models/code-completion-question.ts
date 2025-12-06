@@ -3,7 +3,10 @@ import { CodeConstraints } from "./code-constraints";
 import { TestCase } from "./test-case";
 
 export interface CodeCompletionQuestion extends BaseQuestion {
-    type: QuestionType.CODE_COMPLETION | 'CodeCompletion';
-    codeSnippet: string;
-    acceptedAnswers: string[];
+    type: 'CODE';
+    starterCode: string;
+    solutionCode: string;
+    testCases: TestCase[];
+    constraints: CodeConstraints;
+    hints: string[];
 }

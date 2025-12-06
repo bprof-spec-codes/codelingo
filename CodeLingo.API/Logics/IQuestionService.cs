@@ -8,6 +8,6 @@ namespace CodeLingo.API.Logics
         Task<QuestionResponseDto> UpdateQuestionAsync(string id, QuestionUpdateDto dto, string userId);
         Task DeleteQuestionAsync(string id);
         Task<QuestionResponseDto> GetQuestionAsync(string id);
-        Task<QuestionListResponseDto> GetQuestionsAsync(string? language, string? difficulty, string? type, string? title, string? questionText, int page, int pageSize);
+        Task<QuestionListResponseDto> GetQuestionsAsync(string? language, string? difficulty, string? type, int page, int pageSize);
     }
 }

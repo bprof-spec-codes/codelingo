@@ -27,7 +27,7 @@ namespace CodeLingo.API.Repositories
             _context.AuditLogs.Remove(entity);
         }
 
-        public AuditLog? Read(string id)
+        public AuditLog Read(string id)
         {
             return _context.AuditLogs.FirstOrDefault(l => l.Id == id);
         }

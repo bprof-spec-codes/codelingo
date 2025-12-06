@@ -31,8 +31,10 @@ namespace CodeLingo.API.DTOs
         public List<QuestionOptionDto>? Options { get; set; }
 
         // Code Completion specific
-        public string? CodeSnippet { get; set; }
-        public List<string>? AcceptedAnswers { get; set; }
+        public string? StarterCode { get; set; }
+        public string? CorrectAnswer { get; set; }
+        public List<string>? Hints { get; set; }
+        public CodeConstraintsDto? Constraints { get; set; }
     }
 
     public class QuestionUpdateDto
@@ -67,13 +69,6 @@ namespace CodeLingo.API.DTOs
         public List<string>? ForbiddenKeywords { get; set; }
     }
 
-    public class TestCaseDto
-    {
-        public string Input { get; set; }
-        public string ExpectedOutput { get; set; }
-        public bool IsHidden { get; set; }
-    }
-
     public class QuestionResponseDto
     {
         public string Id { get; set; }
@@ -86,9 +81,6 @@ namespace CodeLingo.API.DTOs
         public List<string> Tags { get; set; } = new();
         public JsonObject? Metadata { get; set; }
         public List<QuestionOptionDto>? Options { get; set; }
-        // Code Completion specific
-        public string? CodeSnippet { get; set; }
-        public List<string>? AcceptedAnswers { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }

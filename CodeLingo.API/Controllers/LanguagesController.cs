@@ -22,7 +22,6 @@ namespace CodeLingo.API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<LanguageResponseDto>>> GetLanguages()
         {
             var languages = await _languageService.GetAllLanguagesAsync();

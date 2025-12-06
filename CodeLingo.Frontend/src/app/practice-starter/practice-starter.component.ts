@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { SessionConfig } from '../models/session-config';
 import { ComponentState } from '../models/component-state';
 import { QuestionSessionService } from '../services/question-session.service';
-import { LanguageService, Language } from '../services/language.service';
 
 @Component({
   selector: 'app-practice-starter',
@@ -14,14 +13,19 @@ import { LanguageService, Language } from '../services/language.service';
 export class PracticeStarterComponent implements OnInit {
   constructor(
     private router: Router,
-    private sessionService: QuestionSessionService,
-    private languageService: LanguageService
+    private sessionService: QuestionSessionService
   ) { }
 
-  availableLanguages: Language[] = [];
+  availableLanguages: string[] = [
+    'JavaScript',
+    'Python',
+    'Java',
+    'C#',
+    'TypeScript',
+  ];
 
   config: SessionConfig = {
-    languageIds: [],
+    language: '',
     difficulty: '',
     questionCount: 10,
   };
@@ -32,25 +36,13 @@ export class PracticeStarterComponent implements OnInit {
     error: null,
   };
 
-  // validation state
-  isQuestionCountValid: boolean = true;
-
   ngOnInit(): void {
-    // Fetch available languages from backend
-    this.languageService.getLanguages().subscribe({
-      next: (languages) => {
-        this.availableLanguages = languages;
-      },
-      error: (err) => {
-        console.error('Error fetching languages:', err);
-        this.state.error = 'Failed to load languages. Please refresh the page.';
-      }
-    });
+    // initialization logic if needed later
   }
 
-  // called when user selects languages (now handles array)
-  onLanguagesChange(languages: string[]) {
-    this.config.languageIds = languages;
+  // called when user selects a language
+  onLangugaeChange(language: string) {
+    this.config.language = language;
   }
 
   // called when user selects a difficulty
@@ -61,11 +53,6 @@ export class PracticeStarterComponent implements OnInit {
   // called when user selects question count
   onQuestionCountChange(count: number): void {
     this.config.questionCount = count;
-  }
-
-  // called when question count validation state changes
-  onQuestionCountValidChange(isValid: boolean): void {
-    this.isQuestionCountValid = isValid;
   }
 
   // start practice session with API call
@@ -85,12 +72,10 @@ export class PracticeStarterComponent implements OnInit {
       },
     });
   }
+
   get isStartButtonDisabled(): boolean {
     return (
-      this.state.isLoading || 
-      this.config.languageIds.length === 0 || 
-      !this.config.difficulty ||
-      !this.isQuestionCountValid
+      this.state.isLoading || !this.config.language || !this.config.difficulty
     );
   }
 }

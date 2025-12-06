@@ -25,8 +25,7 @@ namespace CodeLingo.API.Logics
         {
             Session DatabaseSession = new Session();
             DatabaseSession.UserId = session.UserId;
-            // Store selected languages as comma-separated string for backwards compatibility
-            DatabaseSession.Language = string.Join(", ", session.LanguageIds);
+            DatabaseSession.Language = session.Language;
             DatabaseSession.Difficulty = (DifficultyLevel)Enum.Parse(typeof(DifficultyLevel), session.Difficulty, true);
             DatabaseSession.DesiredCount = session.RequestedQuestionCount;
 
@@ -34,7 +33,7 @@ namespace CodeLingo.API.Logics
 
             List<Question> questions = this.questionRepository.getRandomQuestions(
                 session.RequestedQuestionCount,
-                session.LanguageIds,
+                session.Language,
                 DatabaseSession.Difficulty
                 );
             List<SessionQuestion> sessionQuestions = new List<SessionQuestion>();
@@ -129,32 +128,12 @@ namespace CodeLingo.API.Logics
                         next.Question.QuestionText,
                         next.Question.Explanation,
                         next.Question.Language,
-                        Difficulty = next.Question.Difficulty.ToString(),
+                        Difficulty = next.Question.Difficulty.ToString().ToLower(),
                         Tags = tags,
                         Metadata = metadata,
                         Options = JsonSerializer.Deserialize<List<SessionQuestionOptionDto>>(mcQuestion.Options ?? "[]", new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
                         mcQuestion.AllowMultipleSelection,
                         mcQuestion.ShuffleOptions
-                    };
-                }
-            }
-            else if (next.Question.Type == QuestionType.CodeCompletion)
-            {
-                var fullQuestion = questionRepository.Read(next.QuestionId);
-                if (fullQuestion?.CodeCompletionQuestion != null)
-                {
-                    questionData = new
-                    {
-                        next.Question.Id,
-                        Type = "CodeCompletion",
-                        next.Question.Title,
-                        next.Question.QuestionText,
-                        next.Question.Explanation,
-                        next.Question.Language,
-                        Difficulty = next.Question.Difficulty.ToString(),
-                        Tags = tags,
-                        Metadata = metadata,
-                        CodeSnippet = fullQuestion.CodeCompletionQuestion.CodeSnippet
                     };
                 }
             }

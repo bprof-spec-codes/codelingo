@@ -9,15 +9,14 @@ import { QuestionContainerComponent } from './question-container/question-contai
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './guards/admin.guard';
 import { ProfileComponent } from './profile/profile.component';
-import { guestGuard } from './guards/guest.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing-page', pathMatch: 'full' },
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
   { path: 'practice/start', component: PracticeStarterComponent },
-  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'session/:id/questions', component: QuestionContainerComponent },
   { path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard] },
   { path: 'profile', component: ProfileComponent },

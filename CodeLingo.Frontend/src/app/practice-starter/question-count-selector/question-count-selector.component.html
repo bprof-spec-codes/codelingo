@@ -27,12 +27,9 @@
     </div>
 
     <!-- current selection display -->
-    <div class="selection-display" [ngClass]="{'error': !isValid, 'valid': isValid}">
-        <i [ngClass]="{'bi bi-check-circle-fill': isValid, 'bi bi-x-circle-fill': !isValid}"></i>
-        <span *ngIf="isValid">Selected: <strong>{{ selectedCount }}</strong> questions</span>
-        <span *ngIf="!isValid" class="error-text">
-            <strong>{{ errorMessage }}</strong>
-        </span>
+    <div class="selection-display">
+        <i class="bi bi-check-circle-fill"></i>
+        Selected: <strong>{{ selectedCount }}</strong> questions
     </div>
 
     <!-- helper text -->

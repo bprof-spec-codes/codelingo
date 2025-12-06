@@ -1,5 +1,5 @@
 export interface SessionConfig {
-  languageIds: string[];
+  language: string;
   difficulty: string;
   questionCount: number;
 }

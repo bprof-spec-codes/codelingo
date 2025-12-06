@@ -48,7 +48,5 @@ namespace CodeLingo.API.Models
 
         // Navigation properties
         public virtual ICollection<SessionQuestion> SessionQuestions { get; set; }
-        public virtual MultipleChoiceQuestion? MultipleChoiceQuestion { get; set; }
-        public virtual CodeCompletionQuestion? CodeCompletionQuestion { get; set; }
     }
 }

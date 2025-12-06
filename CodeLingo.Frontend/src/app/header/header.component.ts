@@ -43,13 +43,6 @@ export class HeaderComponent {
     this.auth.logout();
   }
 
-  handlePracticeClick(event: Event) {
-    if (!this.auth.hasValidToken()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }
-
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }

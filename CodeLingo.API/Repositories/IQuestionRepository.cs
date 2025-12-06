@@ -5,9 +5,9 @@ namespace CodeLingo.API.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
-        Task<IEnumerable<Question>> GetQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type, string? title, string? questionText, int page, int pageSize);
-        Task<int> CountQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type, string? title, string? questionText);
+        Task<IEnumerable<Question>> GetQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type, int page, int pageSize);
+        Task<int> CountQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type);
         Task<Question?> GetByIdAsync(string id);
-        List<Question> getRandomQuestions(int count, List<string> languageIds, DifficultyLevel difficulty);
+        List<Question> getRandomQuestions(int count, string language, DifficultyLevel difficulty);
     }
 }

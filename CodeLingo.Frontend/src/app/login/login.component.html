@@ -36,46 +36,24 @@
         <!-- Password -->
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-
-          <!-- Input + eye wrapper -->
-          <div class="position-relative">
-            <input
-              [type]="showPassword ? 'text' : 'password'"
-              class="form-control"
-              id="password"
-              formControlName="password"
-              placeholder="Enter your password"
-              [class.is-invalid]="
-                password?.invalid && (password?.dirty || password?.touched)
-              "
-              required
-            />
-            <button
-              type="button"
-              class="password-toggle-btn"
-              (click)="togglePasswordVisibility()"
-              tabindex="-1"
-            >
-              <i
-                class="bi"
-                [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"
-              ></i>
-            </button>
-          </div>
-
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.is-invalid]="
+              password?.invalid && (password?.dirty || password?.touched)
+            "
+            required
+          />
           <div
             *ngIf="password?.invalid && (password?.dirty || password?.touched)"
-            class="invalid-feedback d-block"
+            class="invalid-feedback"
           >
-            <div *ngIf="password?.errors?.['required']">
-              Password is required.
-            </div>
-            <div *ngIf="password?.errors?.['minlength']">
-              Password must be at least 8 characters.
-            </div>
-            <div *ngIf="password?.errors?.['pattern']">
-              Password must contain at least one uppercase letter.
-            </div>
+            <span *ngIf="password?.errors?.['required']"
+              >Password is required.</span
+            >
           </div>
         </div>
 

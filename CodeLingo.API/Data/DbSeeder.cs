@@ -89,17 +89,6 @@ namespace CodeLingo.API.Data
                     };
                     context.MultipleChoiceQuestions.Add(mcq);
                 }
-
-                if (item.Type == QuestionType.CodeCompletion)
-                {
-                    var ccq = new CodeCompletionQuestion
-                    {
-                        Question = question,
-                        CodeSnippet = item.CodeSnippet,
-                        AcceptedAnswers = JsonSerializer.Serialize(item.AcceptedAnswers)
-                    };
-                    context.CodeCompletionQuestions.Add(ccq);
-                }
             }
 
             await context.SaveChangesAsync();

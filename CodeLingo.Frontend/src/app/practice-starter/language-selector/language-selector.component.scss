@@ -10,7 +10,7 @@
         gap: $space-2;
         font-weight: $font-weight-semibold;
         color: $primary-400;
-        margin-bottom: $space-3;
+        margin-bottom: $space-2;
         font-size: 1.3rem;
 
         i {
@@ -18,147 +18,32 @@
         }
     }
 
-    // Languages list with checkboxes
-    .languages-list {
-        display: flex;
-        flex-direction: column;
-        gap: $space-2;
-        margin-bottom: $space-4;
-        padding: $space-3;
-        background-color: $dark-800;
-        border-radius: 12px;
-        border: 2px solid $secondary-400;
-        max-height: 12.5rem;
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        // Custom scrollbar styling
-        &::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background: $dark-900;
-            border-radius: 10px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background: $primary-400;
-            border-radius: 10px;
-            
-            &:hover {
-                background: $primary-300;
-            }
-        }
-
-        .language-item {
-            .language-checkbox {
-                display: flex;
-                align-items: center;
-                gap: $space-2;
-                padding: $space-2 $space-3;
-                cursor: pointer;
-                border-radius: 8px;
-                transition: all 0.2s ease;
-                user-select: none;
-
-                &:hover {
-                    background-color: $dark-700;
-                }
-
-                input[type="checkbox"] {
-                    width: 18px;
-                    height: 18px;
-                    cursor: pointer;
-                    accent-color: $primary-400;
-                }
-
-                .language-name {
-                    font-size: 1rem;
-                    color: $light;
-                }
-            }
-        }
-    }
-
-    // Selected languages badge bar
-    .selected-languages-bar {
+    .form-select {
         padding: $space-3 $space-4;
+        font-size: 1rem;
+        border: 2px solid $secondary-400;
         border-radius: 12px;
-        margin-bottom: $space-3;
+        background-color: $dark-900;
+        color: $light;
         transition: all 0.3s ease;
-        border: 2px solid;
 
-        &.no-selection {
-            background-color: rgba(255, 193, 7, 0.1);
-            border-color: #ffc107;
-
-            .no-selection-message {
-                display: flex;
-                align-items: center;
-                gap: $space-2;
-                color: #ffc107;
-                font-weight: $font-weight-medium;
-
-                i {
-                    font-size: 1.2rem;
-                }
-            }
+        &:focus {
+            border-color: $primary-400;
+            box-shadow: 0 0 0 0.2rem rgba($primary-400, 0.25);
+            outline: none;
         }
 
-        &.has-selection {
-            background-color: rgba(40, 167, 69, 0.1);
-            border-color: #28a745;
+        &:hover {
+            border-color: $primary-300;
+        }
 
-            .selected-badges {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: $space-2;
+        option {
+            padding: $space-3;
+            background-color: $dark-900;
+            color: $light;
 
-                .selection-label {
-                    font-weight: $font-weight-semibold;
-                    color: #28a745;
-                    margin-right: $space-2;
-                }
-
-                .language-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: $space-1;
-                    padding: $space-1 $space-3;
-                    background-color: $primary-400;
-                    color: $dark-900;
-                    border-radius: 20px;
-                    font-size: 0.9rem;
-                    font-weight: $font-weight-medium;
-                    transition: all 0.2s ease;
-
-                    .remove-badge {
-                        background: none;
-                        border: none;
-                        color: $dark-900;
-                        cursor: pointer;
-                        padding: 0;
-                        margin-left: $space-1;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        width: 20px;
-                        height: 20px;
-                        border-radius: 50%;
-                        transition: all 0.2s ease;
-
-                        &:hover {
-                            background-color: rgba(0, 0, 0, 0.2);
-                        }
-
-                        i {
-                            font-size: 1rem;
-                            font-weight: bold;
-                        }
-                    }
-                }
+            &:disabled {
+                color: $dark-700;
             }
         }
     }
