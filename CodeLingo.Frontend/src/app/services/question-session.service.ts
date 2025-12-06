@@ -8,6 +8,7 @@ import {
   StartSessionResponseDto,
   NextQuestionResponseDto,
   SubmitAnswerResponseDto,
+  CloseSessionResponseDto,
 } from '../dtos/session-dtos';
 
 @Injectable({ providedIn: 'root' })
@@ -42,5 +43,9 @@ export class QuestionSessionService {
 
   submitAnswer(sessionId: string, answerPayload: any): Observable<SubmitAnswerResponseDto> {
     return this.http.post<SubmitAnswerResponseDto>(`${this.baseUrl}/${sessionId}/answer`, answerPayload);
+  }
+
+  closeSession(sessionId: string, forceClose: boolean): Observable<CloseSessionResponseDto> {
+    return this.http.post<CloseSessionResponseDto>(`${this.baseUrl}/${sessionId}/close`, forceClose);
   }
 }
