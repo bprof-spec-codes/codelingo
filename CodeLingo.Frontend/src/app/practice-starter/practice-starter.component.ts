@@ -32,9 +32,6 @@ export class PracticeStarterComponent implements OnInit {
     error: null,
   };
 
-  // validation state
-  isQuestionCountValid: boolean = true;
-
   ngOnInit(): void {
     // Fetch available languages from backend
     this.languageService.getLanguages().subscribe({
@@ -63,11 +60,6 @@ export class PracticeStarterComponent implements OnInit {
     this.config.questionCount = count;
   }
 
-  // called when question count validation state changes
-  onQuestionCountValidChange(isValid: boolean): void {
-    this.isQuestionCountValid = isValid;
-  }
-
   // start practice session with API call
   startSession(): void {
     this.state.isLoading = true;
@@ -80,17 +72,24 @@ export class PracticeStarterComponent implements OnInit {
       },
       error: (err) => {
         this.state.isLoading = false;
-        this.state.error = 'Failed to start practice session. Please try again.';
+        // Display the actual error message from the backend
+        if (err.error && err.error.error) {
+          this.state.error = err.error.error;
+        } else if (err.message) {
+          this.state.error = err.message;
+        } else {
+          this.state.error = 'Failed to start practice session. Please try again.';
+        }
         console.error('Error starting practice session:', err);
       },
     });
   }
+
   get isStartButtonDisabled(): boolean {
     return (
       this.state.isLoading || 
       this.config.languageIds.length === 0 || 
-      !this.config.difficulty ||
-      !this.isQuestionCountValid
+      !this.config.difficulty
     );
   }
 }
