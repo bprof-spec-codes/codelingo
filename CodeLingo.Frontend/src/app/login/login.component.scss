@@ -145,6 +145,30 @@
     }
   }
 
+  .password-wrapper {
+    position: relative;
+  }
+
+  .password-toggle-btn {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    color: $primary-500;
+  }
+
+  .password-toggle-btn:focus {
+    outline: none;
+  }
+
+  .position-relative input {
+    padding-right: 2.5rem; /* room for the eye */
+  }
+
   @keyframes blink {
     0% {
       opacity: 0.2;
