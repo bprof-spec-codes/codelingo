@@ -32,6 +32,9 @@ export class PracticeStarterComponent implements OnInit {
     error: null,
   };
 
+  // validation state
+  isQuestionCountValid: boolean = true;
+
   ngOnInit(): void {
     // Fetch available languages from backend
     this.languageService.getLanguages().subscribe({
@@ -58,6 +61,11 @@ export class PracticeStarterComponent implements OnInit {
   // called when user selects question count
   onQuestionCountChange(count: number): void {
     this.config.questionCount = count;
+  }
+
+  // called when question count validation state changes
+  onQuestionCountValidChange(isValid: boolean): void {
+    this.isQuestionCountValid = isValid;
   }
 
   // start practice session with API call
