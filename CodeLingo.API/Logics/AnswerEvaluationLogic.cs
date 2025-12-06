@@ -61,6 +61,8 @@ namespace CodeLingo.API.Logics
                 if (sessionQuestion != null)
                 {
                     sessionQuestion.Answered = true;
+                    sessionQuestion.Correct = isCorrect;
+                    sessionQuestion.PointsEarned = isCorrect ? 1 : 0;
                     sessionQuestionRepository.SaveChanges();
                 }
 
@@ -99,14 +101,18 @@ namespace CodeLingo.API.Logics
                     }
                 }
 
+                bool isCorrect = score == correctAnswers.Count && answerIds.Count == correctAnswers.Count;
+
                 var sessionQuestion = sessionQuestionRepository.Read(sessionId, questionId);
                 if (sessionQuestion != null)
                 {
                     sessionQuestion.Answered = true;
+                    sessionQuestion.Correct = isCorrect;
+                    sessionQuestion.PointsEarned = score;
                     sessionQuestionRepository.SaveChanges();
                 }
                 AnswerDto answerDto = new AnswerDto();
-                answerDto.IsCorrect = score == correctAnswers.Count && answerIds.Count == correctAnswers.Count;
+                answerDto.IsCorrect = isCorrect;
                 answerDto.Feedback = answerDto.IsCorrect ? "Correct!" : "Incorrect. Please try again.";
                 answerDto.Score = score;
                 answerDto.TotalQuestions = 1; // This seems to be used as "Total Correct Answers" in this context? Or just 1 question?

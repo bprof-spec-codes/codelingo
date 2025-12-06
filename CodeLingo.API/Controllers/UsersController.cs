@@ -1,4 +1,6 @@
 using CodeLingo.API.Models;
+using CodeLingo.API.Repositories;
+using CodeLingo.API.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +15,12 @@ namespace CodeLingo.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly ISessionRepository _sessionRepository;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<User> userManager, ISessionRepository sessionRepository)
         {
             _userManager = userManager;
+            _sessionRepository = sessionRepository;
         }
 
         /// <summary>
@@ -114,6 +118,80 @@ namespace CodeLingo.API.Controllers
             }
 
             return Ok(new { message = "Profile updated successfully" });
+        }
+
+        /// <summary>
+        /// Get the current user's statistics
+        /// </summary>
+        [HttpGet("me/statistics")]
+        public async Task<ActionResult<UserStatisticsDto>> GetStatistics()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { error = "User not authenticated" });
+            }
+
+            var sessions = await _sessionRepository.GetSessionsByUserId(userId);
+
+            var weeklySessions = sessions
+                .Where(s => s.CreatedAt >= DateTime.UtcNow.AddDays(-7))
+                .ToList();
+
+            var totalQuestionsAnswered = weeklySessions
+                .SelectMany(s => s.SessionQuestions)
+                .Count(sq => sq.Answered);
+
+            var correctAnswers = weeklySessions
+                .SelectMany(s => s.SessionQuestions)
+                .Count(sq => sq.Correct);
+
+            var accuracy = totalQuestionsAnswered > 0
+                ? (double)correctAnswers / totalQuestionsAnswered * 100
+                : 0;
+
+            // Calculate streak (consecutive days with at least one session)
+            var streak = 0;
+            var today = DateTime.UtcNow.Date;
+            var sessionDates = sessions
+                .Select(s => s.CreatedAt.Date)
+                .Distinct()
+                .OrderByDescending(d => d)
+                .ToList();
+
+            if (sessionDates.Any())
+            {
+                // Check if there is a session today or yesterday to start the streak
+                if (sessionDates.Contains(today) || sessionDates.Contains(today.AddDays(-1)))
+                {
+                    streak = 1;
+                    var currentDate = sessionDates.Contains(today) ? today : today.AddDays(-1);
+
+                    for (int i = 1; i < sessionDates.Count; i++)
+                    {
+                        if (sessionDates[i] == currentDate.AddDays(-1))
+                        {
+                            streak++;
+                            currentDate = currentDate.AddDays(-1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            var stats = new UserStatisticsDto
+            {
+                TotalQuestionsAnswered = totalQuestionsAnswered,
+                Accuracy = Math.Round(accuracy, 1),
+                CurrentStreak = streak,
+                Rank = 42 // Placeholder for now
+            };
+
+            return Ok(stats);
         }
     }
 }
