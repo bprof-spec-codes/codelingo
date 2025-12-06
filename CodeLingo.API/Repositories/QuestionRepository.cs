@@ -41,15 +41,19 @@ namespace CodeLingo.API.Repositories
             appDbContext.SaveChanges();
         }
 
-        public List<Question> getRandomQuestions(int count, string language, DifficultyLevel difficulty)
+        public List<Question> getRandomQuestions(int count, List<string> languageIds, DifficultyLevel difficulty)
         {
-            var questionList = appDbContext.Questions.Where(q => q.Language == language && q.Difficulty == difficulty).ToList();
-            // Step 1: Get total count(efficient query: SELECT COUNT(*) FROM Users)
+            // Filter questions by multiple languages and difficulty
+            var questionList = appDbContext.Questions
+                .Where(q => languageIds.Contains(q.Language) && q.Difficulty == difficulty)
+                .ToList();
+            
+            // Step 1: Get total count
             var totalCount = questionList.Count();
 
             if (totalCount == 0)
             {
-                throw new NotSufficientQuestionsException("Nincs elegendő kérdés ezen a nyelven és nehézségen");
+                throw new NotSufficientQuestionsException("Nincs elegendő kérdés a kiválasztott nyelveken és nehézségen");
             }
 
             if (totalCount < count)
@@ -61,12 +65,11 @@ namespace CodeLingo.API.Repositories
             var skip = random.Next(0, Math.Max(1, totalCount - count + 1));
 
             // Step 3: Skip random offset and take N (translates to SQL with ROW_NUMBER() or OFFSET/FETCH)
-            // Optional: Add .OrderBy(u => 
             var randomQuestions = questionList
                 .OrderBy(u => u.Id) // Helps distribute if IDs are sequential
-            .Skip(skip)
-            .Take(count)
-            .ToList();
+                .Skip(skip)
+                .Take(count)
+                .ToList();
             return randomQuestions;
 
         }

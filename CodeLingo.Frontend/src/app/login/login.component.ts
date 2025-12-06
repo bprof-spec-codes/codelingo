@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   serverError: string | null = null;
   returnUrl: string = '/landing-page'; // default fallback
 
+  showPassword = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -24,7 +26,14 @@ export class LoginComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       username: ['', [Validators.required]],
-      password: ['', Validators.required],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[A-Z]).+$/), // at least one uppercase
+        ],
+      ],
       rememberMe: [false],
     });
   }
@@ -67,6 +76,10 @@ export class LoginComponent implements OnInit {
             : 'Invalid credentials or server error. Please try again.';
       },
     });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   get username() {

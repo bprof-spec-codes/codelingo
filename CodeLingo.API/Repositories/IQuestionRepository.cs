@@ -8,6 +8,6 @@ namespace CodeLingo.API.Repositories
         Task<IEnumerable<Question>> GetQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type, int page, int pageSize);
         Task<int> CountQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type);
         Task<Question?> GetByIdAsync(string id);
-        List<Question> getRandomQuestions(int count, string language, DifficultyLevel difficulty);
+        List<Question> getRandomQuestions(int count, List<string> languageIds, DifficultyLevel difficulty);
     }
 }
