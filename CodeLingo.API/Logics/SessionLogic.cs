@@ -129,12 +129,32 @@ namespace CodeLingo.API.Logics
                         next.Question.QuestionText,
                         next.Question.Explanation,
                         next.Question.Language,
-                        Difficulty = next.Question.Difficulty.ToString().ToLower(),
+                        Difficulty = next.Question.Difficulty.ToString(),
                         Tags = tags,
                         Metadata = metadata,
                         Options = JsonSerializer.Deserialize<List<SessionQuestionOptionDto>>(mcQuestion.Options ?? "[]", new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
                         mcQuestion.AllowMultipleSelection,
                         mcQuestion.ShuffleOptions
+                    };
+                }
+            }
+            else if (next.Question.Type == QuestionType.CodeCompletion)
+            {
+                var fullQuestion = questionRepository.Read(next.QuestionId);
+                if (fullQuestion?.CodeCompletionQuestion != null)
+                {
+                    questionData = new
+                    {
+                        next.Question.Id,
+                        Type = "CodeCompletion",
+                        next.Question.Title,
+                        next.Question.QuestionText,
+                        next.Question.Explanation,
+                        next.Question.Language,
+                        Difficulty = next.Question.Difficulty.ToString(),
+                        Tags = tags,
+                        Metadata = metadata,
+                        CodeSnippet = fullQuestion.CodeCompletionQuestion.CodeSnippet
                     };
                 }
             }

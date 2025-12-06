@@ -26,9 +26,12 @@ namespace CodeLingo.API.Repositories
             appDbContext.Questions.Remove(entity);
         }
 
-        public Question Read(string id)
+        public Question? Read(string id)
         {
-            return appDbContext.Questions.FirstOrDefault(q => q.Id == id);
+            return appDbContext.Questions
+                .Include(q => q.CodeCompletionQuestion)
+                .Include(q => q.MultipleChoiceQuestion)
+                .FirstOrDefault(q => q.Id == id);
         }
 
         public List<Question> ReadAll()
@@ -74,7 +77,7 @@ namespace CodeLingo.API.Repositories
 
         }
 
-        public async Task<IEnumerable<Question>> GetQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type, int page, int pageSize)
+        public async Task<IEnumerable<Question>> GetQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type, string? title, string? questionText, int page, int pageSize)
         {
             var query = appDbContext.Questions.AsQueryable();
 
@@ -86,15 +89,23 @@ namespace CodeLingo.API.Repositories
 
             if (type.HasValue)
                 query = query.Where(q => q.Type == type.Value);
+
+            if (!string.IsNullOrEmpty(title))
+                query = query.Where(q => q.Title.Contains(title));
+
+            if (!string.IsNullOrEmpty(questionText))
+                query = query.Where(q => q.QuestionText.Contains(questionText));
 
             return await query
                 .OrderByDescending(q => q.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .Include(q => q.CodeCompletionQuestion)
+                .Include(q => q.MultipleChoiceQuestion)
                 .ToListAsync();
         }
 
-        public async Task<int> CountQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type)
+        public async Task<int> CountQuestionsAsync(string? language, DifficultyLevel? difficulty, QuestionType? type, string? title, string? questionText)
         {
             var query = appDbContext.Questions.AsQueryable();
 
@@ -106,13 +117,22 @@ namespace CodeLingo.API.Repositories
 
             if (type.HasValue)
                 query = query.Where(q => q.Type == type.Value);
+
+            if (!string.IsNullOrEmpty(title))
+                query = query.Where(q => q.Title.Contains(title));
+
+            if (!string.IsNullOrEmpty(questionText))
+                query = query.Where(q => q.QuestionText.Contains(questionText));
 
             return await query.CountAsync();
         }
 
         public async Task<Question?> GetByIdAsync(string id)
         {
-            return await appDbContext.Questions.FirstOrDefaultAsync(q => q.Id == id);
+            return await appDbContext.Questions
+                .Include(q => q.CodeCompletionQuestion)
+                .Include(q => q.MultipleChoiceQuestion)
+                .FirstOrDefaultAsync(q => q.Id == id);
         }
     }
 }

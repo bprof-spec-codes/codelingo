@@ -29,7 +29,7 @@ namespace CodeLingo.API.Repositories
             return this.DbContext.Sessions.Where(s => s.Status == Enums.SessionStatus.Active && s.CreatedAt < yestterday).ToList();
         }
 
-        public Session Read(string id)
+        public Session? Read(string id)
         {
             return this.DbContext.Sessions.Where(s => s.Id == id).SingleOrDefault();
         }
