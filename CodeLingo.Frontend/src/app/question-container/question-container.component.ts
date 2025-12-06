@@ -68,9 +68,6 @@ export class QuestionContainerComponent implements OnInit {
         // Assuming response.questionData matches MultipleChoiceQuestion structure for now
         this.questionData = response.questionData;
         this.questionType = response.questionType;
-
-        // Reset selection in child component
-        setTimeout(() => this.multipleChoiceComponent?.resetSelection());
       },
       error: (err) => {
         this.loadingQuestion = false;
