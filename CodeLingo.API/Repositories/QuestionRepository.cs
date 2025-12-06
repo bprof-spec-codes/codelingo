@@ -47,18 +47,29 @@ namespace CodeLingo.API.Repositories
             var questionList = appDbContext.Questions
                 .Where(q => languageIds.Contains(q.Language) && q.Difficulty == difficulty)
                 .ToList();
-            
+
             // Step 1: Get total count
             var totalCount = questionList.Count();
 
             if (totalCount == 0)
             {
-                throw new NotSufficientQuestionsException("Nincs elegendő kérdés a kiválasztott nyelveken és nehézségen");
+                var languagesStr = string.Join(", ", languageIds);
+                throw new NotSufficientQuestionsException(
+                    $"No questions available for the selected languages ({languagesStr}) and difficulty ({difficulty}).",
+                    0,
+                    count
+                );
             }
 
+            // Prevent starting a session if there aren't enough questions
             if (totalCount < count)
             {
-                count = totalCount;
+                var languagesStr = string.Join(", ", languageIds);
+                throw new NotSufficientQuestionsException(
+                     $"We only have {totalCount} {difficulty} question{(totalCount == 1 ? "" : "s")} available for the selected language{(languageIds.Count == 1 ? "" : "s")} ({languagesStr}), but you requested {count}.",
+            totalCount,
+            count
+                );
             }
 
             // Step 2: Calculate random skip (ensure we don't skip beyond total - count)

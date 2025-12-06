@@ -40,6 +40,15 @@ namespace CodeLingo.API.Controllers
                 _logger.LogInformation("Session created");
                 return Ok(response);
             }
+            catch (CodeLingo.API.DTOs.Exceptions.NotSufficientQuestionsException ex)
+            {
+                _logger.LogWarning(ex, "Not enough questions available");
+                return BadRequest(new { 
+                    error = ex.Message,
+                    availableCount = ex.AvailableCount,
+                    requestedCount = ex.RequestedCount
+                });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating session");
