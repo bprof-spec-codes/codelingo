@@ -35,6 +35,7 @@ import { QuestionContainerComponent } from './question-container/question-contai
 import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
+import { ResultSummaryComponent } from './question-container/result-summary/result-summary.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { jwtInterceptor } from './jwt.interceptor';
     MultipleChoiceQuestionComponent,
     QuestionContainerComponent,
     QuestionProgressComponent,
+    ResultSummaryComponent,
   ],
   imports: [
     BrowserModule,
