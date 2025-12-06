@@ -1,0 +1,25 @@
+<div class="code-question-container">
+  <div class="question-header">
+    <h3>{{ question.title }}</h3>
+    <span class="badge" [ngClass]="{
+      'bg-success': question.difficulty === 'Easy',
+      'bg-warning': question.difficulty === 'Medium',
+      'bg-danger': question.difficulty === 'Hard'
+    }">{{ question.difficulty }}</span>
+  </div>
+
+  <div class="question-body">
+    <p [innerHTML]="question.questionText"></p>
+  </div>
+
+  <div class="code-snippet-container">
+    <pre><code>{{ preSnippet }}<input type="text" [(ngModel)]="answer" [disabled]="isSubmitted" class="code-input" placeholder="..." />{{ postSnippet }}</code></pre>
+  </div>
+
+  <div class="actions mt-3">
+    <button class="btn btn-primary" (click)="submitAnswer()" [disabled]="isSubmitted || !answer.trim()">
+      <span *ngIf="isSubmitted" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      {{ isSubmitted ? 'Submitting...' : 'Submit Answer' }}
+    </button>
+  </div>
+</div>

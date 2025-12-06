@@ -1,11 +1,8 @@
 <div class="question-container">
   <div class="question-card">
     <!-- PROGRESS -->
-    <app-question-progress
-      *ngIf="!isCompleted"
-      [currentIndex]="currentIndex"
-      [totalQuestions]="totalQuestions"
-    ></app-question-progress>
+    <app-question-progress *ngIf="!isCompleted" [currentIndex]="currentIndex"
+      [totalQuestions]="totalQuestions"></app-question-progress>
 
     <!-- SESSION COMPLETED -->
     <ng-container *ngIf="isCompleted; else showQuestion">
@@ -13,11 +10,7 @@
         <h2>🎉 Session Completed!</h2>
         <p>You answered all {{ totalQuestions }} questions.</p>
 
-        <button
-          type="button"
-          class="btn btn-outline-secondary btn-lg"
-          routerLink="/landing-page"
-        >
+        <button type="button" class="btn btn-outline-secondary btn-lg" routerLink="/landing-page">
           <i class="bi bi-arrow-left"></i>
           Back to Home
         </button>
@@ -28,31 +21,23 @@
     <ng-template #showQuestion>
       <ng-container [ngSwitch]="questionType">
         <!-- Multiple Choice -->
-        <app-multiple-choice-question
-          #multipleChoiceComponent
-          *ngSwitchCase="'MultipleChoice'"
-          [question]="questionData"
-          [isSubmitted]="
+        <app-multiple-choice-question #multipleChoiceComponent *ngSwitchCase="'MultipleChoice'"
+          [question]="$any(questionData)" [isSubmitted]="
             questionSubmitted || submittingAnswer || loadingQuestion
-          "
-          (answerSubmitted)="onAnswer($event)"
-        >
+          " (answerSubmitted)="onAnswer($event)">
         </app-multiple-choice-question>
 
         <!-- Code Completion -->
-        <!-- TODO: Add code completion component here -->
+        <app-code-completion-question #codeCompletionComponent *ngSwitchCase="'CodeCompletion'"
+          [question]="$any(questionData)" [isSubmitted]="
+            questionSubmitted || submittingAnswer || loadingQuestion
+          " (answerSubmitted)="onCodeAnswer($event)">
+        </app-code-completion-question>
       </ng-container>
 
       <!-- FEEDBACK BOX -->
-      <div
-        *ngIf="questionSubmitted"
-        class="feedback-box"
-        [ngClass]="{ correct: isCorrect, incorrect: !isCorrect }"
-      >
-        <i
-          class="bi"
-          [ngClass]="isCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"
-        ></i>
+      <div *ngIf="questionSubmitted" class="feedback-box" [ngClass]="{ correct: isCorrect, incorrect: !isCorrect }">
+        <i class="bi" [ngClass]="isCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
         <span>{{ feedback }}</span>
       </div>
 

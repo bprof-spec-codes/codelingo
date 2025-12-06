@@ -9,11 +9,13 @@ namespace CodeLingo.API.Logics
     {
         IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
         SessionQuestionRepository sessionQuestionRepository;
+        IQuestionRepository questionRepository;
 
-        public AnswerEvaluationLogic(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository, SessionQuestionRepository sessionQuestionRepository)
+        public AnswerEvaluationLogic(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository, SessionQuestionRepository sessionQuestionRepository, IQuestionRepository questionRepository)
         {
             this.multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
             this.sessionQuestionRepository = sessionQuestionRepository;
+            this.questionRepository = questionRepository;
         }
 
         public AnswerDto EvaluateAnswer(JsonElement body, string sessionId)
@@ -26,6 +28,10 @@ namespace CodeLingo.API.Logics
                 {
                     return this.EvaluateMultipleChoiceAnswer(body, sessionId);
                 }
+                else if (questionType == "CodeCompletion")
+                {
+                    return this.EvaluateCodeCompletionAnswer(body, sessionId);
+                }
                 else if (questionType == "TrueFalse")
                 {
                     // return this.EvaluatetrueFalseAnswer(body);
@@ -33,6 +39,45 @@ namespace CodeLingo.API.Logics
             }
             throw new Exception("There is no questionType field or the value is not valid");
         }
+
+        public AnswerDto EvaluateCodeCompletionAnswer(JsonElement body, string sessionId)
+        {
+            if (body.TryGetProperty("questionId", out JsonElement questionIdElement) && body.TryGetProperty("code", out JsonElement codeElement))
+            {
+                string questionId = questionIdElement.GetString();
+                string userCode = codeElement.GetString();
+
+                var question = questionRepository.Read(questionId);
+                if (question == null || question.CodeCompletionQuestion == null)
+                {
+                    throw new Exception("Question not found");
+                }
+
+                List<string> acceptedAnswers = JsonSerializer.Deserialize<List<string>>(question.CodeCompletionQuestion.AcceptedAnswers ?? "[]");
+
+                bool isCorrect = acceptedAnswers.Any(a => a.Trim().Equals(userCode.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                var sessionQuestion = sessionQuestionRepository.Read(sessionId, questionId);
+                if (sessionQuestion != null)
+                {
+                    sessionQuestion.Answered = true;
+                    sessionQuestionRepository.SaveChanges();
+                }
+
+                AnswerDto answerDto = new AnswerDto();
+                answerDto.IsCorrect = isCorrect;
+                answerDto.Feedback = isCorrect ? "Correct!" : "Incorrect. Please try again.";
+                answerDto.Score = isCorrect ? 1 : 0;
+                answerDto.TotalQuestions = 1;
+                answerDto.IsCompleted = false;
+                answerDto.CurrentIndex = "";
+
+                return answerDto;
+            }
+
+            throw new Exception("There is no questionId or code field");
+        }
+
         public AnswerDto EvaluateMultipleChoiceAnswer(JsonElement body, string sessionId)
         {
             if (body.TryGetProperty("questionId", out JsonElement questionIdElement) && body.TryGetProperty("answerIds", out JsonElement answerIdElements))

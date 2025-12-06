@@ -34,10 +34,17 @@ export class AdminService {
 
   // Questions
 
-  getQuestions(page: number = 1, pageSize: number = 200): Observable<QuestionListResponseDto> {
+  getQuestions(page: number = 1, pageSize: number = 20, filters?: any): Observable<QuestionListResponseDto> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString());
+
+    if (filters) {
+      if (filters.language) params = params.set('language', filters.language);
+      if (filters.difficulty) params = params.set('difficulty', filters.difficulty);
+      if (filters.title) params = params.set('title', filters.title);
+      if (filters.questionText) params = params.set('questionText', filters.questionText);
+    }
 
     return this.http.get<QuestionListResponseDto>(`${this.baseUrl}/questions`, { params });
   }

@@ -5,7 +5,7 @@
         "Difficulty": "Easy",
         "Title": "Which keyword is used to define a class in C#?",
         "QuestionText": "In C#, which keyword is used to declare a new class?",
-        "Explanation": "The 'class' keyword is used to declare a new class in C#.",
+        "Explanation": "The \u0027class\u0027 keyword is used to declare a new class in C#.",
         "Tags": [
             "C#",
             "Basics",
@@ -83,7 +83,7 @@
         "Difficulty": "Easy",
         "Title": "Which keyword is used to implement an interface?",
         "QuestionText": "In C#, which keyword is used when a class implements an interface?",
-        "Explanation": "The ':' symbol is used in a class declaration to specify base classes and implemented interfaces.",
+        "Explanation": "The \u0027:\u0027 symbol is used in a class declaration to specify base classes and implemented interfaces.",
         "Tags": [
             "C#",
             "Interfaces",
@@ -120,9 +120,9 @@
         "Type": "MultipleChoice",
         "Language": "C#",
         "Difficulty": "Medium",
-        "Title": "What is the purpose of the 'using' directive?",
-        "QuestionText": "In C#, what is the main purpose of the 'using' directive at the top of a file?",
-        "Explanation": "The 'using' directive allows you to use types in a namespace without specifying the fully qualified name.",
+        "Title": "What is the purpose of the \u0027using\u0027 directive?",
+        "QuestionText": "In C#, what is the main purpose of the \u0027using\u0027 directive at the top of a file?",
+        "Explanation": "The \u0027using\u0027 directive allows you to use types in a namespace without specifying the fully qualified name.",
         "Tags": [
             "C#",
             "Namespaces",
@@ -181,7 +181,7 @@
             },
             {
                 "Id": "3",
-                "Text": "Only if marked with 'mutable'"
+                "Text": "Only if marked with \u0027mutable\u0027"
             },
             {
                 "Id": "4",
@@ -198,9 +198,9 @@
         "Type": "MultipleChoice",
         "Language": "C#",
         "Difficulty": "Medium",
-        "Title": "What does LINQ's Where method return?",
-        "QuestionText": "In C#, when you call .Where(...) on an IEnumerable<T> using LINQ, what kind of value is typically returned?",
-        "Explanation": "LINQ's Where returns an IEnumerable<T> that lazily filters the original sequence based on the predicate.",
+        "Title": "What does LINQ\u0027s Where method return?",
+        "QuestionText": "In C#, when you call .Where(...) on an IEnumerable\u003cT\u003e using LINQ, what kind of value is typically returned?",
+        "Explanation": "LINQ\u0027s Where returns an IEnumerable\u003cT\u003e that lazily filters the original sequence based on the predicate.",
         "Tags": [
             "C#",
             "LINQ",
@@ -212,11 +212,11 @@
         "Options": [
             {
                 "Id": "1",
-                "Text": "List<T>"
+                "Text": "List\u003cT\u003e"
             },
             {
                 "Id": "2",
-                "Text": "IEnumerable<T>"
+                "Text": "IEnumerable\u003cT\u003e"
             },
             {
                 "Id": "3",
@@ -224,7 +224,7 @@
             },
             {
                 "Id": "4",
-                "Text": "Dictionary<T, T>"
+                "Text": "Dictionary\u003cT, T\u003e"
             }
         ],
         "CorrectAnswerIds": [
@@ -237,9 +237,9 @@
         "Type": "MultipleChoice",
         "Language": "C#",
         "Difficulty": "Medium",
-        "Title": "What do 'async' and 'await' enable in C#?",
-        "QuestionText": "In C#, what is the primary purpose of the 'async' and 'await' keywords?",
-        "Explanation": "'async' and 'await' enable asynchronous programming with tasks, making it easier to write non-blocking code while maintaining a synchronous style.",
+        "Title": "What do \u0027async\u0027 and \u0027await\u0027 enable in C#?",
+        "QuestionText": "In C#, what is the primary purpose of the \u0027async\u0027 and \u0027await\u0027 keywords?",
+        "Explanation": "\u0027async\u0027 and \u0027await\u0027 enable asynchronous programming with tasks, making it easier to write non-blocking code while maintaining a synchronous style.",
         "Tags": [
             "C#",
             "Async",
@@ -276,9 +276,9 @@
         "Type": "MultipleChoice",
         "Language": "C#",
         "Difficulty": "Medium",
-        "Title": "What is the purpose of 'using' statement with IDisposable?",
-        "QuestionText": "In C#, what is the main benefit of using the 'using' statement with an object that implements IDisposable?",
-        "Explanation": "The 'using' statement ensures that Dispose() is called automatically, even if an exception occurs, which helps release unmanaged resources deterministically.",
+        "Title": "What is the purpose of \u0027using\u0027 statement with IDisposable?",
+        "QuestionText": "In C#, what is the main benefit of using the \u0027using\u0027 statement with an object that implements IDisposable?",
+        "Explanation": "The \u0027using\u0027 statement ensures that Dispose() is called automatically, even if an exception occurs, which helps release unmanaged resources deterministically.",
         "Tags": [
             "C#",
             "IDisposable",
@@ -356,7 +356,7 @@
         "Difficulty": "Hard",
         "Title": "What is an extension method?",
         "QuestionText": "In C#, what is an extension method?",
-        "Explanation": "An extension method is a static method in a static class that is called as if it were an instance method on an existing type, using the 'this' modifier on the first parameter.",
+        "Explanation": "An extension method is a static method in a static class that is called as if it were an instance method on an existing type, using the \u0027this\u0027 modifier on the first parameter.",
         "Tags": [
             "C#",
             "Extension Methods",
@@ -393,9 +393,9 @@
         "Type": "MultipleChoice",
         "Language": "C#",
         "Difficulty": "Hard",
-        "Title": "What does the '?' annotation mean in nullable reference types?",
-        "QuestionText": "In modern C#, what does adding '?' to a reference type (e.g., string?) indicate when nullable reference types are enabled?",
-        "Explanation": "With nullable reference types enabled, 'string?' indicates that the reference may be null, and the compiler performs nullability analysis and warnings based on this.",
+        "Title": "What does the \u0027?\u0027 annotation mean in nullable reference types?",
+        "QuestionText": "In modern C#, what does adding \u0027?\u0027 to a reference type (e.g., string?) indicate when nullable reference types are enabled?",
+        "Explanation": "With nullable reference types enabled, \u0027string?\u0027 indicates that the reference may be null, and the compiler performs nullability analysis and warnings based on this.",
         "Tags": [
             "C#",
             "Nullable",
@@ -432,9 +432,9 @@
         "Type": "MultipleChoice",
         "Language": "C#",
         "Difficulty": "Medium",
-        "Title": "What is the difference between 'var' and 'dynamic'?",
-        "QuestionText": "In C#, what is the key difference between 'var' and 'dynamic'?",
-        "Explanation": "'var' is implicitly typed but resolved at compile time, while 'dynamic' is resolved at runtime and bypasses compile-time type checking for member access.",
+        "Title": "What is the difference between \u0027var\u0027 and \u0027dynamic\u0027?",
+        "QuestionText": "In C#, what is the key difference between \u0027var\u0027 and \u0027dynamic\u0027?",
+        "Explanation": "\u0027var\u0027 is implicitly typed but resolved at compile time, while \u0027dynamic\u0027 is resolved at runtime and bypasses compile-time type checking for member access.",
         "Tags": [
             "C#",
             "Keywords",
@@ -471,9 +471,9 @@
         "Type": "MultipleChoice",
         "Language": "C#",
         "Difficulty": "Hard",
-        "Title": "What does the 'lock' statement do?",
-        "QuestionText": "In C#, what is the primary purpose of the 'lock' statement?",
-        "Explanation": "The 'lock' statement ensures that only one thread can enter a critical section of code at a time by acquiring a mutual-exclusion lock on a given object.",
+        "Title": "What does the \u0027lock\u0027 statement do?",
+        "QuestionText": "In C#, what is the primary purpose of the \u0027lock\u0027 statement?",
+        "Explanation": "The \u0027lock\u0027 statement ensures that only one thread can enter a critical section of code at a time by acquiring a mutual-exclusion lock on a given object.",
         "Tags": [
             "C#",
             "Multithreading",
@@ -629,7 +629,7 @@
         "Difficulty": "Easy",
         "Title": "Which keyword is used to define a struct?",
         "QuestionText": "In C#, which keyword declares a value type structure?",
-        "Explanation": "The 'struct' keyword declares a value type that is typically allocated on the stack or inline in containing types.",
+        "Explanation": "The \u0027struct\u0027 keyword declares a value type that is typically allocated on the stack or inline in containing types.",
         "Tags": [
             "C#",
             "Structs",
@@ -785,7 +785,7 @@
         "Difficulty": "Easy",
         "Title": "Which keyword declares a block-scoped variable?",
         "QuestionText": "In JavaScript, which keyword declares a block-scoped variable?",
-        "Explanation": "Both 'let' and 'const' are block-scoped, but 'let' is commonly used for variables that will be reassigned.",
+        "Explanation": "Both \u0027let\u0027 and \u0027const\u0027 are block-scoped, but \u0027let\u0027 is commonly used for variables that will be reassigned.",
         "Tags": [
             "JavaScript",
             "Variables",
@@ -822,9 +822,9 @@
         "Type": "MultipleChoice",
         "Language": "JavaScript",
         "Difficulty": "Easy",
-        "Title": "What does '===' do?",
-        "QuestionText": "In JavaScript, what is the main difference between '==' and '==='?",
-        "Explanation": "'===' is the strict equality operator; it compares both value and type without performing type coercion.",
+        "Title": "What does \u0027===\u0027 do?",
+        "QuestionText": "In JavaScript, what is the main difference between \u0027==\u0027 and \u0027===\u0027?",
+        "Explanation": "\u0027===\u0027 is the strict equality operator; it compares both value and type without performing type coercion.",
         "Tags": [
             "JavaScript",
             "Operators",
@@ -940,7 +940,7 @@
         "Language": "JavaScript",
         "Difficulty": "Medium",
         "Title": "What is the default value of an uninitialized variable?",
-        "QuestionText": "In JavaScript, if you declare 'let x;' and do not assign a value, what is x?",
+        "QuestionText": "In JavaScript, if you declare \u0027let x;\u0027 and do not assign a value, what is x?",
         "Explanation": "An uninitialized variable has the value undefined.",
         "Tags": [
             "JavaScript",
@@ -1056,8 +1056,8 @@
         "Type": "MultipleChoice",
         "Language": "JavaScript",
         "Difficulty": "Medium",
-        "Title": "What does 'use strict' do?",
-        "QuestionText": "In JavaScript, what is a main effect of enabling strict mode with 'use strict';?",
+        "Title": "What does \u0027use strict\u0027 do?",
+        "QuestionText": "In JavaScript, what is a main effect of enabling strict mode with \u0027use strict\u0027;?",
         "Explanation": "Strict mode changes semantics to be more secure and predictable, for example disallowing implicit global variable creation.",
         "Tags": [
             "JavaScript",
@@ -1113,7 +1113,7 @@
             },
             {
                 "Id": "2",
-                "Text": "new Promise((resolve, reject) => { ... })"
+                "Text": "new Promise((resolve, reject) =\u003e { ... })"
             },
             {
                 "Id": "3",
@@ -1121,7 +1121,7 @@
             },
             {
                 "Id": "4",
-                "Text": "async Promise => { ... }"
+                "Text": "async Promise =\u003e { ... }"
             }
         ],
         "CorrectAnswerIds": [
@@ -1173,9 +1173,9 @@
         "Type": "MultipleChoice",
         "Language": "JavaScript",
         "Difficulty": "Hard",
-        "Title": "What is 'this' in an arrow function?",
-        "QuestionText": "In JavaScript, how is 'this' treated inside an arrow function compared to a normal function?",
-        "Explanation": "Arrow functions do not have their own 'this'; they capture 'this' from the surrounding lexical scope.",
+        "Title": "What is \u0027this\u0027 in an arrow function?",
+        "QuestionText": "In JavaScript, how is \u0027this\u0027 treated inside an arrow function compared to a normal function?",
+        "Explanation": "Arrow functions do not have their own \u0027this\u0027; they capture \u0027this\u0027 from the surrounding lexical scope.",
         "Tags": [
             "JavaScript",
             "Arrow Functions",
@@ -1292,7 +1292,7 @@
         "Difficulty": "Easy",
         "Title": "Which keyword defines a function in Python?",
         "QuestionText": "In Python, which keyword is used to define a function?",
-        "Explanation": "The 'def' keyword is used to define a function in Python.",
+        "Explanation": "The \u0027def\u0027 keyword is used to define a function in Python.",
         "Tags": [
             "Python",
             "Functions",
@@ -1487,7 +1487,7 @@
         "Difficulty": "Hard",
         "Title": "What is a generator?",
         "QuestionText": "In Python, what is a generator function?",
-        "Explanation": "A generator function uses 'yield' to produce a sequence of values lazily, returning an iterator instead of computing all values at once.",
+        "Explanation": "A generator function uses \u0027yield\u0027 to produce a sequence of values lazily, returning an iterator instead of computing all values at once.",
         "Tags": [
             "Python",
             "Generators",
@@ -1503,7 +1503,7 @@
             },
             {
                 "Id": "2",
-                "Text": "A function that yields values one at a time using 'yield'"
+                "Text": "A function that yields values one at a time using \u0027yield\u0027"
             },
             {
                 "Id": "3",
@@ -1525,7 +1525,7 @@
         "Language": "Python",
         "Difficulty": "Medium",
         "Title": "What is a context manager?",
-        "QuestionText": "In Python, what does a context manager (used with 'with') typically manage?",
+        "QuestionText": "In Python, what does a context manager (used with \u0027with\u0027) typically manage?",
         "Explanation": "Context managers manage resources, ensuring that setup and cleanup (like opening and closing files) occur reliably.",
         "Tags": [
             "Python",
@@ -1603,8 +1603,8 @@
         "Language": "Python",
         "Difficulty": "Easy",
         "Title": "How do you import a module?",
-        "QuestionText": "In Python, which statement imports the 'math' module?",
-        "Explanation": "The 'import math' statement imports the math module.",
+        "QuestionText": "In Python, which statement imports the \u0027math\u0027 module?",
+        "Explanation": "The \u0027import math\u0027 statement imports the math module.",
         "Tags": [
             "Python",
             "Modules",
@@ -1719,8 +1719,8 @@
         "Type": "MultipleChoice",
         "Language": "Python",
         "Difficulty": "Medium",
-        "Title": "What does 'if __name__ == \"__main__\"' mean?",
-        "QuestionText": "In Python, why is 'if __name__ == \"__main__\"' commonly used?",
+        "Title": "What does \u0027if __name__ == \"__main__\"\u0027 mean?",
+        "QuestionText": "In Python, why is \u0027if __name__ == \"__main__\"\u0027 commonly used?",
         "Explanation": "It ensures that some code runs only when the file is executed as a script, not when imported as a module.",
         "Tags": [
             "Python",
@@ -1759,8 +1759,8 @@
         "Language": "Python",
         "Difficulty": "Easy",
         "Title": "How do you install a package with pip?",
-        "QuestionText": "Which command installs the 'requests' package using pip?",
-        "Explanation": "The command 'pip install requests' installs the requests package.",
+        "QuestionText": "Which command installs the \u0027requests\u0027 package using pip?",
+        "Explanation": "The command \u0027pip install requests\u0027 installs the requests package.",
         "Tags": [
             "Python",
             "pip",
@@ -1838,7 +1838,7 @@
         "Difficulty": "Easy",
         "Title": "Which keyword defines a class in Java?",
         "QuestionText": "In Java, which keyword is used to declare a new class?",
-        "Explanation": "The 'class' keyword declares a new class in Java.",
+        "Explanation": "The \u0027class\u0027 keyword declares a new class in Java.",
         "Tags": [
             "Java",
             "Classes",
@@ -1914,9 +1914,9 @@
         "Type": "MultipleChoice",
         "Language": "Java",
         "Difficulty": "Medium",
-        "Title": "What is the difference between '==' and 'equals' for objects?",
-        "QuestionText": "In Java, how does '==' differ from the equals() method when comparing objects?",
-        "Explanation": "'==' compares object references, while equals() typically compares logical equality as defined by the class.",
+        "Title": "What is the difference between \u0027==\u0027 and \u0027equals\u0027 for objects?",
+        "QuestionText": "In Java, how does \u0027==\u0027 differ from the equals() method when comparing objects?",
+        "Explanation": "\u0027==\u0027 compares object references, while equals() typically compares logical equality as defined by the class.",
         "Tags": [
             "Java",
             "Equality",
@@ -1994,7 +1994,7 @@
         "Difficulty": "Hard",
         "Title": "What are checked exceptions?",
         "QuestionText": "In Java, what characterizes a checked exception?",
-        "Explanation": "Checked exceptions must be either caught or declared in the method's throws clause at compile time.",
+        "Explanation": "Checked exceptions must be either caught or declared in the method\u0027s throws clause at compile time.",
         "Tags": [
             "Java",
             "Exceptions",
@@ -2031,8 +2031,8 @@
         "Type": "MultipleChoice",
         "Language": "Java",
         "Difficulty": "Hard",
-        "Title": "What is the purpose of the 'synchronized' keyword?",
-        "QuestionText": "In Java, what does the 'synchronized' keyword do when applied to a method?",
+        "Title": "What is the purpose of the \u0027synchronized\u0027 keyword?",
+        "QuestionText": "In Java, what does the \u0027synchronized\u0027 keyword do when applied to a method?",
         "Explanation": "The synchronized keyword ensures that only one thread at a time can execute that method on a given instance (or class for static methods).",
         "Tags": [
             "Java",
@@ -2109,8 +2109,8 @@
         "Type": "MultipleChoice",
         "Language": "Java",
         "Difficulty": "Medium",
-        "Title": "What does the 'final' keyword on a variable mean?",
-        "QuestionText": "In Java, what does it mean when a variable is declared as 'final'?",
+        "Title": "What does the \u0027final\u0027 keyword on a variable mean?",
+        "QuestionText": "In Java, what does it mean when a variable is declared as \u0027final\u0027?",
         "Explanation": "A final variable can be assigned only once; after assignment, its reference cannot be changed.",
         "Tags": [
             "Java",
@@ -2188,7 +2188,7 @@
         "Language": "Java",
         "Difficulty": "Hard",
         "Title": "What is type erasure in Java generics?",
-        "QuestionText": "In Java, what is 'type erasure' in the context of generics?",
+        "QuestionText": "In Java, what is \u0027type erasure\u0027 in the context of generics?",
         "Explanation": "Type erasure is the process by which generic type information is removed at compile time, meaning generic types are not preserved at runtime.",
         "Tags": [
             "Java",
@@ -2226,7 +2226,7 @@
         "Type": "MultipleChoice",
         "Language": "Java",
         "Difficulty": "Medium",
-        "Title": "What does the 'static' keyword on a method mean?",
+        "Title": "What does the \u0027static\u0027 keyword on a method mean?",
         "QuestionText": "In Java, what does it mean when a method is declared as static?",
         "Explanation": "A static method belongs to the class rather than a specific instance and can be called without creating an object.",
         "Tags": [
@@ -2382,9 +2382,9 @@
         "Type": "MultipleChoice",
         "Language": "TypeScript",
         "Difficulty": "Easy",
-        "Title": "How do you annotate a variable's type?",
-        "QuestionText": "In TypeScript, which syntax annotates a number variable 'x' correctly?",
-        "Explanation": "The syntax 'let x: number = 5;' declares x as a number.",
+        "Title": "How do you annotate a variable\u0027s type?",
+        "QuestionText": "In TypeScript, which syntax annotates a number variable \u0027x\u0027 correctly?",
+        "Explanation": "The syntax \u0027let x: number = 5;\u0027 declares x as a number.",
         "Tags": [
             "TypeScript",
             "Typing",
@@ -2422,7 +2422,7 @@
         "Language": "TypeScript",
         "Difficulty": "Medium",
         "Title": "What is a union type?",
-        "QuestionText": "In TypeScript, what does the type 'string | number' represent?",
+        "QuestionText": "In TypeScript, what does the type \u0027string | number\u0027 represent?",
         "Explanation": "It is a union type, meaning a value that can be either a string or a number.",
         "Tags": [
             "TypeScript",
@@ -2460,9 +2460,9 @@
         "Type": "MultipleChoice",
         "Language": "TypeScript",
         "Difficulty": "Medium",
-        "Title": "What is the 'any' type?",
-        "QuestionText": "In TypeScript, what does the 'any' type signify?",
-        "Explanation": "The 'any' type disables type checking for that value, allowing any operation without compile-time errors.",
+        "Title": "What is the \u0027any\u0027 type?",
+        "QuestionText": "In TypeScript, what does the \u0027any\u0027 type signify?",
+        "Explanation": "The \u0027any\u0027 type disables type checking for that value, allowing any operation without compile-time errors.",
         "Tags": [
             "TypeScript",
             "Any",
@@ -2486,7 +2486,7 @@
             },
             {
                 "Id": "4",
-                "Text": "A replacement for 'void'"
+                "Text": "A replacement for \u0027void\u0027"
             }
         ],
         "CorrectAnswerIds": [
@@ -2499,9 +2499,9 @@
         "Type": "MultipleChoice",
         "Language": "TypeScript",
         "Difficulty": "Hard",
-        "Title": "What is the 'never' type?",
-        "QuestionText": "In TypeScript, what does the 'never' type represent?",
-        "Explanation": "The 'never' type represents values that never occur, such as functions that always throw or never return.",
+        "Title": "What is the \u0027never\u0027 type?",
+        "QuestionText": "In TypeScript, what does the \u0027never\u0027 type represent?",
+        "Explanation": "The \u0027never\u0027 type represents values that never occur, such as functions that always throw or never return.",
         "Tags": [
             "TypeScript",
             "Never",
@@ -2539,7 +2539,7 @@
         "Language": "TypeScript",
         "Difficulty": "Medium",
         "Title": "What is the difference between interface and type alias?",
-        "QuestionText": "In TypeScript, which statement about 'interface' and 'type' is generally true?",
+        "QuestionText": "In TypeScript, which statement about \u0027interface\u0027 and \u0027type\u0027 is generally true?",
         "Explanation": "Both can describe object shapes, but interfaces can be extended/merged more naturally, while type aliases are more general (unions, primitives).",
         "Tags": [
             "TypeScript",
@@ -2579,7 +2579,7 @@
         "Difficulty": "Easy",
         "Title": "How do you define a function type?",
         "QuestionText": "Which TypeScript syntax correctly defines a function type taking a number and returning a string?",
-        "Explanation": "The syntax '(x: number) => string' describes such a function type.",
+        "Explanation": "The syntax \u0027(x: number) =\u003e string\u0027 describes such a function type.",
         "Tags": [
             "TypeScript",
             "Functions",
@@ -2591,15 +2591,15 @@
         "Options": [
             {
                 "Id": "1",
-                "Text": "(x) number -> string"
+                "Text": "(x) number -\u003e string"
             },
             {
                 "Id": "2",
-                "Text": "(x: number) => string"
+                "Text": "(x: number) =\u003e string"
             },
             {
                 "Id": "3",
-                "Text": "string <= number"
+                "Text": "string \u003c= number"
             },
             {
                 "Id": "4",
@@ -2616,8 +2616,8 @@
         "Type": "MultipleChoice",
         "Language": "TypeScript",
         "Difficulty": "Medium",
-        "Title": "What does the 'readonly' modifier do on a property?",
-        "QuestionText": "In TypeScript, what does marking a property as 'readonly' mean?",
+        "Title": "What does the \u0027readonly\u0027 modifier do on a property?",
+        "QuestionText": "In TypeScript, what does marking a property as \u0027readonly\u0027 mean?",
         "Explanation": "A readonly property can be assigned only during initialization or in the constructor, and cannot be reassigned later.",
         "Tags": [
             "TypeScript",
@@ -2694,9 +2694,9 @@
         "Type": "MultipleChoice",
         "Language": "TypeScript",
         "Difficulty": "Medium",
-        "Title": "What do utility types like Partial<T> do?",
-        "QuestionText": "In TypeScript, what does the utility type Partial<T> do?",
-        "Explanation": "Partial<T> constructs a type with all properties of T set to optional.",
+        "Title": "What do utility types like Partial\u003cT\u003e do?",
+        "QuestionText": "In TypeScript, what does the utility type Partial\u003cT\u003e do?",
+        "Explanation": "Partial\u003cT\u003e constructs a type with all properties of T set to optional.",
         "Tags": [
             "TypeScript",
             "Utility Types",
@@ -2772,8 +2772,8 @@
         "Type": "MultipleChoice",
         "Language": "TypeScript",
         "Difficulty": "Hard",
-        "Title": "What does 'unknown' type represent?",
-        "QuestionText": "In TypeScript, how does the 'unknown' type differ from 'any'?",
+        "Title": "What does \u0027unknown\u0027 type represent?",
+        "QuestionText": "In TypeScript, how does the \u0027unknown\u0027 type differ from \u0027any\u0027?",
         "Explanation": "unknown is a safer alternative to any; you must perform type checks before using a value of type unknown.",
         "Tags": [
             "TypeScript",
@@ -2806,5 +2806,288 @@
         ],
         "AllowMultipleSelection": false,
         "ShuffleOptions": true
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "JavaScript",
+        "Difficulty": "Easy",
+        "Title": "Sum Function",
+        "QuestionText": "Complete the function to return the sum of two numbers.",
+        "Explanation": "The return statement is used to return a value from a function.",
+        "Tags": [
+            "JavaScript",
+            "Functions",
+            "Basics"
+        ],
+        "Metadata": {
+            "Topic": "Functions"
+        },
+        "CodeSnippet": "function sum(a, b) {\n  return _______;\n}",
+        "AcceptedAnswers": [
+            "a + b",
+            "a+b",
+            "b + a",
+            "b+a"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "C#",
+        "Difficulty": "Easy",
+        "Title": "Console WriteLine",
+        "QuestionText": "Complete the code to print 'Hello' to the console.",
+        "Explanation": "Console.WriteLine is used to print text to the console in C#.",
+        "Tags": [
+            "C#",
+            "Console",
+            "Basics"
+        ],
+        "Metadata": {
+            "Topic": "Console I/O"
+        },
+        "CodeSnippet": "Console._______(\"Hello\");",
+        "AcceptedAnswers": [
+            "WriteLine",
+            "Write"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "C#",
+        "Difficulty": "Easy",
+        "Title": "Return Value From Method",
+        "QuestionText": "Complete the method to return the integer 10.",
+        "Explanation": "Use the return keyword to return a value from a method.",
+        "Tags": [
+            "C#",
+            "Methods",
+            "Basics"
+        ],
+        "Metadata": {
+            "Topic": "Functions"
+        },
+        "CodeSnippet": "int GetNumber() {\n  return _______;\n}",
+        "AcceptedAnswers": [
+            "10"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "C#",
+        "Difficulty": "Medium",
+        "Title": "Add Item to List",
+        "QuestionText": "Complete the code to add an item to the list.",
+        "Explanation": "Use the Add method to insert elements into a List.",
+        "Tags": [
+            "C#",
+            "Collections"
+        ],
+        "Metadata": {
+            "Topic": "Lists"
+        },
+        "CodeSnippet": "var list = new List<int>();\nlist._______(5);",
+        "AcceptedAnswers": [
+            "Add",
+            "Add(5)"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "C#",
+        "Difficulty": "Hard",
+        "Title": "Implement Interface Method",
+        "QuestionText": "Complete the implementation of the interface method.",
+        "Explanation": "Interface methods must be implemented exactly as declared.",
+        "Tags": [
+            "C#",
+            "Interfaces"
+        ],
+        "Metadata": {
+            "Topic": "Interfaces"
+        },
+        "CodeSnippet": "interface ILogger {\n  void Log(string msg);\n}\nclass ConsoleLogger : ILogger {\n  public void Log(_______ msg) {\n    Console.WriteLine(msg);\n  }\n}",
+        "AcceptedAnswers": [
+            "string msg",
+            "string"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "JavaScript",
+        "Difficulty": "Easy",
+        "Title": "Print to Console",
+        "QuestionText": "Complete the code to print 'Hello' to the console.",
+        "Explanation": "console.log prints text to the console.",
+        "Tags": [
+            "JavaScript",
+            "Console"
+        ],
+        "Metadata": {
+            "Topic": "Console"
+        },
+        "CodeSnippet": "console._______(\"Hello\");",
+        "AcceptedAnswers": [
+            "log"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "JavaScript",
+        "Difficulty": "Medium",
+        "Title": "Map Array Values",
+        "QuestionText": "Complete the code to double each value in the array.",
+        "Explanation": "map allows transforming each element of an array.",
+        "Tags": [
+            "JavaScript",
+            "Arrays"
+        ],
+        "Metadata": {
+            "Topic": "Array Methods"
+        },
+        "CodeSnippet": "const nums = [1,2,3];\nconst result = nums.map(n => _______ );",
+        "AcceptedAnswers": [
+            "n * 2",
+            "n*2"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "JavaScript",
+        "Difficulty": "Hard",
+        "Title": "Async Await Usage",
+        "QuestionText": "Complete the function to wait for a promise to resolve.",
+        "Explanation": "Use await to pause execution until a promise resolves.",
+        "Tags": [
+            "JavaScript",
+            "Async"
+        ],
+        "Metadata": {
+            "Topic": "Async Programming"
+        },
+        "CodeSnippet": "async function load() {\n  const data = await _______;\n}",
+        "AcceptedAnswers": [
+            "promise",
+            "fetch()",
+            "somePromise"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "TypeScript",
+        "Difficulty": "Easy",
+        "Title": "Define Typed Variable",
+        "QuestionText": "Complete the code to declare a typed number variable.",
+        "Explanation": "TypeScript allows adding type annotations using a colon.",
+        "Tags": [
+            "TypeScript",
+            "Typing"
+        ],
+        "Metadata": {
+            "Topic": "Variables"
+        },
+        "CodeSnippet": "let count: _______ = 5;",
+        "AcceptedAnswers": [
+            "number"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "TypeScript",
+        "Difficulty": "Medium",
+        "Title": "Create Interface",
+        "QuestionText": "Complete the code to define an interface with a name property.",
+        "Explanation": "Interfaces declare the shape of an object.",
+        "Tags": [
+            "TypeScript",
+            "Interfaces"
+        ],
+        "Metadata": {
+            "Topic": "Interfaces"
+        },
+        "CodeSnippet": "interface User {\n  name: _______;\n}",
+        "AcceptedAnswers": [
+            "string"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "TypeScript",
+        "Difficulty": "Hard",
+        "Title": "Generic Function",
+        "QuestionText": "Complete the generic identity function.",
+        "Explanation": "Generics allow functions to preserve data types.",
+        "Tags": [
+            "TypeScript",
+            "Generics"
+        ],
+        "Metadata": {
+            "Topic": "Generics"
+        },
+        "CodeSnippet": "function identity<_______>(value: T): T {\n  return value;\n}",
+        "AcceptedAnswers": [
+            "T",
+            "<T>"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "Java",
+        "Difficulty": "Easy",
+        "Title": "Print to System Out",
+        "QuestionText": "Complete the code to print 'Hi' to the console.",
+        "Explanation": "System.out.println prints a line to the console.",
+        "Tags": [
+            "Java",
+            "Console"
+        ],
+        "Metadata": {
+            "Topic": "Console"
+        },
+        "CodeSnippet": "System.out._______(\"Hi\");",
+        "AcceptedAnswers": [
+            "println",
+            "print"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "Java",
+        "Difficulty": "Medium",
+        "Title": "Create Array",
+        "QuestionText": "Complete the array initialization.",
+        "Explanation": "Java arrays require specifying a type before the brackets.",
+        "Tags": [
+            "Java",
+            "Arrays"
+        ],
+        "Metadata": {
+            "Topic": "Arrays"
+        },
+        "CodeSnippet": "int[] nums = new _______ {1, 2, 3};",
+        "AcceptedAnswers": [
+            "int[]",
+            "int []"
+        ]
+    },
+    {
+        "Type": "CodeCompletion",
+        "Language": "Java",
+        "Difficulty": "Hard",
+        "Title": "Override toString",
+        "QuestionText": "Complete the code to override the toString method.",
+        "Explanation": "@Override ensures proper method overriding.",
+        "Tags": [
+            "Java",
+            "OOP"
+        ],
+        "Metadata": {
+            "Topic": "Classes"
+        },
+        "CodeSnippet": "class Person {\n  String name;\n  @Override\n  public String toString() {\n    return _______;\n  }\n}",
+        "AcceptedAnswers": [
+            "name",
+            "\"\" + name",
+            "this.name"
+        ]
     }
 ]

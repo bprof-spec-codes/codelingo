@@ -5,8 +5,8 @@ import { AuthService } from '../services/auth/auth.service';
 export const guestGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  
-  if (authService.getAccessToken()) {
+
+  if (authService.hasValidToken()) {
     return router.createUrlTree(['/']);
   }
 

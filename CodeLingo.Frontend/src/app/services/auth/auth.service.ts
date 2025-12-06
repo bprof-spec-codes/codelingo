@@ -21,7 +21,7 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  private isAdminSubject = new BehaviorSubject<boolean>(this.hasAdminRole());
+  private isAdminSubject = new BehaviorSubject<boolean>(this.hasValidToken() && this.hasAdminRole());
   isAdmin$ = this.isAdminSubject.asObservable();
 
   private refreshTimer?: ReturnType<typeof setTimeout>;
@@ -88,6 +88,16 @@ export class AuthService {
     const { accessToken, refreshToken, expiresIn, isAdmin } = response;
     const expiryTime = Date.now() + expiresIn * 1000;
 
+    // Clear both storages to prevent conflicts
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenExpiry');
+    localStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('tokenExpiry');
+    sessionStorage.removeItem('isAdmin');
+
     this.storage.setItem('accessToken', accessToken);
     if (refreshToken) this.storage.setItem('refreshToken', refreshToken);
     this.storage.setItem('tokenExpiry', expiryTime.toString());
@@ -128,10 +138,14 @@ export class AuthService {
   }
 
   private clearAuthData(): void {
-    this.storage.removeItem('accessToken');
-    this.storage.removeItem('refreshToken');
-    this.storage.removeItem('tokenExpiry');
-    this.storage.removeItem('isAdmin');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenExpiry');
+    localStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('tokenExpiry');
+    sessionStorage.removeItem('isAdmin');
     clearTimeout(this.refreshTimer);
   }
 
@@ -146,17 +160,15 @@ export class AuthService {
     return this.storage.getItem('refreshToken');
   }
 
-  private hasValidToken(): boolean {
+  public hasValidToken(): boolean {
     const token = this.getAccessToken();
     const expiry = Number(this.storage.getItem('tokenExpiry'));
     return !!token && expiry > Date.now();
   }
 
   public hasAdminRole(): boolean {
-    return (
-      localStorage.getItem('isAdmin') === 'true' ||
-      sessionStorage.getItem('isAdmin') === 'true'
-    );
+    if (!this.hasValidToken()) return false;
+    return this.storage.getItem('isAdmin') === 'true';
   }
 
   private handleError(error: HttpErrorResponse) {

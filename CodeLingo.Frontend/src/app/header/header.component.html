@@ -45,10 +45,10 @@
       <!-- Right side buttons -->
       <div class="d-flex align-items-center">
         <ng-container *ngIf="!(isLoggedIn$ | async)">
-          <button class="btn btn-outline-dark me-2" routerLink="login" (click)="closeMobileMenu()">
+          <button class="btn btn-outline-dark me-2" routerLink="/login" (click)="closeMobileMenu()">
             Login
           </button>
-          <button class="btn btn-secondary text-white" routerLink="register" (click)="closeMobileMenu()">
+          <button class="btn btn-secondary text-white" routerLink="/register" (click)="closeMobileMenu()">
             Registration
           </button>
         </ng-container>
