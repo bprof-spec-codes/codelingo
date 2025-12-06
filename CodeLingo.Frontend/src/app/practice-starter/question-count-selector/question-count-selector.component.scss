@@ -100,16 +100,30 @@
   }
 
   .selection-display {
-    background-color: rgba($success-400, 0.1);
-    border: 1px solid $success-400;
     border-radius: 8px;
     padding: $space-3 $space-4;
-    color: $success-400;
     display: flex;
     align-items: center;
     gap: $space-2;
     margin-bottom: $space-3;
     font-size: 0.95rem;
+    transition: all 0.3s ease;
+
+    &.valid {
+      background-color: rgba($success-400, 0.1);
+      border: 1px solid $success-400;
+      color: $success-400;
+    }
+
+    &.error {
+      background-color: rgba($danger-400, 0.1);
+      border: 1px solid $danger-400;
+      color: $danger-400;
+
+      .error-text {
+        color: $danger-400;
+      }
+    }
 
     i {
       font-size: 1.1rem;

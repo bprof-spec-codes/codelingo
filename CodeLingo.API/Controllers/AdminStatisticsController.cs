@@ -30,7 +30,7 @@ namespace CodeLingo.API.Controllers
         [HttpGet("dashboard")]
         public async Task<ActionResult<DashboardStatisticsDto>> GetDashboardStatistics()
         {
-            var totalQuestions = await _questionRepository.CountQuestionsAsync(null, null, null);
+            var totalQuestions = await _questionRepository.CountQuestionsAsync(null, null, null, null, null);
             var totalUsers = await _userManager.Users.CountAsync();
             var sessionsThisWeek = await _sessionRepository.CountSessionsAsync(DateTime.UtcNow.AddDays(-7));
 
