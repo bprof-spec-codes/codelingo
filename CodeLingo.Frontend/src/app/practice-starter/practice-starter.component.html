@@ -29,7 +29,8 @@
 
                 <!-- question count selector -->
                 <app-question-count-selector [selectedCount]="config.questionCount"
-                    (countChange)="onQuestionCountChange($event)">
+                    (countChange)="onQuestionCountChange($event)"
+                    (validChange)="onQuestionCountValidChange($event)">
                 </app-question-count-selector>
 
                 <!-- API Error -->
@@ -84,7 +85,9 @@
                         </div>
                         <div class="summary-item">
                             <span class="summary-label">Questions:</span>
-                            <span class="summary-value">{{ config.questionCount }}</span>
+                            <span class="summary-value" [ngClass]="{'invalid-value': !isQuestionCountValid}">
+                                {{ isQuestionCountValid ? config.questionCount : 'Enter a valid number' }}
+                            </span>
                         </div>
                     </div>
                 </div>
