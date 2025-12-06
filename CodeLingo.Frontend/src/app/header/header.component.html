@@ -22,8 +22,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/practice/start" [class.disabled]="!(isLoggedIn$ | async)"
-            [attr.aria-disabled]="!(isLoggedIn$ | async)" (click)="closeMobileMenu()">
+          <a class="nav-link" routerLink="/practice/start" [class.disabled-link]="!(isLoggedIn$ | async)"
+            [appTooltip]="(isLoggedIn$ | async) ? '' : 'Please log in to start practicing!'"
+            (click)="handlePracticeClick($event); closeMobileMenu()">
             <i class="bi bi-arrow-right-circle-fill"></i>
             Practice
           </a>
@@ -45,10 +46,10 @@
       <!-- Right side buttons -->
       <div class="d-flex align-items-center">
         <ng-container *ngIf="!(isLoggedIn$ | async)">
-          <button class="btn btn-outline-dark me-2" routerLink="login" (click)="closeMobileMenu()">
+          <button class="btn btn-outline-dark me-2" routerLink="/login" (click)="closeMobileMenu()">
             Login
           </button>
-          <button class="btn btn-secondary text-white" routerLink="register" (click)="closeMobileMenu()">
+          <button class="btn btn-secondary text-white" routerLink="/register" (click)="closeMobileMenu()">
             Registration
           </button>
         </ng-container>

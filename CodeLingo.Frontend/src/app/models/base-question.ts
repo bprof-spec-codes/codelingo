@@ -1,9 +1,9 @@
 export enum QuestionType {
-    MULTIPLE_CHOICE = 'MC',
-    CODE_COMPLETION = 'CODE',
-    TRUE_FALSE = 'TF',
-    FILL_IN_BLANK = 'FIB',
-    CODE_REVIEW = 'REVIEW'
+    MULTIPLE_CHOICE = 'MultipleChoice',
+    CODE_COMPLETION = 'CodeCompletion',
+    TRUE_FALSE = 'TrueFalse',
+    FILL_IN_BLANK = 'FillInBlank',
+    CODE_REVIEW = 'CodeReview'
 }
 
 export enum DifficultyLevel {

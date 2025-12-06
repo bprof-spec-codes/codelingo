@@ -80,17 +80,24 @@ export class PracticeStarterComponent implements OnInit {
       },
       error: (err) => {
         this.state.isLoading = false;
-        this.state.error = 'Failed to start practice session. Please try again.';
+        // Display the actual error message from the backend
+        if (err.error && err.error.error) {
+          this.state.error = err.error.error;
+        } else if (err.message) {
+          this.state.error = err.message;
+        } else {
+          this.state.error = 'Failed to start practice session. Please try again.';
+        }
         console.error('Error starting practice session:', err);
       },
     });
   }
+
   get isStartButtonDisabled(): boolean {
     return (
       this.state.isLoading || 
       this.config.languageIds.length === 0 || 
-      !this.config.difficulty ||
-      !this.isQuestionCountValid
+      !this.config.difficulty
     );
   }
 }

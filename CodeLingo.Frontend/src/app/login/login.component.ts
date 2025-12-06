@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginRequest } from '../models/auth';
 import { AuthService } from '../services/auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,17 +10,19 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form: FormGroup;
   isLoading = false;
   serverError: string | null = null;
+  returnUrl: string = '/landing-page'; // default fallback
 
   showPassword = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
       username: ['', [Validators.required]],
@@ -34,6 +36,11 @@ export class LoginComponent {
       ],
       rememberMe: [false],
     });
+  }
+
+  ngOnInit() {
+    this.returnUrl =
+      this.route.snapshot.queryParams['returnUrl'] || '/landing-page';
   }
 
   submit() {
@@ -57,7 +64,7 @@ export class LoginComponent {
         console.log('Login successful:', res);
         this.isLoading = false;
 
-        this.router.navigate(['/landing-page']);
+        this.router.navigateByUrl(this.returnUrl);
       },
       error: (err) => {
         console.error('Login error:', err);
