@@ -154,11 +154,6 @@ export class MultipleChoiceQuestionComponent implements OnChanges {
     }
   }
 
-  resetSelection() {
-    this.selectedAnswerIds = [];
-    this.isSubmitted = false;
-  }
-
   trackByOptionId(index: number, option: AnswerOption) {
     return option.id;
   }
