@@ -49,6 +49,15 @@ namespace CodeLingo.API.Repositories
             return await query.CountAsync();
         }
 
+        public async Task<List<Session>> GetSessionsByUserId(string userId)
+        {
+            return await this.DbContext.Sessions
+                .Include(s => s.SessionQuestions)
+                .ThenInclude(sq => sq.Question)
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+        }
+
         public void SaveChanges()
         {
             this.DbContext.SaveChanges();
