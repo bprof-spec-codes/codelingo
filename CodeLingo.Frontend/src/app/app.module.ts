@@ -36,6 +36,7 @@ import { QuestionContainerComponent } from './question-container/question-contai
 import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
+import { TooltipDirective } from './shared/directives/tooltip.directive';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { jwtInterceptor } from './jwt.interceptor';
     CodeCompletionQuestionComponent,
     QuestionContainerComponent,
     QuestionProgressComponent,
+    TooltipDirective,
   ],
   imports: [
     BrowserModule,
