@@ -46,6 +46,7 @@ export class QuestionSessionService {
   }
 
   closeSession(sessionId: string, forceClose: boolean): Observable<CloseSessionResponseDto> {
-    return this.http.post<CloseSessionResponseDto>(`${this.baseUrl}/${sessionId}/close`, forceClose);
+    const request = { forceClose };
+    return this.http.post<CloseSessionResponseDto>(`${this.baseUrl}/${sessionId}/close`, request);
   }
 }
