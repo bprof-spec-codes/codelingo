@@ -9,19 +9,10 @@
 
     <!-- SESSION COMPLETED -->
     <ng-container *ngIf="isCompleted; else showQuestion">
-      <div>
-        <h2>🎉 Session Completed!</h2>
-        <p>You answered all {{ totalQuestions }} questions.</p>
-
-        <button
-          type="button"
-          class="btn btn-outline-secondary btn-lg"
-          routerLink="/landing-page"
-        >
-          <i class="bi bi-arrow-left"></i>
-          Back to Home
-        </button>
-      </div>
+      <app-result-summary 
+        *ngIf="sessionSummary" 
+        [sessionSummary]="sessionSummary">
+      </app-result-summary>
     </ng-container>
 
     <!-- SHOW QUESTION -->
