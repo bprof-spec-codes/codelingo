@@ -38,3 +38,14 @@ button {
       background-color: darken(rgb(154, 47, 255), 12%);
     }
   }
+.cl-burger-img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  transition: transform 0.2s ease;
+  transform-origin: center center;
+}
+
+.cl-burger-img.rotated {
+  transform: rotate(90deg);
+}

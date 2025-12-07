@@ -6,9 +6,9 @@
     </a>
 
     <!-- Hamburger menu for mobile -->
-    <button class="navbar-toggler" type="button" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen"
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler custom-toggler" type="button" (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle navigation">
+      <img src="assets/brand/menu.svg" [class.rotated]="isMobileMenuOpen" alt="Menü" class="cl-burger-img">
     </button>
 
     <!-- Menu items and buttons -->
