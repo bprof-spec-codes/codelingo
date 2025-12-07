@@ -1,11 +1,20 @@
 <div class="code-question-container">
   <div class="question-header">
-    <h3>{{ question.title }}</h3>
-    <span class="badge" [ngClass]="{
-      'bg-success': question.difficulty === 'Easy',
-      'bg-warning': question.difficulty === 'Medium',
-      'bg-danger': question.difficulty === 'Hard'
-    }">{{ question.difficulty }}</span>
+    <h2 class="question-title">{{ question.title }}</h2>
+    <div class="question-meta">
+      <span class="meta-item">
+        <i class="bi bi-code-square"></i>
+        {{ question.language | uppercase }}
+      </span>
+      <span class="meta-item difficulty" [ngClass]="'difficulty-' + question.difficulty">
+        <i class="bi bi-bar-chart-fill"></i>
+        {{ question.difficulty | titlecase }}
+      </span>
+      <span class="meta-item">
+        <i class="bi bi-clock"></i>
+        {{ question.metadata.estimatedTimeSeconds }}s
+      </span>
+    </div>
   </div>
 
   <div class="question-body">
