@@ -31,21 +31,171 @@ button {
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: darken(rgb(154, 47, 255), 8%);
+        background-color: darken(rgb(154, 47, 255), 8%);
     }
 
     &:active {
-      background-color: darken(rgb(154, 47, 255), 12%);
+        background-color: darken(rgb(154, 47, 255), 12%);
     }
-  }
+}
+
 .cl-burger-img {
-  width: 24px;
-  height: 24px;
-  display: block;
-  transition: transform 0.2s ease;
-  transform-origin: center center;
+    width: 24px;
+    height: 24px;
+    display: block;
+    transition: transform 0.2s ease;
+    transform-origin: center center;
 }
 
 .cl-burger-img.rotated {
-  transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.custom-toggler {
+    padding: 6px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.custom-toggler:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 991.98px) {
+    .navbar.bg-primary {
+        position: relative;
+        z-index: 10;
+    }
+
+    .cl-mobile-menu.collapse {
+        display: block !important;
+    }
+
+    .cl-mobile-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        background-color: #181818;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+
+        /* closed*/
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition:
+            max-height 0.3s ease,
+            opacity 0.3s ease,
+            transform 0.3s ease;
+    }
+
+    /* open */
+    .cl-mobile-menu.show {
+        padding: 0.5rem 0.75rem 0.75rem;
+        margin-top: 0.25rem;
+        border-top: 2px solid #DAE243;
+        max-height: 600px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .cl-mobile-menu .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        margin: 0;
+        padding: 0;
+        align-items: stretch;
+    }
+
+    .cl-mobile-menu .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        width: 100%;
+        padding: 0.5rem 0.6rem;
+        font-size: 0.95rem;
+        color: #DAE243;
+        border-radius: 6px;
+    }
+
+    .cl-mobile-menu .nav-link i {
+        font-size: 1.15rem;
+        color: #DAE243;
+        opacity: 0.9;
+    }
+
+    .cl-mobile-menu .nav-link:hover {
+        background-color: rgba(218, 226, 67, 0.15);
+    }
+
+    .cl-mobile-menu .d-flex.align-items-center {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-top: 0.6rem;
+        padding-top: 0.4rem;
+        border-top: 1px solid rgba(218, 226, 67, 0.25);
+        align-items: stretch;
+    }
+
+    .cl-mobile-menu .profile-link {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.45rem 0.6rem;
+        border-radius: 6px;
+        color: #DAE243;
+        text-decoration: none;
+    }
+
+    .cl-mobile-menu .profile-link:hover {
+        background-color: rgba(218, 226, 67, 0.15);
+    }
+
+    .cl-mobile-menu .profile-picture {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(218, 226, 67, 0.6);
+    }
+
+    .cl-mobile-menu .profile-link i {
+        font-size: 1.4rem;
+        color: #DAE243;
+    }
+
+    .cl-mobile-menu .btn {
+        width: 100%;
+        border-radius: 6px;
+        padding: 0.4rem;
+        font-size: 0.9rem;
+    }
+
+    .cl-mobile-menu .btn.btn-outline-dark {
+        background: transparent;
+        color: #DAE243;
+        border: 1px solid rgba(218, 226, 67, 0.6);
+    }
+
+    .cl-mobile-menu .btn.btn-outline-dark:hover {
+        background-color: rgba(218, 226, 67, 0.15);
+    }
+
+    .cl-mobile-menu .btn.btn-secondary {
+        background-color: #DAE243;
+        border-color: #DAE243;
+        color: #181818;
+    }
+
+    .cl-mobile-menu .btn.btn-secondary:hover {
+        background-color: #c9d130;
+    }
+
+.reg-link {
+  color: #181818 !important;
+}
 }
