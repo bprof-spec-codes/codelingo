@@ -6,7 +6,6 @@
         {
             public int RowNumber { get; set; }
             public string Message { get; set; } = string.Empty;
-            public string? Field { get; set; }
         }
 
         public class QuestionImportReportDto
@@ -16,7 +15,6 @@
             public int ImportedCount { get; set; }
             public int FailedCount { get; set; }
             public List<QuestionImportErrorDto> Errors { get; set; } = new();
-            public string? Summary { get; set; }
         }
     }
 }
