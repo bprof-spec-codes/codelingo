@@ -53,7 +53,7 @@ button {
 
 .custom-toggler {
     padding: 6px 10px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: none;
 }
 
 .custom-toggler:focus {
@@ -195,7 +195,7 @@ button {
         background-color: #c9d130;
     }
 
-.reg-link {
-  color: #181818 !important;
-}
+    .reg-link {
+        color: #181818 !important;
+    }
 }
