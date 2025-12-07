@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { SessionSummary } from '../../models/session-summary';
 
 @Component({
   selector: 'app-result-summary',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './result-summary.component.scss'
 })
 export class ResultSummaryComponent {
-
+  @Input() sessionSummary!: SessionSummary
 }

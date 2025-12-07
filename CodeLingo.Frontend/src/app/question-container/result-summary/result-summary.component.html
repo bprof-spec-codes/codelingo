@@ -1,0 +1,117 @@
+<div class="result-summary-container">
+  <div class="container py-5">
+    <h2 class="summary-title text-center">Practice Result</h2>
+
+    <div *ngIf="sessionSummary.accuracyPercentage >= 80" class="success-animation text-center mb-4">
+      <div class="trophy-icon">
+        <i class="bi bi-trophy-fill"></i>
+      </div>
+      <h3 class="success-message">Excellent Work!</h3>
+    </div>
+    
+    <div class="summary-grid">
+      <div class="row g-4 mb-4">
+        <div class="col-12">
+          <div class="card summary-card h-100 border-primary">
+            <div class="card-body text-center py-4">
+              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
+                <i class="bi bi-star-fill me-1"></i>Total Score<i class="bi bi-star-fill ms-1"></i>
+              </span>
+              <span class="card-value display-3 fw-bold text-primary">{{ sessionSummary.totalScore }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-md-6">
+          <div class="card summary-card h-100">
+            <div class="card-body">
+              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
+                <i class="bi bi-code-square me-1"></i>Language
+              </span>
+              <span class="card-value display-6 fw-bold">{{ sessionSummary.language }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card summary-card h-100">
+            <div class="card-body">
+              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
+                <i class="bi bi-speedometer2 me-1"></i>Difficulty
+              </span>
+              <span class="card-value display-6 fw-bold">{{ sessionSummary.difficulty }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-12">
+          <div class="card summary-card h-100">
+            <div class="card-body text-center">
+              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
+                <i class="bi bi-question-circle me-1"></i>Total Questions
+              </span>
+              <span class="card-value display-5 fw-bold">{{ sessionSummary.totalQuestions }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="card summary-card h-100">
+            <div class="card-body">
+              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
+                <i class="bi bi-pencil-square me-1"></i>Answered
+              </span>
+              <span class="card-value display-6 fw-bold">{{ sessionSummary.answeredQuestions }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card summary-card h-100">
+            <div class="card-body">
+              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
+                <i class="bi bi-check-circle me-1"></i>Correct
+              </span>
+              <span class="card-value display-6 fw-bold text-success">{{ sessionSummary.correctAnswers }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card summary-card h-100 text-white">
+            <div class="card-body">
+              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
+                <i class="bi bi-bullseye me-1"></i>Accuracy
+              </span>
+              <span class="card-value display-6 fw-bold">{{ sessionSummary.accuracyPercentage | number:'1.1-1' }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <button
+            type="button"
+            class="btn btn-primary btn-lg w-100 px-4"
+            routerLink="/practice/start">
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Practice Again
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-lg w-100 px-4"
+            routerLink="/landing-page">
+            <i class="bi bi-house-door me-2"></i>
+            Back to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

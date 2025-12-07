@@ -1,0 +1,133 @@
+.result-summary-container {
+  background: #1e1e1e;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.summary-title {
+  color: #f5f5f5;
+  font-weight: 700;
+  margin-bottom: 3rem;
+}
+
+.summary-grid {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.summary-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background-color: #3d3d3d;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-body {
+  padding: 1.5rem;
+
+  @media (max-width: 767.98px) {
+    text-align: center;
+  }
+}
+
+.card-label {
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  color: #e4f098;
+}
+
+.card-value {
+  color: #f5f5f5;
+}
+
+.text-success {
+  color: #13D460 !important;
+}
+
+.border-primary {
+  border: 2px solid #dae243 !important;
+}
+
+.text-primary {
+  color: #dae243 !important;
+}
+
+.btn-outline-secondary {
+  color: #f5f5f5;
+  border-color: #dae243;
+  
+  &:hover {
+    background-color: #3d3d3d;
+    border-color: #dae243;
+    color: #f5f5f5;
+  }
+}
+
+// Success Animation
+.success-animation {
+  animation: fadeInScale 0.8s ease-out;
+  
+  .trophy-icon {
+    font-size: 5rem;
+    color: #dae243;
+    animation: bounce 1s ease-in-out infinite;
+    text-shadow: 0 4px 8px rgba(218, 226, 67, 0.3);
+    
+    i {
+      display: inline-block;
+    }
+  }
+  
+  .success-message {
+    color: #13D460;
+    font-weight: 700;
+    margin-top: 1rem;
+    animation: slideInFromTop 0.6s ease-out 0.3s both;
+  }
+
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slideInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(19, 212, 96, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(19, 212, 96, 0.6);
+  }
+}
