@@ -101,8 +101,6 @@ namespace CodeLingo.API.Logics
 
             if (next == null)
             {
-                session.Status = SessionStatus.Completed;
-                session.UpdatedAt = DateTime.UtcNow;
                 repository.SaveChanges();
 
                 return new NextQuestionResponseDto
