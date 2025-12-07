@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { ProfileService } from '../services/profile.service';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, delay, retry, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navigation-header',
@@ -27,11 +27,16 @@ export class HeaderComponent {
 
     // Fetch profile picture when user is logged in
     this.profilePictureUrl$ = this.isLoggedIn$.pipe(
+      delay(0),
       switchMap(isLoggedIn => {
         if (isLoggedIn) {
-          return this.profileService.getProfile().pipe(
-            map(user => user.profilePictureUrl || null),
-            catchError(() => of(null))
+          return this.profileService.profileUpdated$.pipe(
+            startWith(null),
+            switchMap(() => this.profileService.getProfile().pipe(
+              map(user => user.profilePictureUrl || null),
+              retry(1),
+              catchError(() => of(null))
+            ))
           );
         }
         return of(null);
