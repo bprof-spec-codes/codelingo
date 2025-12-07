@@ -31,12 +31,18 @@
                             <h1 class="hero-title" *ngIf="!(isLoggedIn$ | async)">Master coding with CodeLingo</h1>
                             <h1 class="hero-title" *ngIf="isLoggedIn$ | async">Welcome back, {{ username }}!</h1>
 
-                            <p class="hero-subtitle" *ngIf="!(isLoggedIn$ | async)"> Learn, practice, and improve your coding
+                            <p class="hero-subtitle" *ngIf="!(isLoggedIn$ | async)"> Learn, practice, and improve your
+                                coding
                                 skills
                                 with interactive challenges and instant feedback. </p>
                             <p class="hero-subtitle" *ngIf="isLoggedIn$ | async">
                                 Continue your coding journey.<br>
-                                Current rank: {{ userRank }} </p>
+                                <span *ngIf="userStats">
+                                    Questions Answered: {{ userStats.totalQuestionsAnswered }} |
+                                    Weekly Accuracy: {{ userStats.accuracy }}% |
+                                    Streak: {{ userStats.currentStreak }} days
+                                </span>
+                            </p>
 
                             <!-- action buttons -->
                             <div *ngIf="!(isLoggedIn$ | async)" class="cta-buttons">
@@ -49,7 +55,8 @@
                                     </button>
                                 </div>
                                 <p class="login-link">
-                                    Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log In</a>
+                                    Already have an account? <a href="#" (click)="login(); $event.preventDefault();">Log
+                                        In</a>
                                 </p>
                             </div>
 
@@ -70,12 +77,12 @@
                                     <span class="dot dot-green"></span>
                                 </div>
                             </div>
-                            <pre class="code-content"><code>function fibonacci(n) {{'{}'}}
+                            <pre class="code-content"><code>function fibonacci(n) {{'{'}}
   if (n <= 1) return n;
   
   let prev = 0, curr = 1;
   
-  for (let i = 2; i <= n; i++) {{'{}'}}
+  for (let i = 2; i <= n; i++) {{'{'}}
     let next = prev + curr;
     prev = curr;
     curr = next;

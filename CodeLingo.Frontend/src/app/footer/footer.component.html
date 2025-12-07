@@ -12,7 +12,9 @@
                 <ul class="list-unstyled d-flex flex-column gap-2">
                     <li><a routerLink="landing-page" class="text-dark text-decoration-none">
                             Home</a></li>
-                    <li><a routerLink="practice/start" class="text-dark text-decoration-none ">
+                    <li><a routerLink="practice/start" class="text-dark text-decoration-none "
+                            [appTooltip]="(isLoggedIn$ | async) ? '' : 'Please log in to start practicing!'"
+                            [class.disabled-link]="!(isLoggedIn$ | async)" (click)="handlePracticeClick($event)">
                             Practice</a></li>
                     <li><a routerLink="leaderboard" class="text-dark text-decoration-none">
                             Leaderboard</a></li>
@@ -25,7 +27,7 @@
                     </a> Follow us
                 </h5>
             </div>
-                <p class="text-dark">© 2025 Codelingo Team</p>
+            <p class="text-dark">© 2025 Codelingo Team</p>
         </div>
 
     </div>

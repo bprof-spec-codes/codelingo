@@ -30,7 +30,7 @@ export class QuestionSessionService {
     this.config = config;
     const request: StartSessionRequestDto = {
       userId: 'test-user', // TODO: Get from auth service
-      language: config.language,
+      languageIds: config.languageIds,
       difficulty: config.difficulty,
       requestedQuestionCount: config.questionCount,
     };

@@ -1,6 +1,6 @@
 export interface StartSessionRequestDto {
     userId: string;
-    language: string;
+    languageIds: string[];
     difficulty: string;
     requestedQuestionCount: number;
 }

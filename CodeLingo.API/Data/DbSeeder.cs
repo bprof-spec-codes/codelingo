@@ -15,7 +15,9 @@ namespace CodeLingo.API.Data
                 var csharp = new ProgrammingLanguage { Name = "C#", ShortCode = "csharp", Version = "12.0" };
                 var js = new ProgrammingLanguage { Name = "JavaScript", ShortCode = "js", Version = "ES6" };
                 var py = new ProgrammingLanguage { Name = "Python", ShortCode = "py", Version = "3.12" };
-                context.ProgrammingLanguages.AddRange(csharp, js, py);
+                var java = new ProgrammingLanguage { Name = "Java", ShortCode = "java", Version = "21" };
+                var ts = new ProgrammingLanguage { Name = "TypeScript", ShortCode = "ts", Version = "5.3" };
+                context.ProgrammingLanguages.AddRange(csharp, js, py, java, ts);
                 await context.SaveChangesAsync();
             }
 
@@ -88,6 +90,17 @@ namespace CodeLingo.API.Data
                         ShuffleOptions = item.ShuffleOptions
                     };
                     context.MultipleChoiceQuestions.Add(mcq);
+                }
+
+                if (item.Type == QuestionType.CodeCompletion)
+                {
+                    var ccq = new CodeCompletionQuestion
+                    {
+                        Question = question,
+                        CodeSnippet = item.CodeSnippet,
+                        AcceptedAnswers = JsonSerializer.Serialize(item.AcceptedAnswers)
+                    };
+                    context.CodeCompletionQuestions.Add(ccq);
                 }
             }
 

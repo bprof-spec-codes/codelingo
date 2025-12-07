@@ -6,13 +6,13 @@
     </a>
 
     <!-- Hamburger menu for mobile -->
-    <button class="navbar-toggler" type="button" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen"
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler custom-toggler" type="button" (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle navigation">
+      <img src="assets/brand/menu.svg" [class.rotated]="isMobileMenuOpen" alt="Menü" class="cl-burger-img">
     </button>
 
     <!-- Menu items and buttons -->
-    <div class="collapse navbar-collapse position-relative" [class.show]="isMobileMenuOpen" id="navbarContent">
+    <div class="collapse navbar-collapse position-relative cl-mobile-menu" [class.show]="isMobileMenuOpen" id="navbarContent">
       <!-- Centered menu links -->
       <ul class="navbar-nav mx-auto d-flex gap-4">
         <li class="nav-item">
@@ -22,8 +22,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/practice/start" [class.disabled]="!(isLoggedIn$ | async)"
-            [attr.aria-disabled]="!(isLoggedIn$ | async)" (click)="closeMobileMenu()">
+          <a class="nav-link" routerLink="/practice/start" [class.disabled-link]="!(isLoggedIn$ | async)"
+            [appTooltip]="(isLoggedIn$ | async) ? '' : 'Please log in to start practicing!'"
+            (click)="handlePracticeClick($event); closeMobileMenu()">
             <i class="bi bi-arrow-right-circle-fill"></i>
             Practice
           </a>
@@ -43,21 +44,21 @@
       </ul>
 
       <!-- Right side buttons -->
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center gap-2">
         <ng-container *ngIf="!(isLoggedIn$ | async)">
-          <button class="btn btn-outline-dark me-2" routerLink="login" (click)="closeMobileMenu()">
+          <button class="btn btn-outline-dark" routerLink="/login" (click)="closeMobileMenu()">
             Login
           </button>
-          <button class="btn btn-secondary text-white" routerLink="register" (click)="closeMobileMenu()">
+          <button class="btn btn-secondary text-white reg-link" routerLink="/register" (click)="closeMobileMenu()">
             Registration
           </button>
         </ng-container>
 
         <ng-container *ngIf="isLoggedIn$ | async">
-          <a routerLink="/profile" class="text-decoration-none text-dark me-3 profile-link" title="Profile"
+          <a routerLink="/profile" class="text-decoration-none text-dark profile-link justify-content-center" title="Profile"
             (click)="closeMobileMenu()">
             <ng-container *ngIf="profilePictureUrl$ | async as profilePicture; else defaultIcon">
-              <img [src]="profilePicture" alt="Profile" class="profile-picture" />
+              <img [src]="profilePicture" alt="Profile" class="profile-picture"/> 
             </ng-container>
             <ng-template #defaultIcon>
               <i class="bi bi-person-circle fs-3"></i>
