@@ -35,12 +35,6 @@
         </app-code-completion-question>
       </ng-container>
 
-      <!-- FEEDBACK BOX -->
-      <div *ngIf="questionSubmitted" class="feedback-box" [ngClass]="{ correct: isCorrect, incorrect: !isCorrect }">
-        <i class="bi" [ngClass]="isCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
-        <span>{{ feedback }}</span>
-      </div>
-
       <div *ngIf="loadingQuestion" class="loading-overlay">
         <span>Loading next question...</span>
       </div>
