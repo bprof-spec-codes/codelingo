@@ -1,7 +1,5 @@
 <div class="result-summary-container">
-  <div class="container py-5">
-    <h2 class="summary-title text-center">Practice Result</h2>
-
+  <div class="container py-1">
     <div *ngIf="sessionSummary.accuracyPercentage >= 80" class="success-animation text-center mb-4">
       <div class="trophy-icon">
         <i class="bi bi-trophy-fill"></i>
@@ -10,89 +8,71 @@
     </div>
     
     <div class="summary-grid">
-      <div class="row g-4 mb-4">
-        <div class="col-12">
-          <div class="card summary-card h-100 border-primary">
-            <div class="card-body text-center py-4">
-              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
-                <i class="bi bi-star-fill me-1"></i>Total Score<i class="bi bi-star-fill ms-1"></i>
-              </span>
-              <span class="card-value display-3 fw-bold text-primary">{{ sessionSummary.totalScore }}</span>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+          <div class="summary-card-main">
+            <!-- Top Row: Language and Difficulty -->
+            <div class="d-flex justify-content-between align-items-start mb-5">
+              <div class="info-badge">
+                <i class="bi bi-code-square me-2"></i>
+                <span class="text-uppercase fw-semibold me-2">{{ sessionSummary.language }}</span>
+                <i class="bi bi-speedometer2 me-2"></i>
+                <span class="text-uppercase fw-semibold">{{ sessionSummary.difficulty }}</span>
+              </div>
+            </div>
+
+            <!-- Center: Total Score -->
+            <div class="text-center my-5 py-4">
+              <div class="score-label text-uppercase fw-semibold mb-3">
+                <i class="bi bi-star-fill me-2"></i>Total Score<i class="bi bi-star-fill ms-2"></i>
+              </div>
+              <div class="score-value" [countUp]="sessionSummary.totalScore" [options]="{ duration: 3 }" [reanimateOnClick]="false">
+                0
+              </div>
+            </div>
+
+            <!-- Bottom: Progress Bar -->
+            <div class="mt-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="progress-label">
+                  <i class="bi bi-list-check me-2"></i>
+                  Practice result 
+                </span>
+                <span class="accuracy-badge" [class.high-accuracy]="sessionSummary.accuracyPercentage >= 80">
+                  <i class="bi bi-bullseye me-1"></i>
+                  {{ sessionSummary.accuracyPercentage | number:'1.1-1' }}%
+                </span>
+              </div>
+              
+              <div class="custom-progress mb-3">
+                <div class="progress-track">
+                  <div 
+                    class="progress-answered" 
+                    [style.width.%]="answeredPercentage">
+                    <div 
+                      class="progress-correct" 
+                      [style.width.%]="correctPercentage">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between progress-stats">
+                <span class="text-muted">
+                  <i class="bi bi-pencil-square me-1"></i>
+                  Answered: <strong>{{ sessionSummary.answeredQuestions }}</strong>/{{ sessionSummary.totalQuestions }}
+                </span>
+                <span class="text-success">
+                  <i class="bi bi-check-circle me-1"></i>
+                  Correct: <strong>{{ sessionSummary.correctAnswers }}</strong>
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row g-4 mb-4">
-        <div class="col-md-6">
-          <div class="card summary-card h-100">
-            <div class="card-body">
-              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
-                <i class="bi bi-code-square me-1"></i>Language
-              </span>
-              <span class="card-value display-6 fw-bold">{{ sessionSummary.language }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card summary-card h-100">
-            <div class="card-body">
-              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
-                <i class="bi bi-speedometer2 me-1"></i>Difficulty
-              </span>
-              <span class="card-value display-6 fw-bold">{{ sessionSummary.difficulty }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4 mb-4">
-        <div class="col-12">
-          <div class="card summary-card h-100">
-            <div class="card-body text-center">
-              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
-                <i class="bi bi-question-circle me-1"></i>Total Questions
-              </span>
-              <span class="card-value display-5 fw-bold">{{ sessionSummary.totalQuestions }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4 mb-5">
-        <div class="col-md-4">
-          <div class="card summary-card h-100">
-            <div class="card-body">
-              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
-                <i class="bi bi-pencil-square me-1"></i>Answered
-              </span>
-              <span class="card-value display-6 fw-bold">{{ sessionSummary.answeredQuestions }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card summary-card h-100">
-            <div class="card-body">
-              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
-                <i class="bi bi-check-circle me-1"></i>Correct
-              </span>
-              <span class="card-value display-6 fw-bold text-success">{{ sessionSummary.correctAnswers }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card summary-card h-100 text-white">
-            <div class="card-body">
-              <span class="card-label d-block text-uppercase fw-semibold small mb-2">
-                <i class="bi bi-bullseye me-1"></i>Accuracy
-              </span>
-              <span class="card-value display-6 fw-bold">{{ sessionSummary.accuracyPercentage | number:'1.1-1' }}%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-3">
+      <div class="row g-3 mt-3">
         <div class="col-md-6">
           <button
             type="button"

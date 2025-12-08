@@ -1,70 +1,178 @@
+@import '../../../variables';
+
 .result-summary-container {
   background: #1e1e1e;
-  min-height: 100vh;
-  padding: 2rem 0;
-}
-
-.summary-title {
-  color: #f5f5f5;
-  font-weight: 700;
-  margin-bottom: 3rem;
 }
 
 .summary-grid {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-.summary-card {
+.summary-card-main {
+  background-color: $dark-925;
+  border: 3px solid $secondary-400;
+  border-radius: 1.5rem;
+  padding: $space-4;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: none;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  background-color: #3d3d3d;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  @media (max-width: 767.98px) {
+    padding: $space-3;
   }
 }
 
-.card-body {
-  padding: 1.5rem;
+.info-badge {
+  border-radius: 0.75rem;
+  color: $primary-400;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  
+  i {
+    color: $primary-400;
+    font-size: 1rem;
+  }
 
   @media (max-width: 767.98px) {
+    font-size: 0.65rem;
+  }
+}
+
+.score-label {
+  color: $primary-400;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  
+  i {
+    color: $primary-400;
+  }
+}
+
+.score-value {
+  color: $primary-400;
+  font-size: 8rem;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  text-shadow: 0 4px 12px rgba(218, 226, 67, 0.4);
+  
+  @media (max-width: 767.98px) {
+    font-size: 5rem;
+  }
+}
+
+.progress-label {
+  color: $primary-400;
+  font-size: 0.875rem;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+
+  i {
+    color: $primary-400;
+  }
+}
+
+.custom-progress {
+  position: relative;
+}
+
+.progress-track {
+  height: 2.5rem;
+  background-color: $dark-950;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-answered {
+  height: 100%;
+  background-color: $dark-900;
+  transition: width 1s ease-out;
+  position: relative;
+  width: 0;
+}
+
+.progress-correct {
+  height: 100%;
+  background: linear-gradient(90deg, $secondary-400 0%, $secondary-500 100%);
+  transition: width 1.2s ease-out;
+  box-shadow: 0 0 15px $secondary-600;
+  width: 0;
+}
+
+.accuracy-badge {
+  background: linear-gradient(135deg, $primary-400 0%, $primary-500 100%);
+  color: $dark-950;
+  font-size: 0.875rem;
+  padding: $space-2 $space-3;
+  border-radius: 2rem;
+  font-weight: $font-weight-semibold;
+  display: inline-flex;
+  align-items: center;
+  
+  &.high-accuracy {
+    background: linear-gradient(135deg, $success-400 0%, $success-500 100%);
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+    @media (max-width: 767.98px) {
+      
+    }
+}
+
+.progress-stats {
+  font-size: 0.875rem;
+
+  @media (max-width: 767.98px) {
+    flex-direction: column;
+    gap: $space-2;
     text-align: center;
   }
 }
 
-.card-label {
-  font-size: 0.875rem;
-  letter-spacing: 0.5px;
-  color: #e4f098;
-}
-
-.card-value {
-  color: #f5f5f5;
-}
-
 .text-success {
-  color: #13D460 !important;
+  color: $success !important;
 }
 
-.border-primary {
-  border: 2px solid #dae243 !important;
+.text-muted {
+  color: $primary-400 !important;
 }
 
-.text-primary {
-  color: #dae243 !important;
+.btn-primary {
+  background-color: $primary-400;
+  border-color: $primary-300;
+  color: $dark;
+  font-weight: $font-weight-semibold;
+  padding: $space-3 $space-6;
+  border-radius: 0.75rem;
+  
+  &:hover {
+    background-color: $primary-500;
+    border-color: $primary-200;
+    color: $dark;
+    transform: translateY(-2px);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.25rem $primary-700;
+  }
 }
 
 .btn-outline-secondary {
-  color: #f5f5f5;
-  border-color: #dae243;
+  color: $light;
+  border: 2px solid $secondary-400;
+  background-color: transparent;
+  font-weight: $font-weight-semibold;
+  padding: $space-3 $space-6;
+  border-radius: 0.75rem;
   
   &:hover {
-    background-color: #3d3d3d;
-    border-color: #dae243;
-    color: #f5f5f5;
+    background-color: $dark-900;
+    border-color: $secondary-500;
+    color: $secondary-300;
+    transform: translateY(-2px);
   }
 }
 
@@ -74,7 +182,7 @@
   
   .trophy-icon {
     font-size: 5rem;
-    color: #dae243;
+    color: $primary-400;
     animation: bounce 1s ease-in-out infinite;
     text-shadow: 0 4px 8px rgba(218, 226, 67, 0.3);
     
@@ -84,12 +192,12 @@
   }
   
   .success-message {
-    color: #13D460;
-    font-weight: 700;
-    margin-top: 1rem;
+    color: $success;
+    font-weight: $font-weight-bold;
+    font-size: 2rem;
+    margin-top: $space-4;
     animation: slideInFromTop 0.6s ease-out 0.3s both;
   }
-
 }
 
 @keyframes fadeInScale {
@@ -125,9 +233,9 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 2px 8px rgba(19, 212, 96, 0.3);
+    box-shadow: 0 0 15px $success-600;
   }
   50% {
-    box-shadow: 0 4px 20px rgba(19, 212, 96, 0.6);
+    box-shadow: 0 0 25px $success-500;
   }
 }
