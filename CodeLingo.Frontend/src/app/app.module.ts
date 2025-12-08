@@ -37,6 +37,7 @@ import { QuestionProgressComponent } from './question-container/question-progres
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
 import { TooltipDirective } from './shared/directives/tooltip.directive';
+import { ProgressDashboardComponent } from './profile/components/progress-dashboard/progress-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { TooltipDirective } from './shared/directives/tooltip.directive';
     QuestionContainerComponent,
     QuestionProgressComponent,
     TooltipDirective,
+    ProgressDashboardComponent,
   ],
   imports: [
     BrowserModule,

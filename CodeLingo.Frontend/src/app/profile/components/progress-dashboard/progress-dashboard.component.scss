@@ -1,0 +1,335 @@
+.progress-dashboard-container {
+  background: #1e1e1e;
+  min-height: 100vh;
+  color: #f5f5f5;
+}
+
+.dashboard-title {
+  color: #dae243;
+  font-weight: 700;
+}
+
+// Navigation Tabs
+.nav-tabs {
+  border-bottom: 2px solid #3d3d3d;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-item {
+    flex-shrink: 0;
+    
+    .nav-link {
+      background: transparent;
+      border: none;
+      color: #e4f098;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      min-width: fit-content;
+
+      &:hover {
+        color: #dae243;
+        padding: 1rem 1.5rem;
+        
+        .tab-text {
+          max-width: 200px;
+          opacity: 1;
+        }
+      }
+
+      &.active {
+        color: #dae243;
+        border-bottom-color: #dae243;
+        background: rgba(218, 226, 67, 0.1);
+        padding: 1rem 1.5rem;
+        
+        .tab-text {
+          max-width: 200px;
+          opacity: 1;
+        }
+      }
+
+      i {
+        font-size: 1.25rem;
+        flex-shrink: 0;
+      }
+
+      .tab-text {
+        max-width: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+}
+
+// Stat Cards (Overview)
+.stat-card {
+  background: linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-height: 200px;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    border-color: rgba(218, 226, 67, 0.3);
+    background: linear-gradient(135deg, #3d3d3d 0%, #4d4d4d 100%);
+  }
+
+  .stat-icon {
+    font-size: 4rem;
+    color: #dae243;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    i {
+      display: block;
+    }
+  }
+
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #b8c66d;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin: 0;
+      white-space: nowrap;
+    }
+  }
+}
+
+// Table Styles
+.table-dark {
+  background: #3d3d3d;
+  
+  thead {
+    background: #2d2d2d;
+    
+    th {
+      color: #dae243;
+      border-bottom: 2px solid #dae243;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background: rgba(218, 226, 67, 0.1);
+      }
+
+      td {
+        color: #f5f5f5;
+        border-color: #454545;
+      }
+    }
+  }
+}
+
+// Breakdown Cards (Languages & Difficulty)
+.breakdown-card {
+  background: #3d3d3d;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-header {
+    background: #2d2d2d;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #dae243;
+
+    i {
+      color: #dae243;
+      font-size: 1.5rem;
+    }
+
+    h5 {
+      margin: 0;
+      color: #f5f5f5;
+      font-weight: 600;
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .breakdown-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #454545;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: #e4f098;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .value {
+      color: #f5f5f5;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+  }
+}
+
+// Time-Based Stats Cards
+.time-stat-card {
+  background: linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-height: 250px;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    border-color: rgba(218, 226, 67, 0.3);
+    background: linear-gradient(135deg, #3d3d3d 0%, #4d4d4d 100%);
+  }
+
+  i {
+    font-size: 4rem;
+    color: #dae243;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h4 {
+    color: #f5f5f5;
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .score {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .label {
+    color: #b8c66d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+// Responsive
+@media (max-width: 767.98px) {
+  .stat-card {
+    padding: 1.5rem;
+    min-height: 180px;
+
+    .stat-icon {
+      font-size: 3rem;
+    }
+
+    .stat-content {
+      .stat-value {
+        font-size: 2rem;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .time-stat-card {
+    padding: 2rem;
+    min-height: 220px;
+
+    i {
+      font-size: 3rem;
+    }
+
+    .score {
+      font-size: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.125rem;
+    }
+  }
+
+  .nav-tabs .nav-item .nav-link {
+    padding: 0.75rem;
+    
+    i {
+      font-size: 1.125rem;
+    }
+  }
+}
