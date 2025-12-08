@@ -34,6 +34,7 @@ export class QuestionContainerComponent implements OnInit {
   feedback: string | null = null;
   isCorrect: boolean | null = null;
   isCompleted = false;
+  score = 0;
 
   sessionSummary!: SessionSummary;
 
@@ -105,6 +106,7 @@ export class QuestionContainerComponent implements OnInit {
         this.questionSubmitted = true;
         this.isCorrect = response.isCorrect;
         this.feedback = response.feedback;
+        this.score += response.score;
 
         // Automatically load next question after 2s
         setTimeout(() => this.loadNextQuestion(), 2000);
@@ -137,6 +139,7 @@ export class QuestionContainerComponent implements OnInit {
         this.questionSubmitted = true;
         this.isCorrect = response.isCorrect;
         this.feedback = response.feedback;
+        this.score += response.score;
 
         // Automatically load next question after 2s
         setTimeout(() => this.loadNextQuestion(), 2000);

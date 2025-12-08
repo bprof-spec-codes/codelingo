@@ -2,7 +2,7 @@
   <div class="question-card">
     <!-- PROGRESS -->
     <app-question-progress *ngIf="!isCompleted" [currentIndex]="currentIndex"
-      [totalQuestions]="totalQuestions"></app-question-progress>
+      [totalQuestions]="totalQuestions" [currentScore]="score"></app-question-progress>
 
     <!-- SESSION COMPLETED -->
     <ng-container *ngIf="isCompleted; else showQuestion">
