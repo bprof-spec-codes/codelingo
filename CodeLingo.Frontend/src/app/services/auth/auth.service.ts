@@ -176,4 +176,17 @@ export class AuthService {
     if (error.error?.error) msg = error.error.error;
     return throwError(() => msg);
   }
+
+  public getUserId(): string | null {
+    const token = this.getAccessToken();
+    if (!token) return null;
+    
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.sub || payload.userId || payload.id;
+    } catch (error) {
+        console.error('Error decoding token:', error);
+        return null;
+    }
+  }
 }
