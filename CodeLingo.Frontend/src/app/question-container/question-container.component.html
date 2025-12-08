@@ -24,7 +24,7 @@
         <app-multiple-choice-question #multipleChoiceComponent *ngSwitchCase="'MultipleChoice'"
           [question]="$any(questionData)" [isSubmitted]="
             questionSubmitted || submittingAnswer || loadingQuestion
-          " (answerSubmitted)="onAnswer($event)">
+          " [wasCorrect]="isCorrect" (answerSubmitted)="onAnswer($event)">
         </app-multiple-choice-question>
 
         <!-- Code Completion -->

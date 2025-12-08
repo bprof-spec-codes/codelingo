@@ -45,6 +45,12 @@
       class="answer-card"
       [class.selected]="isOptionSelected(option.id)"
       [class.disabled]="isSubmitted"
+      [class.correct-selection]="
+        isSubmitted && wasCorrect && isOptionSelected(option.id)
+      "
+      [class.incorrect-selection]="
+        isSubmitted && wasCorrect === false && isOptionSelected(option.id)
+      "
       (click)="toggleOption(option.id)"
     >
       <div class="answer-selector">
