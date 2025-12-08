@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
 import { MultipleChoiceQuestionComponent } from './multiple-choice-question/multiple-choice-question.component';
@@ -51,6 +51,21 @@ export class QuestionContainerComponent implements OnInit {
       return;
     }
     this.loadNextQuestion();
+  }
+
+  // Detect when user closes the tab/window
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: BeforeUnloadEvent) {
+    if (!this.isCompleted && this.sessionId) {
+      this.closeSession(true);
+    }
+  }
+
+  // Detect when user navigates away
+  ngOnDestroy() {
+    if (!this.isCompleted && this.sessionId) {
+      this.closeSession(true);
+    }
   }
 
   // Load next question
