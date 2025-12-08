@@ -9,12 +9,12 @@
       </span>
       <span
         class="meta-item difficulty"
-        [ngClass]="'difficulty-' + question.difficulty"
+        [ngClass]="'difficulty-' + (question.difficulty | lowercase)"
       >
         <i class="bi bi-bar-chart-fill"></i>
         {{ question.difficulty | titlecase }}
       </span>
-      <span class="meta-item">
+      <span class="meta-item" *ngIf="question.metadata.estimatedTimeSeconds">
         <i class="bi bi-clock"></i>
         {{ question.metadata.estimatedTimeSeconds }}s
       </span>

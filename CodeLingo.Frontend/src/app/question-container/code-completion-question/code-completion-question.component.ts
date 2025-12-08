@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CodeCompletionQuestion } from '../../models/code-completion-question';
 
 @Component({
@@ -22,8 +22,11 @@ export class CodeCompletionQuestionComponent implements OnInit, OnChanges {
         this.parseSnippet();
     }
 
-    ngOnChanges(): void {
-        this.parseSnippet();
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['question']) {
+            this.answer = '';
+            this.parseSnippet();
+        }
     }
 
     private parseSnippet(): void {
