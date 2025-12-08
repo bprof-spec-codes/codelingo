@@ -9,7 +9,7 @@
       </span>
       <span
         class="meta-item difficulty"
-        [ngClass]="'difficulty-' + question.difficulty"
+        [ngClass]="'difficulty-' + (question.difficulty | lowercase)"
       >
         <i class="bi bi-bar-chart-fill"></i>
         {{ question.difficulty | titlecase }}
