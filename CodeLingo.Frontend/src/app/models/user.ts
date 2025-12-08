@@ -28,8 +28,8 @@ export interface UserStats {
   accuracyPercentage: number;
   sessionCount: number;
   historicalProgress: HistoricalProgress;
-  languageBreakdown: LanguageBreakdownItem[];
-  difficultyBreakdown: DifficultyBreakdownItem[];
+  languageBreakdown: LanguageBreakdown;
+  difficultyBreakdown: DifficultyBreakdown;
   timeBasedStats: TimeBasedStats;
 }
 
@@ -46,11 +46,19 @@ export interface SessionHistory {
   difficulty: string;
 }
 
+export interface LanguageBreakdown {
+  items: LanguageBreakdownItem[];
+}
+
 export interface LanguageBreakdownItem {
   language: string;
   totalScore: number;
   accuracyPercentage: number;
   sessionCount: number;
+}
+
+export interface DifficultyBreakdown {
+  items: DifficultyBreakdownItem[];
 }
 
 export interface DifficultyBreakdownItem {
