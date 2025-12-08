@@ -22,7 +22,19 @@ namespace CodeLingo.API.Logics
 
             if (progress == null)
             {
-                throw new KeyNotFoundException($"Progress not found for user {userId}");
+                progress = new Progress
+                {
+                    UserId = userId,
+                    TotalScore = 0,
+                    Xp = 0,
+                    CurrentLevel = 1,
+                    Streak = 0,
+                    Accuracy = 0.0f,
+                    LastSessionAt = null
+                };
+
+                _context.Progresses.Add(progress);
+                await _context.SaveChangesAsync();
             }
 
             var sessions = await _context.Sessions
