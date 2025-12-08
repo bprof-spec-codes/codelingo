@@ -1,11 +1,6 @@
 <div class="result-summary-container">
   <div class="container py-1">
-    <div *ngIf="sessionSummary.accuracyPercentage >= 80" class="success-animation text-center mb-4">
-      <div class="trophy-icon">
-        <i class="bi bi-trophy-fill"></i>
-      </div>
-      <h3 class="success-message">Excellent Work!</h3>
-    </div>
+    
     
     <div class="summary-grid">
       <div class="row justify-content-center">
@@ -21,8 +16,25 @@
               </div>
             </div>
 
+            <!-- Star Rating -->
+            <div class="success-animation text-center mb-4">
+
+              <h3 class="success-message" *ngIf="sessionSummary.accuracyPercentage >= 80">Excellent Work!</h3>
+              <h3 class="success-message" *ngIf="sessionSummary.accuracyPercentage >= 60 && sessionSummary.accuracyPercentage < 80">Good Job!</h3>
+              <h3 class="success-message" *ngIf="sessionSummary.accuracyPercentage >= 20 && sessionSummary.accuracyPercentage < 60">Keep Practicing!</h3>
+              <h3 class="fail-message" *ngIf="sessionSummary.accuracyPercentage < 20">Don't Give Up!</h3>
+
+              <div class="star-rating">
+                <i class="bi bi-star-fill" [class.active]="sessionSummary.accuracyPercentage >= 20"></i>
+                <i class="bi bi-star-fill" [class.active]="sessionSummary.accuracyPercentage >= 60"></i>
+                <i class="bi bi-star-fill" [class.active]="sessionSummary.accuracyPercentage >= 80"></i>
+              </div>
+
+              
+            </div>
+
             <!-- Center: Total Score -->
-            <div class="text-center my-5 py-4">
+            <div class="text-center my-3 py-4">
               <div class="score-label text-uppercase fw-semibold mb-3">
                 <i class="bi bi-star-fill me-2"></i>Total Score<i class="bi bi-star-fill ms-2"></i>
               </div>

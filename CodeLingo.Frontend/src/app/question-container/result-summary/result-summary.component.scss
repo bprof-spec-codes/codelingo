@@ -179,16 +179,44 @@
 // Success Animation
 .success-animation {
   animation: fadeInScale 0.8s ease-out;
-  
-  .trophy-icon {
-    font-size: 5rem;
-    color: $primary-400;
-    animation: bounce 1s ease-in-out infinite;
-    text-shadow: 0 4px 8px rgba(218, 226, 67, 0.3);
+
+  .star-rating {
+    display: flex;
+    justify-content: center;
+    gap: $space-4;
+    font-size: 4rem;
+    margin-bottom: $space-4;
     
     i {
-      display: inline-block;
+      color: $dark-900;
+      transition: color 0.5s ease, transform 0.5s ease;
+      
+      &.active {
+        color: $primary-400;
+        text-shadow: 0 4px 8px $primary-700;
+        animation: starPop 0.6s ease-out forwards;
+      }
+      
+      &:nth-child(1).active {
+        animation-delay: 0.3s;
+      }
+      
+      &:nth-child(2).active {
+        animation-delay: 0.6s;
+      }
+      
+      &:nth-child(3).active {
+        animation-delay: 0.9s;
+      }
     }
+  }
+
+  .fail-message {
+    color: $danger-600;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-top: 1rem;
+    animation: slideInFromTop 0.6s ease-out 0.8s both;
   }
   
   .success-message {
@@ -196,7 +224,21 @@
     font-weight: $font-weight-bold;
     font-size: 2rem;
     margin-top: $space-4;
-    animation: slideInFromTop 0.6s ease-out 0.3s both;
+    animation: slideInFromTop 0.6s ease-out 1.2s both;
+  }
+}
+
+@keyframes starPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
@@ -208,15 +250,6 @@
   100% {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
   }
 }
 
