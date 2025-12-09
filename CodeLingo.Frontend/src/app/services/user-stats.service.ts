@@ -12,7 +12,7 @@ import { AuthService } from './auth/auth.service';
 })
 export class UserStatsService {
 
-    private get apiUrl() { return `${this.configService.apiUrl}/users/me/statistics`; }
+    private get apiUrl() { return `${this.configService.apiUrl}/users`; }
     constructor(private http: HttpClient, private configService: ConfigService, private authService: AuthService) { }
 
 
