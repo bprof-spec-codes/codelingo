@@ -59,7 +59,7 @@ jobs:
       run: npm run build
     # Compress
     - name: Compress Frontend
-      working-directory: ./CodeLingo.Frontend/dist/code-lingo-frontend/browser
+      working-directory: ./CodeLingo.Frontend/dist/code-lingo.frontend/browser
       run: tar -czf ../../../../frontend_artifact.tar.gz .
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
