@@ -25,19 +25,6 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       working-directory: ./CodeLingo.API
-      run: dotnet restore
-    - name: Build
-      working-directory: ./CodeLingo.API
-      run: dotnet build --no-restore -c Release
-    - name: Publish
-      working-directory: ./CodeLingo.API
-      run: dotnet publish -c Release -o ./publish
-    # Compress
-    - name: Compress Backend
-      working-directory: ./CodeLingo.API/publish
-      run: tar -czf ../../backend_artifact.tar.gz .
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.BACKEND_ARTIFACT_NAME }}
         path: backend_artifact.tar.gz
