@@ -118,28 +118,28 @@ Rövid kivonat. Teljes specifikáció: [docs/technical/api-reference.md](docs/te
 
 ## 🖼️ UI Screens
 
-- Landing Page (/landing-page)
+- Landing Page
   - Purpose: Welcome screen with feature highlights and clear CTAs.
   - Key actions: Sign Up, Log In, Start Practice (when logged in).
   - Screenshot: to be added.
 
-- Login (/login)
+- Login
   - Purpose: Authenticate existing users.
   - Key actions: Submit credentials, “Remember me”, navigate to Register.
   - Screenshot: to be added.
 
-- Register (/register)
+- Register
   - Purpose: Create a new user account.
   - Key actions: Fill form with validation, navigate to Login after success.
   - Screenshot: to be added.
 
-- Practice Starter (/practice/start)
+- Practice Starter
   - Purpose: Configure a new practice session.
   - Key actions: Select language, difficulty, question count; start session.
   - Backend: POST /sessions/start
   - Screenshot: to be added.
 
-- Practice Session (Question View)
+- Practice Session
   - Purpose: Show current question, collect answer, proceed to next.
   - Key actions: Submit answer, see feedback, continue.
   - Backend: GET /sessions/{id}/next, POST /sessions/{id}/answer
@@ -150,7 +150,7 @@ Rövid kivonat. Teljes specifikáció: [docs/technical/api-reference.md](docs/te
   - Key actions: Review answers, navigate to leaderboard or start a new session.
   - Screenshot: to be added.
 
-- Leaderboard (/leaderboard)
+- Leaderboard
   - Purpose: Show rankings and competition stats.
   - Key actions: Filter by range/language, view positions.
   - Screenshot: to be added.
