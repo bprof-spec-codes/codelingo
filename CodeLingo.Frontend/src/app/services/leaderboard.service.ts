@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { ConfigService } from './config.service';
 import { LeaderboardDto } from '../models/leaderboard';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeaderboardService {
-  private apiUrl = `${environment.apiUrl}/leaderboard`;
+  private get apiUrl() { return `${this.configService.apiUrl}/leaderboard`; }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { }
 
   getLeaderboard(page: number = 1, pageSize: number = 10, language?: string, difficulty?: string): Observable<LeaderboardDto> {
     let params = new HttpParams()

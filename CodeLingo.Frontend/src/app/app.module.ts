@@ -94,7 +94,7 @@ import { ProgressDashboardComponent } from './profile/components/progress-dashbo
       useFactory: (configService: ConfigService) => () => configService.loadConfig(),
       deps: [ConfigService],
       multi: true
-    }
+    },
     provideAnimations(),
     provideToastr()
   ],

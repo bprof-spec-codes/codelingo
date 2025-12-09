@@ -13,7 +13,7 @@ import { AuthService } from './auth/auth.service';
 export class UserStatsService {
 
     private get apiUrl() { return `${this.configService.apiUrl}/users/me/statistics`; }
-    constructor(private http: HttpClient, private configService: ConfigService) { }
+    constructor(private http: HttpClient, private configService: ConfigService, private authService: AuthService) { }
 
 
     getStatistics(): Observable<UserStatistics> {
