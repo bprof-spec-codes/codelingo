@@ -3,6 +3,7 @@
 - [Task Description](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/%C3%96LAB-2025-26-1/codelingo.md)
 - [Code of Conduct](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/ÖLAB-2025-26-1/coc.md)
 - [Requirements](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/ÖLAB-2025-26-1/requirements.md)
+- **Live Site: [codelingo.hu](https://codelingo.hu)**
 
 ---
 
@@ -26,6 +27,9 @@
 - Tasks: GitHub Projects board per sprint columns.
 - Meetings: Twice per week per coc.md. Usually thurstday and sunday.
 
+### Live Environment
+- **Production URL:** [https://codelingo.hu](https://codelingo.hu)
+
 ### Local setup
 - Prerequisites: .NET 8 SDK, Node.js LTS, Angular CLI.
 - Backend:
@@ -40,6 +44,10 @@
 
 ## 🖥️ Usage
 
+### Production
+- Visit [https://codelingo.hu](https://codelingo.hu) to use the live application.
+
+### Local Development
 1. Start backend and frontend.
 2. Backend default URL: http://localhost:7107 (Swagger enabled)
 3. Frontend URL: http://localhost:4200
