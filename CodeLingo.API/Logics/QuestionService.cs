@@ -49,84 +49,43 @@ namespace CodeLingo.API.Logics
                 IsActive = true
             };
 
-            // Handle MC Options or Code details mapping to JSON if needed
-            // For MC, options are usually stored in Metadata or a separate table?
-            // The Question model has no "Options" property, but "Metadata" is JSON.
-            // The API docs show "options" in the JSON example for MC.
-            // The implementation plan says "Question entity specifications" in "Question entity CRUD operations optimized".
-            // I'll assume Options are stored in Metadata for now as per the JSON example in docs/technical/question-data-structures.md
-            // "options": [...] is at the root of the JSON example, but the Question model only has Metadata.
-            // Wait, the Question model in `Question.cs` has `Metadata` as JSON string.
-            // The `question-data-structures.md` shows `MultipleChoiceQuestion` extending `BaseQuestion` with `options`.
-            // But the C# model `Question` seems to be a single table (TPH or just one table with JSON).
-            // It has `public string Metadata { get; set; }`.
-            // If I look at `Question.cs` again, it doesn't have `Options`.
-            // So I must store Options in Metadata or a separate table.
-            // `MultipleChoiceQuestionRepository` exists, implying maybe TPH or separate table?
-            // Let's check `MultipleChoiceQuestion` model if it exists.
-            
-            // If `MultipleChoiceQuestion` exists and inherits from `Question`, then `QuestionRepository` might not be enough if it only returns `Question`.
-            // But `QuestionRepository` uses `appDbContext.Questions`.
-            // If `MultipleChoiceQuestion` is a derived class in EF Core, `appDbContext.Questions` would return it.
-            
-            // I'll check if `MultipleChoiceQuestion.cs` exists in Models.
-            // If it does, I should instantiate that instead of `Question` for MC.
-            
-            // For now, I'll assume I need to check for `MultipleChoiceQuestion` model.
-            // If I can't check now, I'll assume standard `Question` and put everything in Metadata/JSON for simplicity if TPH isn't used, 
-            // OR use the specific class if it exists.
-            
-            // I'll check the file list again or just try to instantiate `Question` and put options in Metadata.
-            // Actually, `MultipleChoiceQuestionRepository` suggests there IS a `MultipleChoiceQuestion` entity.
-            
-            // Let's pause writing this file and check for `MultipleChoiceQuestion` model first.
-            // But I can't pause easily. I'll write a placeholder and then fix it.
-            // Actually, I'll just use `Question` and if I need to change it I will.
-            // But wait, `MultipleChoiceQuestionRepository` uses `DbContext.MultipleChoiceQuestions`.
-            // This implies a `DbSet<MultipleChoiceQuestion>`.
-            // So `Question` might be a base class.
-            
-            // I will assume `Question` is the base and I should create specific entities based on type.
-            // But `QuestionService` needs to handle all types.
-            // If I use `Question` entity, I might lose specific fields if they are not in `Question`.
-            // But `Question` has `Metadata` json.
-            
-            // Let's look at `Question.cs` again. It has `public QuestionType Type { get; set; }`.
-            // It doesn't look like an abstract base class for TPH because it has `[Key] public string Id`.
-            
-            // I'll assume for this implementation that I should map extra fields to `Metadata` JSON 
-            // OR that I should use the specific repositories if I want to use specific entities.
-            // But `IQuestionRepository` returns `Question`.
-            
-            // I'll stick to `Question` model and put type-specific data into `Metadata` JSON for now, 
-            // as that's what the `Question` model suggests (it has `Metadata` and `Tags` as JSON).
-            // The `question-data-structures.md` shows `options` as a property of `MultipleChoiceQuestion`, 
-            // but the C# model `Question` doesn't have it.
-            // So it MUST be in Metadata or the model is incomplete.
-            // Given the task "Question entity CRUD operations optimized", maybe I should have added it?
-            // But I didn't modify the model.
-            
-            // I will map Options to Metadata.
+            _repository.Create(question);
+            // Save to generate ID if needed, but we set ID in model. 
+            // However, EF needs to track it before adding related entities if we don't set navigation property directly on them.
+            // But we can set navigation property.
             
             if (type == QuestionType.MultipleChoice && dto.Options != null)
             {
-                var metadataNode = JsonNode.Parse(question.Metadata ?? "{}")?.AsObject() ?? new JsonObject();
-                metadataNode["options"] = JsonSerializer.SerializeToNode(dto.Options);
-                question.Metadata = metadataNode.ToJsonString();
+                var mcq = new MultipleChoiceQuestion
+                {
+                    Question = question,
+                    Options = JsonSerializer.Serialize(dto.Options),
+                    CorrectAnswerIds = JsonSerializer.Serialize(dto.Options.Where(o => o.IsCorrect).Select(o => o.Text).ToList()), // Assuming Text is ID or we just store correct options
+                    // Wait, CorrectAnswerIds usually stores IDs. But OptionDto doesn't have ID.
+                    // If Options is just a list of texts, then index or text is the ID.
+                    // Let's assume Text is unique or we use Index.
+                    // Existing DbSeeder uses `item.CorrectAnswerIds`.
+                    // Let's stick to what DbSeeder does if possible, but here we have DTO.
+                    // I'll serialize the list of correct option texts for now.
+                    AllowMultipleSelection = dto.Options.Count(o => o.IsCorrect) > 1,
+                    ShuffleOptions = true 
+                };
+                // We need to add this to context. 
+                // Since we don't have _mcqRepository injected here, we can add it to question.MultipleChoiceQuestion if we set it up.
+                question.MultipleChoiceQuestion = mcq;
             }
             
-             // For Code Completion
             if (type == QuestionType.CodeCompletion)
             {
-                 var metadataNode = JsonNode.Parse(question.Metadata ?? "{}")?.AsObject() ?? new JsonObject();
-                 if (dto.StarterCode != null) metadataNode["starterCode"] = dto.StarterCode;
-                 if (dto.CorrectAnswer != null) metadataNode["correctAnswer"] = dto.CorrectAnswer;
-                 if (dto.Hints != null) metadataNode["hints"] = JsonSerializer.SerializeToNode(dto.Hints);
-                 if (dto.Constraints != null) metadataNode["constraints"] = JsonSerializer.SerializeToNode(dto.Constraints);
-                 question.Metadata = metadataNode.ToJsonString();
+                 var ccq = new CodeCompletionQuestion
+                 {
+                     Question = question,
+                     CodeSnippet = dto.CodeSnippet ?? "",
+                     AcceptedAnswers = JsonSerializer.Serialize(dto.AcceptedAnswers ?? new List<string>())
+                 };
+                 question.CodeCompletionQuestion = ccq;
             }
 
-            _repository.Create(question);
             _repository.SaveChanges();
 
             return MapToDto(question);
@@ -199,7 +158,7 @@ namespace CodeLingo.API.Logics
             return MapToDto(question);
         }
 
-        public async Task<QuestionListResponseDto> GetQuestionsAsync(string? language, string? difficulty, string? type, int page, int pageSize)
+        public async Task<QuestionListResponseDto> GetQuestionsAsync(string? language, string? difficulty, string? type, string? title, string? questionText, int page, int pageSize)
         {
             DifficultyLevel? diffEnum = null;
             if (!string.IsNullOrEmpty(difficulty) && Enum.TryParse<DifficultyLevel>(difficulty, true, out var d)) diffEnum = d;
@@ -207,8 +166,8 @@ namespace CodeLingo.API.Logics
             QuestionType? typeEnum = null;
             if (!string.IsNullOrEmpty(type) && Enum.TryParse<QuestionType>(type, true, out var t)) typeEnum = t;
 
-            var questions = await _repository.GetQuestionsAsync(language, diffEnum, typeEnum, page, pageSize);
-            var totalItems = await _repository.CountQuestionsAsync(language, diffEnum, typeEnum);
+            var questions = await _repository.GetQuestionsAsync(language, diffEnum, typeEnum, title, questionText, page, pageSize);
+            var totalItems = await _repository.CountQuestionsAsync(language, diffEnum, typeEnum, title, questionText);
 
             return new QuestionListResponseDto
             {
@@ -255,12 +214,27 @@ namespace CodeLingo.API.Logics
                 IsActive = q.IsActive
             };
 
-            // Extract Options from Metadata if MC
-            if (q.Type == QuestionType.MultipleChoice && dto.Metadata != null && dto.Metadata.ContainsKey("options"))
+            // Extract Options from MC entity
+            if (q.Type == QuestionType.MultipleChoice && q.MultipleChoiceQuestion != null)
             {
                 try {
+                    dto.Options = JsonSerializer.Deserialize<List<QuestionOptionDto>>(q.MultipleChoiceQuestion.Options);
+                } catch {}
+            }
+            // Fallback to Metadata if entity is missing (backward compatibility or if seeded differently)
+            else if (q.Type == QuestionType.MultipleChoice && dto.Metadata != null && dto.Metadata.ContainsKey("options"))
+            {
+                 try {
                     dto.Options = dto.Metadata["options"]?.Deserialize<List<QuestionOptionDto>>();
                 } catch {}
+            }
+
+            if (q.Type == QuestionType.CodeCompletion && q.CodeCompletionQuestion != null)
+            {
+                dto.CodeSnippet = q.CodeCompletionQuestion.CodeSnippet;
+                dto.AcceptedAnswers = string.IsNullOrEmpty(q.CodeCompletionQuestion.AcceptedAnswers) 
+                    ? new List<string>() 
+                    : JsonSerializer.Deserialize<List<string>>(q.CodeCompletionQuestion.AcceptedAnswers);
             }
 
             return dto;

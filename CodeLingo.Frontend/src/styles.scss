@@ -4,14 +4,33 @@
 // Import variables (this won't generate CSS, just makes variables available)
 @import 'variables';
 
-
-
 // Global typography styles
-h1, .h1 { font-weight: $font-weight-extrabold; }
-h2, .h2 { font-weight: $font-weight-extrabold; }
-h3, .h3 { font-weight: $font-weight-bold; }
-h4, .h4 { font-weight: $font-weight-semibold; }
-h5, .h5, h6, .h6 { font-weight: $font-weight-regular; }
+h1,
+.h1 {
+  font-weight: $font-weight-extrabold;
+}
+
+h2,
+.h2 {
+  font-weight: $font-weight-extrabold;
+}
+
+h3,
+.h3 {
+  font-weight: $font-weight-bold;
+}
+
+h4,
+.h4 {
+  font-weight: $font-weight-semibold;
+}
+
+h5,
+.h5,
+h6,
+.h6 {
+  font-weight: $font-weight-regular;
+}
 
 // Caption text
 .caption {
@@ -21,7 +40,9 @@ h5, .h5, h6, .h6 { font-weight: $font-weight-regular; }
 }
 
 // Code blocks
-code, pre, .code {
+code,
+pre,
+.code {
   font-family: $font-family-monospace;
   font-size: 1.5rem;
   line-height: 1.4;
@@ -30,3 +51,45 @@ code, pre, .code {
 // Import Bootstrap with our custom theme
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
+
+// Custom Tooltip
+.custom-tooltip {
+  position: fixed;
+  z-index: 10000;
+  background-color: $dark;
+  color: $white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid $primary;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent $primary transparent;
+  }
+}
+
+.disabled-link {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+// Toast imports
+// regular style toast
+@import 'ngx-toastr/toastr';
+
+// if you'd like to use it without importing all of bootstrap it requires
+//@import 'bootstrap/scss/functions';
+//@import 'bootstrap/scss/variables';
+//@import 'bootstrap/scss/mixins';
+// boostrap 5
+@import 'ngx-toastr/toastr-bs5-alert';

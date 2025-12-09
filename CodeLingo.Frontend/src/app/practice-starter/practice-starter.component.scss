@@ -150,6 +150,11 @@
                 color: $light;
                 font-weight: $font-weight-bold;
                 text-transform: capitalize;
+
+                &.invalid-value {
+                    color: $danger-400;
+                    text-transform: none;
+                }
             }
         }
     }

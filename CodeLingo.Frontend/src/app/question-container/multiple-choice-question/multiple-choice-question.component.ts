@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnChanges,
+} from '@angular/core';
 import { MultipleChoiceQuestion } from '../../models/multiple-choice-question';
 import { AnswerOption } from '../../models/answer-option';
 
@@ -67,6 +73,7 @@ export class MultipleChoiceQuestionComponent implements OnChanges {
 
   selectedAnswerIds: string[] = [];
   sortedOptions: AnswerOption[] = [];
+  previousQuestionId: string | null = null;
 
   // toggle option selection
   toggleOption(optionId: string): void {
@@ -99,13 +106,17 @@ export class MultipleChoiceQuestionComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    console.log('MultipleChoiceQuestionComponent: question input changed', this.question);
-    if (this.question && this.question.options) {
-      console.log('Options:', this.question.options);
-      this.updateSortedOptions();
-    } else {
-      console.warn('Options are missing or undefined!');
-    }
+    console.log(
+      'MultipleChoiceQuestionComponent: question input changed',
+      this.question
+    );
+
+    if (!this.question || this.previousQuestionId === this.question.id) return;
+
+    this.previousQuestionId = this.question.id;
+    this.selectedAnswerIds = [];
+    this.isSubmitted = false;
+    this.updateSortedOptions();
   }
 
   // sort and optionally shuffle options
@@ -143,8 +154,7 @@ export class MultipleChoiceQuestionComponent implements OnChanges {
     }
   }
 
-  resetSelection() {
-    this.selectedAnswerIds = [];
-    this.isSubmitted = false;
+  trackByOptionId(index: number, option: AnswerOption) {
+    return option.id;
   }
 }

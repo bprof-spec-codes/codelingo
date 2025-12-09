@@ -12,7 +12,7 @@ export interface QuestionListResponseDto {
   items: Question[];
   page: number;
   pageSize: number;
-  totalCount: number;
+  totalItems: number;
 }
 
 export interface BaseQuestion {
@@ -23,8 +23,8 @@ export interface BaseQuestion {
   questionText: string;
 
   explanation?: string;
-  tags?: string[];                
-  metadata?: QuestionMetadata;   
+  tags?: string[];
+  metadata?: QuestionMetadata;
 
   // Backend által adott mezők
   id: string;
@@ -55,19 +55,8 @@ export interface MultipleChoiceQuestion extends BaseQuestion {
 export interface CodeCompletionQuestion extends BaseQuestion {
   type: QuestionType.CodeCompletion;
 
-  starterCode: string;
-  correctAnswer: string;
-  hints?: string[];
-  constraints?: CodeConstraints;
-}
-
-export interface CodeConstraints {
-  maxLines?: number;
-  maxCharacters?: number;
-  forbiddenKeywords?: string[];
-
-  // allowedKeywords?: string[];
-  // timeout?: number;
+  codeSnippet: string;
+  acceptedAnswers: string[];
 }
 
 /* Összefoglaló*/
