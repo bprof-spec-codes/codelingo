@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
 import { MultipleChoiceQuestionComponent } from './multiple-choice-question/multiple-choice-question.component';
@@ -6,6 +6,7 @@ import { CodeCompletionQuestion } from '../models/code-completion-question';
 import { CodeCompletionQuestionComponent } from './code-completion-question/code-completion-question.component';
 import { QuestionSessionService } from '../services/question-session.service';
 import { SessionConfig } from '../models/session-config';
+import { SessionSummary } from '../models/session-summary';
 
 @Component({
   selector: 'app-question-container',
@@ -33,6 +34,9 @@ export class QuestionContainerComponent implements OnInit {
   feedback: string | null = null;
   isCorrect: boolean | null = null;
   isCompleted = false;
+  score = 0;
+
+  sessionSummary!: SessionSummary;
 
   constructor(
     private sessionService: QuestionSessionService,
@@ -49,6 +53,21 @@ export class QuestionContainerComponent implements OnInit {
     this.loadNextQuestion();
   }
 
+  // Detect when user closes the tab/window
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: BeforeUnloadEvent) {
+    if (!this.isCompleted && this.sessionId) {
+      this.closeSession(true);
+    }
+  }
+
+  // Detect when user navigates away
+  ngOnDestroy() {
+    if (!this.isCompleted && this.sessionId) {
+      this.closeSession(true);
+    }
+  }
+
   // Load next question
   loadNextQuestion() {
     if (!this.sessionId) return;
@@ -62,7 +81,7 @@ export class QuestionContainerComponent implements OnInit {
       next: (response) => {
         this.loadingQuestion = false;
         if (response.isCompleted) {
-          this.isCompleted = true;
+          this.closeSession(false)
           return;
         }
 
@@ -102,6 +121,7 @@ export class QuestionContainerComponent implements OnInit {
         this.questionSubmitted = true;
         this.isCorrect = response.isCorrect;
         this.feedback = response.feedback;
+        this.score += response.score;
       },
       error: (err) => {
         this.submittingAnswer = false;
@@ -131,11 +151,28 @@ export class QuestionContainerComponent implements OnInit {
         this.questionSubmitted = true;
         this.isCorrect = response.isCorrect;
         this.feedback = response.feedback;
+        this.score += response.score;
+
       },
       error: (err) => {
         this.submittingAnswer = false;
         console.error('Error submitting answer:', err);
         this.feedback = 'Error submitting answer. Please try again.';
+      }
+    });
+  }
+
+  closeSession(forceClose: boolean) {
+    if (!this.sessionId) return;
+
+    this.sessionService.closeSession(this.sessionId, forceClose).subscribe({
+      next: (response) => {
+        this.sessionSummary = response;
+        this.isCompleted = true;
+      },
+      error: (err) => {
+        console.log("Error closing session: ", err);
+        setTimeout(() => this.router.navigate(['/landing-page']), 3000);
       }
     });
   }

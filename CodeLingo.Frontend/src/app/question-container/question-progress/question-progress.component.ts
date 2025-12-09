@@ -9,4 +9,5 @@ import { Component, Input } from '@angular/core';
 export class QuestionProgressComponent {
   @Input() currentIndex: number = 1;
   @Input() totalQuestions: number = 1;
+  @Input() currentScore: number = 0;
 }

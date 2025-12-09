@@ -62,5 +62,13 @@ namespace CodeLingo.API.Repositories
         {
             this.DbContext.SaveChanges();
         }
+
+        public Session ReadWithQuestions(string id)
+        {
+            return DbContext.Sessions
+                    .Include(s => s.SessionQuestions)
+                        .ThenInclude(sq => sq.Question)
+                    .FirstOrDefault(s => s.Id == id);
+        }
     }
 }
