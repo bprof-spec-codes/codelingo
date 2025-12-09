@@ -14,6 +14,7 @@ namespace CodeLingo.Tests
         private ISessionRepository sessionRepository;
         private QuestionRepository questionRepository;
         private SessionQuestionRepository sessionQuestionRepository;
+        private IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
         private SessionLogic underTest;
 
         [SetUp]
@@ -31,7 +32,8 @@ namespace CodeLingo.Tests
             sessionRepository = new SessionRepository(db);
             questionRepository = new QuestionRepository(db);
             sessionQuestionRepository = new SessionQuestionRepository(db);
-            underTest = new SessionLogic(sessionRepository, questionRepository, sessionQuestionRepository);
+            multipleChoiceQuestionRepository = new MultipleChoiceQuestionRepository(db);
+            underTest = new SessionLogic(sessionRepository, questionRepository, sessionQuestionRepository, multipleChoiceQuestionRepository);
         }
 
         [TearDown]
@@ -43,12 +45,12 @@ namespace CodeLingo.Tests
         {
             User user1 = new User();
             user1.Id = "test1ID";
-            user1.Username = "test1";
+            user1.UserName = "test1";
             user1.PasswordHash = "test1";
 
             User user2 = new User();
             user2.Id = "test2ID";
-            user2.Username = "test2";
+            user2.UserName = "test2";
             user2.PasswordHash = "test2";
             appDbContext.Users.Add(user1);
             appDbContext.Users.Add(user2);
@@ -108,7 +110,7 @@ namespace CodeLingo.Tests
             StartSessionRequestDto sessionRequest = new StartSessionRequestDto();
             sessionRequest.UserId = "test1ID";
             sessionRequest.Difficulty = "Medium";
-            sessionRequest.Language = "test1Language";
+            sessionRequest.LanguageIds = new List<string> { "test1Language" };
             sessionRequest.RequestedQuestionCount = 1;
 
             // Act
@@ -126,12 +128,12 @@ namespace CodeLingo.Tests
             StartSessionRequestDto sessionRequest = new StartSessionRequestDto();
             sessionRequest.UserId = "test1ID";
             sessionRequest.Difficulty = "Medium";
-            sessionRequest.Language = "test1Language";
+            sessionRequest.LanguageIds = new List<string> { "test1Language" };
             sessionRequest.RequestedQuestionCount = 2;
 
             // Act
             StartSessionResponseDto responseDto = underTest.Create(sessionRequest);
-            List<SessionQuestion> questions = sessionQuestionRepository.GetAll();
+            List<SessionQuestion> questions = db.SessionQuestions.ToList();
 
             // Assert
             Assert.AreEqual(2, questions.Count);
@@ -145,7 +147,7 @@ namespace CodeLingo.Tests
             StartSessionRequestDto sessionRequest = new StartSessionRequestDto();
             sessionRequest.UserId = "test1ID";
             sessionRequest.Difficulty = "Medium";
-            sessionRequest.Language = "test1Language";
+            sessionRequest.LanguageIds = new List<string> { "test1Language" };
             sessionRequest.RequestedQuestionCount = 2;
 
             // Act

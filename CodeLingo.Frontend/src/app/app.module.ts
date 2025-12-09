@@ -37,6 +37,8 @@ import { QuestionProgressComponent } from './question-container/question-progres
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
 import { TooltipDirective } from './shared/directives/tooltip.directive';
+import { APP_INITIALIZER } from '@angular/core';
+import { ConfigService } from './services/config.service';
 
 @NgModule({
   declarations: [
@@ -81,6 +83,12 @@ import { TooltipDirective } from './shared/directives/tooltip.directive';
   ],
   providers: [
     provideHttpClient(withInterceptors([jwtInterceptor])),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (configService: ConfigService) => () => configService.loadConfig(),
+      deps: [ConfigService],
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
 })

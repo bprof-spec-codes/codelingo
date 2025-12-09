@@ -20,8 +20,17 @@ namespace CodeLingo.API
             // Add services to the container.
 
             // EF Core + ConnectionString
-            //var cs = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb").UseLazyLoadingProxies());
+            // EF Core + ConnectionString
+            var useInMemory = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
+            if (useInMemory)
+            {
+                builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("CodeLingoTestDb").UseLazyLoadingProxies());
+            }
+            else
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString).UseLazyLoadingProxies());
+            }
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<SessionQuestionRepository>();
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -115,7 +124,10 @@ namespace CodeLingo.API
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                //await db.Database.MigrateAsync(); // létrehozza/napra készíti a sémát inmemory miatt kikommentezve
+                if (!useInMemory)
+                {
+                    await db.Database.MigrateAsync();
+                }
 
                 // Create roles
                 foreach (var role in AppRoles.AllRoles)
@@ -178,7 +190,7 @@ namespace CodeLingo.API
             }
             else
             {
-                app.UseHttpsRedirection();
+                // app.UseHttpsRedirection();
             }
 
             app.UseCors();

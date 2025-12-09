@@ -10,7 +10,7 @@ namespace CodeLingo.API.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        [StringLength(36)]
+        [StringLength(450)]
         [ForeignKey("User")]
         public string UserId { get; set; }
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { ConfigService } from './config.service';
 import { Question, QuestionListResponseDto } from '../models/question';
 import { Language } from '../models/language';
 
@@ -9,9 +9,9 @@ import { Language } from '../models/language';
   providedIn: 'root'
 })
 export class AdminService {
-  private baseUrl = `${environment.apiUrl}/admin`;
+  private get baseUrl() { return `${this.configService.apiUrl}/admin`; }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { }
 
   private languagesSubject = new BehaviorSubject<Language[]>([]);
   languages$ = this.languagesSubject.asObservable();
@@ -101,6 +101,6 @@ export class AdminService {
 
   // Statistics
   getDashboardStatistics(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/admin/statistics/dashboard`);
+    return this.http.get(`${this.configService.apiUrl}/admin/statistics/dashboard`);
   }
 }
