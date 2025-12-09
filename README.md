@@ -57,15 +57,62 @@
 
 ---
 
-## 🔌 API Function List (excerpt)
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/register` | POST | Register a new user |
-| `/api/login` | POST | User login |
-| `/api/logout` | POST | User logout |
-| `/api/questions` | GET | Fetch list of questions |
-| `/api/answer` | POST | Submit an answer |
-| `/api/leaderboard` | GET | Fetch leaderboard |
+## 🔌 API Function List
+Rövid kivonat. Teljes specifikáció: [docs/technical/api-reference.md](docs/technical/api-reference.md)
+
+- Authentication
+  | Endpoint | Method | Description |
+  |----------|--------|-------------|
+  | `/auth/register` | POST | Register a new user, return JWT and refresh token |
+  | `/auth/login` | POST | Log in, return JWT and refresh token |
+  | `/auth/token/refresh` | POST | Refresh access token using a refresh token |
+
+- User Management
+  | Endpoint | Method | Description |
+  |----------|--------|-------------|
+  | `/users/me` | GET | Get the authenticated user's profile |
+  | `/users/me` | PUT | Update profile |
+  | `/users/me/statistics` | GET | Personal stats (total questions, accuracy, streak, rank) |
+
+- Practice Mode
+  | Endpoint | Method | Description |
+  |----------|--------|-------------|
+  | `/sessions/start` | POST | Start a new practice session |
+  | `/sessions/{id}/next` | GET | Get the next question or completion state |
+  | `/sessions/{id}/answer` | POST | Submit an answer and scoring |
+  | `/sessions/{id}/close` | POST | Close the session and return summary |
+  | `/sessions/{id}/results` | GET | Detailed session results |
+
+- Progress & Stats
+  | Endpoint | Method | Description |
+  |----------|--------|-------------|
+  | `/users/{id}/stats` | GET | User statistics and progress |
+  | `/leaderboard` | GET | Global/filtered leaderboard |
+
+- Admin - Language Management
+  | Endpoint | Method | Description |
+  |----------|--------|-------------|
+  | `/admin/languages` | GET | List languages |
+  | `/admin/languages` | POST | Create a new language |
+  | `/admin/languages/{id}` | PUT | Update a language |
+  | `/admin/languages/{id}` | DELETE | Delete a language |
+
+- Admin - Question Management
+  | Endpoint | Method | Description |
+  |----------|--------|-------------|
+  | `/admin/questions` | GET | List questions with filtering/pagination |
+  | `/admin/questions/{id}` | GET | Get detailed question by ID |
+  | `/admin/questions` | POST | Create a new question |
+  | `/admin/questions/{id}` | PUT | Update a question |
+  | `/admin/questions/{id}` | DELETE | Delete a question |
+
+- Admin - Import/Export
+  | Endpoint | Method | Description |
+  |----------|--------|-------------|
+  | `/admin/questions/import` | POST | Import questions (CSV/Aiken, sync/async) |
+  | `/admin/questions/import/{jobId}/status` | GET | Import job status |
+  | `/admin/questions/export` | GET | Export questions (JSON/CSV/Aiken, sync/async) |
+  | `/admin/questions/export/{jobId}/status` | GET | Export job status and download link |
 
 ---
 
