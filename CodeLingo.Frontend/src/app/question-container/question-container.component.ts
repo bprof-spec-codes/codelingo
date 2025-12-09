@@ -122,9 +122,6 @@ export class QuestionContainerComponent implements OnInit {
         this.isCorrect = response.isCorrect;
         this.feedback = response.feedback;
         this.score += response.score;
-
-        // Automatically load next question after 2s
-        setTimeout(() => this.loadNextQuestion(), 2000);
       },
       error: (err) => {
         this.submittingAnswer = false;
@@ -156,8 +153,6 @@ export class QuestionContainerComponent implements OnInit {
         this.feedback = response.feedback;
         this.score += response.score;
 
-        // Automatically load next question after 2s
-        setTimeout(() => this.loadNextQuestion(), 2000);
       },
       error: (err) => {
         this.submittingAnswer = false;

@@ -3,6 +3,7 @@ import { map, Observable, of } from 'rxjs';
 import { Question, MultipleChoiceQuestion, CodeCompletionQuestion, QuestionType } from '../../models/question';
 import { AdminService } from '../../services/admin.service';
 import { CountUpModule } from 'ngx-countup';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-panel',
@@ -38,7 +39,7 @@ export class AdminPanelComponent implements OnInit {
   filters: any = {};
   languages: any[] = [];
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.loadQuestions();
@@ -102,9 +103,11 @@ export class AdminPanelComponent implements OnInit {
   onQuestionUpdated(updated: Question) {
     this.adminService.updateQuestion(updated.id, updated).subscribe({
       next: () => {
+        this.toastr.success("Success", "Updated question successfully");
         this.loadQuestions(); // lista újratöltése
       },
       error: err => {
+         this.toastr.error("Failed", "Updated question failed");
         console.error('Update failed', err);
       }
     });
@@ -112,9 +115,11 @@ export class AdminPanelComponent implements OnInit {
   onQuestionDelete(id: string) {
     this.adminService.deleteQuestion(id).subscribe({
       next: () => {
+        this.toastr.success("Success", "Deleted question successfully");
         this.loadQuestions(); // törlés után újratöltöd
       },
       error: err => {
+        this.toastr.error("Failed", "Deleted question failed");
         console.error('Delete failed', err);
       }
     });
@@ -122,9 +127,11 @@ export class AdminPanelComponent implements OnInit {
   onQuestionCreated(created: Question) {
     this.adminService.createQuestion(created).subscribe({
       next: () => {
+         this.toastr.success("Success", "Created question successfully");
         this.loadQuestions(); // létrehozás után is frissítesz
       },
       error: err => {
+        this.toastr.error("Failed", "Created question failed");
         console.error('Create failed', err);
       }
     });
