@@ -33,6 +33,7 @@ namespace CodeLingo.API
             builder.Services.AddScoped<SessionLogic>();
             builder.Services.AddScoped<AnswerEvaluationLogic>();
             builder.Services.AddScoped<UserStatsLogic>();
+            builder.Services.AddScoped<LeaderboardLogic>();
             builder.Services.AddHostedService<SessionCleanUpLogic>();
 
             // Identity Configuration
