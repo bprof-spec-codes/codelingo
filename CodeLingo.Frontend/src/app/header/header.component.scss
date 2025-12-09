@@ -1,3 +1,5 @@
+@import "../../variables";
+
 a,
 button {
     font-weight: 600;
@@ -5,6 +7,12 @@ button {
 
 button {
     border-radius: 24px;
+}
+
+.profile-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
 }
 
 .profile-picture {
@@ -23,6 +31,24 @@ button {
 .profile-link:hover i {
     transform: scale(1.1);
     transition: transform 0.2s ease;
+}
+
+.level-badge {
+    position: absolute;
+    bottom: -$space-1;
+    right: -$space-1;
+    background: linear-gradient(135deg, $primary 0%, $primary-200 100%);
+    color: $dark;
+    font-size: 0.65rem;
+    font-weight: $font-weight-extrabold;
+    padding: $space-1 0.35rem;
+    border-radius: 10px;
+    border: 2px solid $dark;
+    line-height: 1;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 1;
 }
 
 .navbar .btn.btn-secondary {
@@ -150,6 +176,7 @@ button {
         border-radius: 6px;
         color: #DAE243;
         text-decoration: none;
+        position: relative;
     }
 
     .cl-mobile-menu .profile-link:hover {
@@ -166,6 +193,24 @@ button {
     .cl-mobile-menu .profile-link i {
         font-size: 1.4rem;
         color: #DAE243;
+    }
+
+    .cl-mobile-menu .level-badge {
+        position: absolute;
+        bottom: 0.25rem;
+        left: 1.2rem;
+        background: linear-gradient(135deg, $primary 0%, $primary-400 100%);
+        color: $dark;
+        font-size: 0.6rem;
+        font-weight: $font-weight-extrabold;
+        padding: 0.15rem $space-1;
+        border-radius: 8px;
+        border: 2px solid $dark;
+        line-height: 1;
+        min-width: 18px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 1;
     }
 
     .cl-mobile-menu .btn {

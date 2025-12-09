@@ -12,13 +12,15 @@ namespace CodeLingo.API.Logics
         private IQuestionRepository questionRepository;
         private SessionQuestionRepository sessionQuestionRepository;
         private IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
+        private IProgressRepository progressRepository;
 
-        public SessionLogic(ISessionRepository repository, IQuestionRepository questionRepository, SessionQuestionRepository sessionQuestionRepository, IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository)
+        public SessionLogic(ISessionRepository repository, IQuestionRepository questionRepository, SessionQuestionRepository sessionQuestionRepository, IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository, IProgressRepository progressRepository)
         {
                 this.repository = repository;
                 this.questionRepository = questionRepository;
                 this.sessionQuestionRepository = sessionQuestionRepository;
                 this.multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
+                this.progressRepository = progressRepository;
         }
 
         public StartSessionResponseDto Create(StartSessionRequestDto session)
@@ -100,8 +102,6 @@ namespace CodeLingo.API.Logics
 
             if (next == null)
             {
-                session.Status = SessionStatus.Completed;
-                session.UpdatedAt = DateTime.UtcNow;
                 repository.SaveChanges();
 
                 return new NextQuestionResponseDto
@@ -185,6 +185,125 @@ namespace CodeLingo.API.Logics
                 Metadata = null
             };
         }
-       
+
+        public SessionSummaryDto CloseSession(string sessionId, string userId, bool forceClose)
+        {
+            var session = repository.ReadWithQuestions(sessionId);
+
+            if (session == null)
+            {
+                throw new KeyNotFoundException("Session not found");
+            }
+
+            if (session.UserId != userId)
+            {
+                throw new UnauthorizedAccessException("Not authorized to close this session");
+            }
+
+            if (session.Status == SessionStatus.Completed || session.Status == SessionStatus.Terminated)
+            {
+                throw new InvalidOperationException("Session already closed or invalid state");
+            }
+
+            var totalQuestions = session.SessionQuestions.Count;
+            var answeredQuestions = session.SessionQuestions.Count(sq => sq.Answered);
+            var correctAnswers = session.SessionQuestions.Count(sq => sq.Correct);
+            var totalScore = session.SessionQuestions.Sum(sq => sq.PointsEarned);
+            var accuracyPercentage = answeredQuestions > 0
+                ? (float)correctAnswers / answeredQuestions * 100
+                : 0f;
+
+            var unansweredQuestions = totalQuestions - answeredQuestions;
+            if (unansweredQuestions > 0 && !forceClose)
+            {
+                throw new InvalidOperationException("Session already closed or invalid state");
+            }
+
+            session.Status = answeredQuestions == totalQuestions
+                ? SessionStatus.Completed
+                : SessionStatus.Terminated;
+            session.UpdatedAt = DateTime.UtcNow;
+
+            UpdateUserProgress(session.UserId, correctAnswers, totalScore, accuracyPercentage);
+
+            repository.SaveChanges();
+
+            return new SessionSummaryDto
+            {
+                SessionId = session.Id,
+                UserId = session.UserId,
+                Language = session.Language,
+                Difficulty = session.Difficulty.ToString(),
+                Status = session.Status.ToString().ToLower(),
+                TotalQuestions = totalQuestions,
+                AnsweredQuestions = answeredQuestions,
+                CorrectAnswers = correctAnswers,
+                TotalScore = totalScore,
+                AccuracyPercentage = accuracyPercentage,
+                ClosedAt = DateTime.UtcNow
+            };
+        }
+
+        private void UpdateUserProgress(string userId, int correctAnswers, int totalScore, float accuracyPercentage)
+        {
+            var progress = progressRepository.ReadByUserId(userId);
+
+            if (progress == null)
+            {
+                progress = new Progress
+                {
+                    UserId = userId,
+                    TotalScore = totalScore,
+                    Xp = totalScore,
+                    CurrentLevel = 1,
+                    Streak = correctAnswers,
+                    Accuracy = accuracyPercentage / 100,
+                    LastSessionAt = DateTime.UtcNow
+                };
+                progressRepository.Create(progress);
+            }
+            else
+            {
+                progress.TotalScore += totalScore;
+                progress.Xp += totalScore;
+
+                var completedSessions = repository.ReadAll()
+                    .Where(s => s.UserId == userId &&
+                               (s.Status == SessionStatus.Completed || s.Status == SessionStatus.Terminated))
+                    .Count();
+
+                progress.Accuracy = ((progress.Accuracy * (completedSessions - 1)) + (accuracyPercentage / 100)) / completedSessions;
+
+                progress.CurrentLevel = CalculateLevelFromXp(progress.Xp);
+
+                progress.LastSessionAt = DateTime.UtcNow;
+            }
+
+            progressRepository.SaveChanges();
+        }
+
+        /*
+           Szintlépési képlet:
+           Következő szint XP-minimum = előző szint XP-minimum + (aktuális szint × 100)
+        */
+        private int CalculateLevelFromXp(int xp)
+        {
+            int level = 1;
+            int xpMinForCurrentLevel = 0;
+
+            while (true)
+            {
+                int xpMinForNextLevel = xpMinForCurrentLevel + (level * 100);
+
+                if (xp < xpMinForNextLevel)
+                {
+                    return level;
+                }
+
+                level++;
+                xpMinForCurrentLevel = xpMinForNextLevel;
+            }
+        }
+
     }
 }

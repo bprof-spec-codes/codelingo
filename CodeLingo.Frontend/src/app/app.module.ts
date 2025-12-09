@@ -12,7 +12,7 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { AdminListComponent } from './admin/admin-list/admin-list.component';
 import { AdminEditComponent } from './admin/admin-edit/admin-edit.component';
 import { AdminItemComponent } from './admin/admin-item/admin-item.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { CountUpModule } from 'ngx-countup';
 import { AdminLanguageCreateComponent } from './admin/admin-language-create/admin-language-create.component';
 import { AdminLanguageListComponent } from './admin/admin-language-list/admin-language-list.component';
@@ -36,9 +36,13 @@ import { QuestionContainerComponent } from './question-container/question-contai
 import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
+import { ResultSummaryComponent } from './question-container/result-summary/result-summary.component';
 import { TooltipDirective } from './shared/directives/tooltip.directive';
 import { APP_INITIALIZER } from '@angular/core';
 import { ConfigService } from './services/config.service';
+import { provideToastr } from 'ngx-toastr';
+import { ProgressDashboardComponent } from './profile/components/progress-dashboard/progress-dashboard.component';
+
 
 @NgModule({
   declarations: [
@@ -72,7 +76,9 @@ import { ConfigService } from './services/config.service';
     CodeCompletionQuestionComponent,
     QuestionContainerComponent,
     QuestionProgressComponent,
+    ResultSummaryComponent,
     TooltipDirective,
+    ProgressDashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,6 +95,8 @@ import { ConfigService } from './services/config.service';
       deps: [ConfigService],
       multi: true
     }
+    provideAnimations(),
+    provideToastr()
   ],
   bootstrap: [AppComponent],
 })

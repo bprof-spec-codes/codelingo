@@ -1,0 +1,277 @@
+<div class="progress-dashboard-container mt-5">
+  <div class="container py-4">
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 text-muted">Loading your statistics...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="alert alert-info" role="alert">
+      <i class="bi bi-info-circle me-2"></i>
+      {{ error }}
+    </div>
+
+    <!-- Stats Content -->
+    <div *ngIf="userStats && !loading">
+      <!-- Navigation Tabs -->
+      <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+          <button 
+            class="nav-link" 
+            [class.active]="activeTab === 'overview'"
+            (click)="setActiveTab('overview')">
+            <i class="bi bi-graph-up"></i>
+            <span class="tab-text">Overview</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button 
+            class="nav-link" 
+            [class.active]="activeTab === 'history'"
+            (click)="setActiveTab('history')">
+            <i class="bi bi-clock-history"></i>
+            <span class="tab-text">Session History</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button 
+            class="nav-link" 
+            [class.active]="activeTab === 'languages'"
+            (click)="setActiveTab('languages')">
+            <i class="bi bi-code-slash"></i>
+            <span class="tab-text">Languages</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button 
+            class="nav-link" 
+            [class.active]="activeTab === 'difficulty'"
+            (click)="setActiveTab('difficulty')">
+            <i class="bi bi-bar-chart-fill"></i>
+            <span class="tab-text">Difficulty</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button 
+            class="nav-link" 
+            [class.active]="activeTab === 'time'"
+            (click)="setActiveTab('time')">
+            <i class="bi bi-calendar3"></i>
+            <span class="tab-text">Time-Based Stats</span>
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Overview Tab -->
+        <div *ngIf="activeTab === 'overview'" class="tab-pane fade show active">
+          <div class="row g-4 mb-4">
+            <!-- Level & XP Card -->
+            <div class="col-lg-6">
+              <div class="level-card">
+                <div class="level-display">
+                  <i class="bi bi-award-fill level-icon"></i>
+                  <div class="level-number">{{ currentLevel }}</div>
+                  <div class="level-label">LEVEL</div>
+                </div>
+                <div class="xp-info">
+                  <h3 class="xp-value">{{ userStats.totalScore }} XP</h3>
+                  <p class="xp-progress">{{ nextLevelMinXP - userStats.totalScore }} XP to Level {{ currentLevel + 1 }}</p>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill" [style.width.%]="progressPercentage"></div>
+                  </div>
+                  <div class="progress-text">{{ progressPercentage | number:'1.0-0' }}%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Other Stats -->
+            <div class="col-lg-6">
+              <div class="row g-4 h-100">
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-bullseye"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStats.accuracyPercentage | number:'1.1-1' }}%</h3>
+                      <p class="stat-label">Accuracy</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-list-check"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStats.sessionCount }}</h3>
+                      <p class="stat-label">Sessions Completed</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-question-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStatistics?.totalQuestionsAnswered || 0 }}</h3>
+                      <p class="stat-label">Questions Answered</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStatistics?.currentStreak || 0 }}</h3>
+                      <p class="stat-label">Day Streak</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session History Tab -->
+        <div *ngIf="activeTab === 'history'" class="tab-pane fade show active">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Language</th>
+                  <th>Difficulty</th>
+                  <th>Score</th>
+                  <th>Accuracy</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let session of userStats.historicalProgress.sessions">
+                  <td>{{ session.date | date:'short' }}</td>
+                  <td>
+                    <span class="badge bg-secondary">{{ session.language }}</span>
+                  </td>
+                  <td>
+                    <span class="badge" 
+                          [class.bg-success]="session.difficulty === 'Easy'"
+                          [class.bg-warning]="session.difficulty === 'Medium'"
+                          [class.bg-danger]="session.difficulty === 'Hard'">
+                      {{ session.difficulty }}
+                    </span>
+                  </td>
+                  <td>{{ session.score }}</td>
+                  <td>{{ session.accuracy | number:'1.1-1' }}%</td>
+                </tr>
+                <tr *ngIf="userStats.historicalProgress.sessions.length === 0">
+                  <td colspan="5" class="text-center text-muted">No sessions found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Languages Tab -->
+        <div *ngIf="activeTab === 'languages'" class="tab-pane fade show active">
+          <div class="row g-4">
+            <div class="col-md-6 col-lg-4" *ngFor="let lang of userStats.languageBreakdown.items">
+              <div class="breakdown-card">
+                <div class="card-header">
+                  <i class="bi bi-code-square me-2"></i>
+                  <h5>{{ lang.language }}</h5>
+                </div>
+                <div class="card-body">
+                  <div class="breakdown-stat">
+                    <span class="label">Total Score:</span>
+                    <span class="value">{{ lang.totalScore }}</span>
+                  </div>
+                  <div class="breakdown-stat">
+                    <span class="label">Accuracy:</span>
+                    <span class="value">{{ lang.accuracyPercentage | number:'1.1-1' }}%</span>
+                  </div>
+                  <div class="breakdown-stat">
+                    <span class="label">Sessions:</span>
+                    <span class="value">{{ lang.sessionCount }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="userStats.languageBreakdown.items.length === 0" class="col-12">
+              <p class="text-center text-muted">No language data available</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Difficulty Tab -->
+        <div *ngIf="activeTab === 'difficulty'" class="tab-pane fade show active">
+          <div class="row g-4">
+            <div class="col-md-6 col-lg-4" *ngFor="let diff of userStats.difficultyBreakdown.items">
+              <div class="breakdown-card">
+                <div class="card-header">
+                  <i class="bi bi-bar-chart-fill me-2"></i>
+                  <h5>{{ diff.difficulty }}</h5>
+                </div>
+                <div class="card-body">
+                  <div class="breakdown-stat">
+                    <span class="label">Total Score:</span>
+                    <span class="value">{{ diff.totalScore }}</span>
+                  </div>
+                  <div class="breakdown-stat">
+                    <span class="label">Accuracy:</span>
+                    <span class="value">{{ diff.accuracyPercentage | number:'1.1-1' }}%</span>
+                  </div>
+                  <div class="breakdown-stat">
+                    <span class="label">Sessions:</span>
+                    <span class="value">{{ diff.sessionCount }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="userStats.difficultyBreakdown.items.length === 0" class="col-12">
+              <p class="text-center text-muted">No difficulty data available</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Time-Based Stats Tab -->
+        <div *ngIf="activeTab === 'time'" class="tab-pane fade show active">
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="time-stat-card">
+                <i class="bi bi-calendar-day"></i>
+                <h4>Daily</h4>
+                <p class="score">{{ userStats.timeBasedStats.daily.score }}</p>
+                <span class="label">points today</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="time-stat-card">
+                <i class="bi bi-calendar-week"></i>
+                <h4>Weekly</h4>
+                <p class="score">{{ userStats.timeBasedStats.weekly.score }}</p>
+                <span class="label">points this week</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="time-stat-card">
+                <i class="bi bi-calendar-month"></i>
+                <h4>Monthly</h4>
+                <p class="score">{{ userStats.timeBasedStats.monthly.score }}</p>
+                <span class="label">points this month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

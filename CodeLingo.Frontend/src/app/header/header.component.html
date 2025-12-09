@@ -59,9 +59,11 @@
             (click)="closeMobileMenu()">
             <ng-container *ngIf="profilePictureUrl$ | async as profilePicture; else defaultIcon">
               <img [src]="profilePicture" alt="Profile" class="profile-picture"/> 
+              <span class="level-badge" *ngIf="userLevel$ | async as level">{{ level }}</span>
             </ng-container>
             <ng-template #defaultIcon>
               <i class="bi bi-person-circle fs-3"></i>
+              <span class="level-badge" *ngIf="userLevel$ | async as level">{{ level }}</span>
             </ng-template>
           </a>
           <button class="btn btn-outline-dark" (click)="logout(); closeMobileMenu()">
