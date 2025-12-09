@@ -24,7 +24,7 @@
 - Tech stack: ASP.NET 8 backend, Angular frontend, Bootstrap UI.
 - Branching: GitFlow (master, develop, feature/*, hotfix/*).
 - Tasks: GitHub Projects board per sprint columns.
-- Meetings: Weekly per coc.md.
+- Meetings: Twice per week per coc.md. Usually thurstday and sunday.
 
 ### Local setup
 - Prerequisites: .NET 8 SDK, Node.js LTS, Angular CLI.
@@ -168,14 +168,13 @@ Rövid kivonat. Teljes specifikáció: [docs/technical/api-reference.md](docs/te
 ---
 
 ## 📝 Problem Log
-This is where we track encountered problems and their solutions.  
-The full list will be maintained in [Problems Log](./docs/PROBLEMS.md).  
 
-### Example format
 | Problem | Solution | Affected Area |
 |---------|----------|---------------|
 | Issue template was hard to understand | Created examples and filled-in templates | Scrum process |
-| TODO 2 | TODO | Frontend |
-| TODO 3 | TODO | Backend |
-| TODO 4 | TODO | Architecture |
-| TODO 5 | TODO | Mixed |
+| Project was completely new | Plan issues in the first phase | Scrum process |
+| Ticket collisions | Assign similar tickets to the same person | Scrum process |
+| Dependent issues got stuck | Prioritize properly | Scrum process |
+| Changes weren't merged to master early on | Add merge as a requirement before closing | Git workflow |
+| Too many extras in the API | Strive for simplicity | Backend |
+| Burnup chart looked off | Ensure issues are properly closed | Scrum process |
