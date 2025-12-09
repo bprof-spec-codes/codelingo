@@ -67,16 +67,6 @@
         </button>
       </div>
 
-      <!-- FEEDBACK BOX -->
-      <div
-        *ngIf="questionSubmitted && !isCorrect"
-        class="feedback-box"
-        [ngClass]="{ incorrect: true }"
-      >
-        <i class="bi bi-x-circle-fill"></i>
-        <span>{{ feedback }}</span>
-      </div>
-
       <div *ngIf="loadingQuestion" class="loading-overlay">
         <span>Loading next question...</span>
       </div>
