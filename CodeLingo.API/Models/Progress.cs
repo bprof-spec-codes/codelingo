@@ -7,6 +7,7 @@ namespace CodeLingo.API.Models
     {
         [Key]
         [ForeignKey("User")]
+        [StringLength(450)]
         public string UserId { get; set; }
 
         public int TotalScore { get; set; } = 0;

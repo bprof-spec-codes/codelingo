@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { ConfigService } from './config.service';
 
 export interface QuestionDto {
   id: number;
@@ -18,9 +18,9 @@ export interface QuestionDto {
 
 @Injectable({ providedIn: 'root' })
 export class QuestionService {
-  private baseUrl = `${environment.apiUrl}/questions`;
+  private get baseUrl() { return `${this.configService.apiUrl}/questions`; }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private configService: ConfigService) { }
 
   getDemo() {
     return this.http.get<QuestionDto>(`${this.baseUrl}/demo`);

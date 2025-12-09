@@ -31,17 +31,17 @@ namespace CodeLingo.API.Models
         [Column(TypeName = "text")]
         public string Explanation { get; set; }
 
-        [Column(TypeName = "json")]
+        [Column(TypeName = "nvarchar(max)")]
         public string Tags { get; set; } // JSON array of strings
 
-        [Column(TypeName = "json")]
+        [Column(TypeName = "nvarchar(max)")]
         public string Metadata { get; set; } // JSON object
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        [StringLength(36)]
+        [StringLength(450)]
         public string CreatedBy { get; set; }
 
         public bool IsActive { get; set; } = true;
