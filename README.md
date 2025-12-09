@@ -116,13 +116,54 @@ Rövid kivonat. Teljes specifikáció: [docs/technical/api-reference.md](docs/te
 
 ---
 
-## 🖼️ UI Screens (overview)
-- **Login / Register** – user authentication  
-- **Dashboard** – overview, shows level and score  
-- **Practice mode** – solve questions and get feedback  
-- **Leaderboard** – view ranking  
+## 🖼️ UI Screens
 
-> **TODO:** add screenshots during the semester.
+- Landing Page (/landing-page)
+  - Purpose: Welcome screen with feature highlights and clear CTAs.
+  - Key actions: Sign Up, Log In, Start Practice (when logged in).
+  - Screenshot: to be added.
+
+- Login (/login)
+  - Purpose: Authenticate existing users.
+  - Key actions: Submit credentials, “Remember me”, navigate to Register.
+  - Screenshot: to be added.
+
+- Register (/register)
+  - Purpose: Create a new user account.
+  - Key actions: Fill form with validation, navigate to Login after success.
+  - Screenshot: to be added.
+
+- Practice Starter (/practice/start)
+  - Purpose: Configure a new practice session.
+  - Key actions: Select language, difficulty, question count; start session.
+  - Backend: POST /sessions/start
+  - Screenshot: to be added.
+
+- Practice Session (Question View)
+  - Purpose: Show current question, collect answer, proceed to next.
+  - Key actions: Submit answer, see feedback, continue.
+  - Backend: GET /sessions/{id}/next, POST /sessions/{id}/answer
+  - Screenshot: to be added.
+
+- Session Results
+  - Purpose: Display session summary and performance.
+  - Key actions: Review answers, navigate to leaderboard or start a new session.
+  - Screenshot: to be added.
+
+- Leaderboard (/leaderboard)
+  - Purpose: Show rankings and competition stats.
+  - Key actions: Filter by range/language, view positions.
+  - Screenshot: to be added.
+
+- Profile
+  - Purpose: Manage user profile and view personal stats.
+  - Key actions: Edit profile, change avatar, review statistics.
+  - Screenshot: to be added.
+
+- Admin Panel
+  - Purpose: Administer languages, questions, and monitor KPIs.
+  - Key actions: CRUD for questions/languages, import/export, dashboard metrics.
+  - Screenshot: to be added.
 
 ---
 
