@@ -1,7 +1,7 @@
 @import "../../variables";
 
 .leaderboard-container {
-  background: $dark;
+  background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
   min-height: 100vh;
   color: $light;
   padding-top: $space-4;
@@ -19,27 +19,28 @@
 
 // Filters Card
 .filters-card {
-  background: $dark-700;
+  background: $dark-800;
   border-radius: 0.5rem;
+  border: 1px solid $secondary-400;
   padding: $space-3;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 
   .form-label {
-    color: $primary-200;
+    color: $primary-400;
     font-weight: $font-weight-semibold;
     font-size: 0.875rem;
     margin-bottom: $space-1;
   }
 
   .form-select {
-    background: $dark-800;
+    background: $dark-900;
     border: 1px solid $dark-700;
     color: $light;
     border-radius: 0.25rem;
     
     &:focus {
-      border-color: $primary;
-      box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+      border-color: $secondary-400;
+      box-shadow: 0 0 0 0.2rem rgba($secondary-700, 0.25);
       background: $dark-800;
       color: $light;
     }
@@ -53,8 +54,8 @@
 
 // Current User Card
 .current-user-card {
-  background: linear-gradient(135deg, $dark-700 0%, $dark-800 100%);
-  border: 2px solid $primary;
+  background: $dark-800;
+  border: 2px solid $secondary-400;
   border-radius: 0.5rem;
   padding: $space-3;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -68,7 +69,7 @@
     text-align: center;
     
     .stat-label {
-      color: $primary-200;
+      color: $primary-300;
       font-size: 0.875rem;
       font-weight: $font-weight-semibold;
       margin-bottom: $space-1;
@@ -88,15 +89,16 @@
 
 // Leaderboard Table
 .leaderboard-table-container {
-  background: $dark-700;
+  background: transparent;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .leaderboard-table {
   margin-bottom: 0;
-  
+  background: transparent;
+  color: $light;
+
   thead {
     background: $dark-800;
     
@@ -106,15 +108,16 @@
       text-transform: uppercase;
       font-size: 0.875rem;
       letter-spacing: 0.5px;
-      border-bottom: 2px solid $primary;
+      border-bottom: 2px solid $secondary-400;
       padding: $space-3;
+      background: $dark-900;
     }
   }
 
   tbody {
     tr {
       background: $dark-700;
-      border-bottom: 1px solid $dark-700;
+      border-bottom: 1px solid $dark-800;
       transition: background-color 0.3s ease;
 
       &:hover {
@@ -138,6 +141,8 @@
         color: $light;
         padding: $space-3;
         vertical-align: middle;
+        background: transparent;
+        border-color: $dark-800;
       }
     }
   }
@@ -185,8 +190,8 @@
   }
 
   &.rank-default {
-    background: $dark-700;
-    color: $primary-200;
+    background: $secondary-300;
+    color: $dark;
   }
 }
 
@@ -208,14 +213,14 @@
 
         &:hover:not(:disabled) {
           background: $primary;
-          border-color: $primary;
+          border-color: $secondary;
           color: $dark;
         }
       }
 
       &.active .page-link {
         background: $primary;
-        border-color: $primary;
+        border-color: $secondary;
         color: $dark;
         font-weight: $font-weight-bold;
       }
@@ -232,11 +237,11 @@
 
 // Ranking Rules Card
 .ranking-rules-card {
-  background: $dark-700;
+  background: $dark-800;
   border-radius: 0.5rem;
   padding: $space-3;
   font-size: 0.875rem;
-  color: $primary-200;
+  color: $primary-400;
 
   h6 {
     color: $primary;

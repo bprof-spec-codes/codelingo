@@ -110,10 +110,8 @@
                 <th class="rank-column">Rank</th>
                 <th>Player</th>
                 <th class="text-center">Score</th>
-                <th class="text-center d-none d-md-table-cell">Accuracy</th>
+                <th class="text-center">Accuracy</th>
                 <th class="text-center d-none d-lg-table-cell">Sessions</th>
-                <th class="text-center d-none d-lg-table-cell">Language</th>
-                <th class="text-center d-none d-lg-table-cell">Difficulty</th>
               </tr>
             </thead>
             <tbody>
@@ -123,33 +121,22 @@
                 [class.top-rank]="entry.rank <= 3">
                 <td class="rank-column">
                   <span [class]="getRankBadgeClass(entry.rank) + ' rank-badge'">
-                    <i [class]="getRankIcon(entry.rank)"></i>
+                    <i *ngIf="getRankIcon(entry.rank)!=''" [class]="getRankIcon(entry.rank)"></i>
                     {{ entry.rank }}
                   </span>
                 </td>
                 <td class="username-column">
                   <span class="username">{{ entry.username }}</span>
-                  <span *ngIf="entry.isCurrentUser" class="badge bg-primary ms-2">You</span>
+                  <span *ngIf="entry.isCurrentUser" class="badge bg-secondary ms-2">You</span>
                 </td>
                 <td class="text-center score-column">
                   <strong>{{ entry.score }}</strong>
                 </td>
-                <td class="text-center d-none d-md-table-cell">
+                <td class="text-center">
                   {{ entry.accuracyPercentage | number:'1.1-1' }}%
                 </td>
                 <td class="text-center d-none d-lg-table-cell">
                   {{ entry.sessionCount }}
-                </td>
-                <td class="text-center d-none d-lg-table-cell">
-                  <span class="badge bg-info">{{ entry.language }}</span>
-                </td>
-                <td class="text-center d-none d-lg-table-cell">
-                  <span class="badge"
-                        [class.bg-success]="entry.difficulty === 'Easy'"
-                        [class.bg-warning]="entry.difficulty === 'Medium'"
-                        [class.bg-danger]="entry.difficulty === 'Hard'">
-                    {{ entry.difficulty }}
-                  </span>
                 </td>
               </tr>
             </tbody>

@@ -84,7 +84,7 @@ export class LeaderboardComponent implements OnInit {
     if (rank === 1) return 'bi-trophy-fill';
     if (rank === 2) return 'bi-award-fill';
     if (rank === 3) return 'bi-award-fill';
-    return 'bi-hash';
+    return '';
   }
 
   get pages(): number[] {
