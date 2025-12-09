@@ -41,6 +41,11 @@
                 "glob": "**/*",
                 "input": "src/assets/brand",
                 "output": "assets/brand"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor/min/vs",
+                "output": "assets/monaco/vs"
               }
             ],
             "styles": [
@@ -112,6 +117,11 @@
                 "glob": "**/*",
                 "input": "src/assets/brand",
                 "output": "assets/brand"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor/min/vs",
+                "output": "assets/monaco/vs"
               }
             ],
             "styles": [

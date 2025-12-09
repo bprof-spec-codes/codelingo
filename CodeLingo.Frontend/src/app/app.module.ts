@@ -31,10 +31,12 @@ import { AvatarUploadComponent } from './profile/components/avatar-upload/avatar
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MultipleChoiceQuestionComponent } from './question-container/multiple-choice-question/multiple-choice-question.component';
+import { CodeCompletionQuestionComponent } from './question-container/code-completion-question/code-completion-question.component';
 import { QuestionContainerComponent } from './question-container/question-container.component';
 import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
+import { TooltipDirective } from './shared/directives/tooltip.directive';
 import { provideToastr } from 'ngx-toastr';
 
 @NgModule({
@@ -66,8 +68,10 @@ import { provideToastr } from 'ngx-toastr';
     LoginComponent,
     RegisterComponent,
     MultipleChoiceQuestionComponent,
+    CodeCompletionQuestionComponent,
     QuestionContainerComponent,
     QuestionProgressComponent,
+    TooltipDirective,
   ],
   imports: [
     BrowserModule,

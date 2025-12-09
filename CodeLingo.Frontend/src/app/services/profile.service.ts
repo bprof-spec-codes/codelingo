@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { User, ProfileUpdateRequest } from '../models/user';
 import { environment } from '../../environments/environment';
 
@@ -10,6 +11,9 @@ import { environment } from '../../environments/environment';
 export class ProfileService {
     private apiUrl = `${environment.apiUrl}/users/me`;
 
+    private profileUpdatedSubject = new Subject<void>();
+    profileUpdated$ = this.profileUpdatedSubject.asObservable();
+
     constructor(private http: HttpClient) { }
 
     getProfile(): Observable<User> {
@@ -17,6 +21,8 @@ export class ProfileService {
     }
 
     updateProfile(profile: ProfileUpdateRequest): Observable<{ message: string }> {
-        return this.http.put<{ message: string }>(this.apiUrl, profile);
+        return this.http.put<{ message: string }>(this.apiUrl, profile).pipe(
+            tap(() => this.profileUpdatedSubject.next())
+        );
     }
 }

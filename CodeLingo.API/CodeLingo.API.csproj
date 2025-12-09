@@ -21,4 +21,10 @@
 
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="seedsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

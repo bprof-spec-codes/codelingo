@@ -14,4 +14,10 @@ export class AvatarUploadComponent {
         const input = event.target as HTMLInputElement;
         this.urlChange.emit(input.value);
     }
+
+    onImageError(event: Event): void {
+        // Clear the URL to show the default icon instead
+        this.currentUrl = null;
+        this.urlChange.emit('');
+    }
 }

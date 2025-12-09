@@ -2,7 +2,7 @@ import { AnswerOption } from "./answer-option";
 import { BaseQuestion, QuestionType } from "./base-question";
 
 export interface MultipleChoiceQuestion extends BaseQuestion {
-    type: 'MC';
+    type: QuestionType.MULTIPLE_CHOICE | 'MultipleChoice';
     options: AnswerOption[];
     correctAnswerIds: string[];
     allowMultipleSelection: boolean;

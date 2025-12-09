@@ -18,5 +18,10 @@ namespace CodeLingo.API.DTOs
         public List<string> CorrectAnswerIds { get; set; }
         public bool AllowMultipleSelection { get; set; }
         public bool ShuffleOptions { get; set; }
+        
+        // Code Completion specific
+        // Code Completion specific
+        public string CodeSnippet { get; set; }
+        public List<string> AcceptedAnswers { get; set; }
     }
 }

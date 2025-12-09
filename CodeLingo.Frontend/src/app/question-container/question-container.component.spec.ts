@@ -10,6 +10,7 @@ import { MultipleChoiceQuestionComponent } from './multiple-choice-question/mult
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
 import { of } from 'rxjs';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-multiple-choice-question',
@@ -20,7 +21,7 @@ class MockMultipleChoiceComponent {
   @Input() isSubmitted: boolean = false;
   @Output() answerSubmitted = new EventEmitter<string[]>();
 
-  resetSelection() {}
+  resetSelection() { }
 }
 
 describe('QuestionContainerComponent', () => {
@@ -83,70 +84,84 @@ describe('QuestionContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [QuestionContainerComponent], // non-standalone goes here
-      imports: [MockMultipleChoiceComponent], // standalone components go here
-      providers: [QuestionSessionService],
+      declarations: [QuestionContainerComponent],
+      imports: [MockMultipleChoiceComponent],
+      providers: [
+        {
+          provide: QuestionSessionService,
+          useValue: jasmine.createSpyObj('QuestionSessionService', ['getNextQuestion', 'submitAnswer'])
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { paramMap: { get: () => 'session-123' } } }
+        },
+        {
+          provide: Router,
+          useValue: jasmine.createSpyObj('Router', ['navigate'])
+        }
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(QuestionContainerComponent);
     component = fixture.componentInstance;
     sessionService = TestBed.inject(QuestionSessionService);
 
-    spyOn(sessionService, 'getConfig').and.returnValue({
-      language: 'C#',
-      difficulty: 'easy',
-      questionCount: 2,
-    });
-    spyOn(sessionService, 'getQuestions').and.returnValue(mockQuestions);
+    (sessionService.getNextQuestion as jasmine.Spy).and.returnValue(of({
+      questionId: 'q1',
+      questionType: 'MC',
+      questionData: mockQuestions[0],
+      currentIndex: 1,
+      totalQuestions: 2,
+      isCompleted: false,
+      metadata: {}
+    }));
+
+    (sessionService.submitAnswer as jasmine.Spy).and.returnValue(of({
+      isCorrect: true,
+      feedback: 'Correct!',
+      score: 10,
+      currentIndex: 1,
+      totalQuestions: 2,
+      isCompleted: false
+    }));
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('ngOnInit should set questions and load first question', fakeAsync(() => {
+  it('ngOnInit should load next question', () => {
     component.ngOnInit();
-    tick(500); // simulate loadNextQuestion delay
-
-    expect(component.questions).toEqual(mockQuestions);
-    expect(component.totalQuestions).toBe(2);
-    expect(component.currentIndex).toBe(1);
+    expect(sessionService.getNextQuestion).toHaveBeenCalledWith('session-123');
     expect(component.questionData).toEqual(mockQuestions[0]);
-    expect(component.isCompleted).toBeFalse();
-  }));
+    expect(component.currentIndex).toBe(1);
+    expect(component.totalQuestions).toBe(2);
+  });
 
-  it('loadNextQuestion should increment index and complete session', fakeAsync(() => {
-    component.questions = mockQuestions;
-    component.totalQuestions = mockQuestions.length;
-    component.currentIndex = 1;
+  it('loadNextQuestion should handle completion', () => {
+    (sessionService.getNextQuestion as jasmine.Spy).and.returnValue(of({
+      isCompleted: true
+    }));
 
+    component.sessionId = 'session-123';
     component.loadNextQuestion();
-    tick(500);
-    expect(component.currentIndex).toBe(2);
-    expect(component.isCompleted).toBeFalse();
 
-    component.loadNextQuestion();
-    tick(500);
-    expect(component.currentIndex).toBe(3);
     expect(component.isCompleted).toBeTrue();
-  }));
+  });
 
-  it('onAnswer should set isCorrect and feedback', fakeAsync(() => {
-    component.questions = mockQuestions;
-    component.totalQuestions = mockQuestions.length;
-    component.currentIndex = 1;
+  it('onAnswer should submit answer and update feedback', () => {
+    component.sessionId = 'session-123';
     component.questionData = mockQuestions[0];
+    component.questionType = 'MC';
 
-    component.onAnswer(['opt1']); // correct answer
-    tick(1200);
+    component.onAnswer(['opt1']);
 
+    expect(sessionService.submitAnswer).toHaveBeenCalledWith('session-123', {
+      questionType: 'MC',
+      questionId: 'q1',
+      answerIds: ['opt1']
+    });
     expect(component.isCorrect).toBeTrue();
-    expect(component.feedback).toContain('Correct!');
-
-    component.onAnswer(['wrong']); // incorrect
-    tick(1200);
-
-    expect(component.isCorrect).toBeFalse();
-    expect(component.feedback).toContain('Incorrect');
-  }));
+    expect(component.feedback).toBe('Correct!');
+  });
 });

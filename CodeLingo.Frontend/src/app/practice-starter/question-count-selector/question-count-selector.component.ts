@@ -13,6 +13,9 @@ export class QuestionCountSelectorComponent {
 
   // Event emitted when user selects or inputs a count
   @Output() countChange = new EventEmitter<number>();
+  
+  // Event emitted when validation state changes
+  @Output() validChange = new EventEmitter<boolean>();
 
   // preset question counts for quick selection
   presetCounts: number[] = [5, 10, 20, 30];
@@ -24,35 +27,61 @@ export class QuestionCountSelectorComponent {
   //custom count
   customCount: number | null = null;
   isCustom: boolean = false;
+  
+  // validation state
+  isValid: boolean = true;
+  errorMessage: string = '';
 
   onPresetSelect(count: number): void {
     this.selectedCount = count;
     this.isCustom = false;
     this.customCount = null;
+    this.isValid = true;
+    this.errorMessage = '';
     this.countChange.emit(count);
+    this.validChange.emit(true);
   }
 
   onCustomInput(event: Event): void {
     const input = event.target as HTMLInputElement;
+    const rawValue = input.value.trim();
 
-    // limit to 2 digits
-    if (input.value.length > 2) {
-      input.value = input.value.slice(0, 2);
+    // if empty, reset to invalid state
+    if (rawValue === '') {
+      this.customCount = null;
+      this.isCustom = false;
+      this.isValid = false;
+      this.errorMessage = 'Please enter a number';
+      this.validChange.emit(false);
+      return;
     }
 
-    const value = parseInt(input.value, 10);
+    const value = parseInt(rawValue, 10);
 
-    if (value > 50) {
-      input.value = input.value.slice(0, 1);
+    // check if it's a valid number
+    if (isNaN(value)) {
+      this.isValid = false;
+      this.errorMessage = 'Please enter a valid number';
+      this.validChange.emit(false);
+      return;
     }
 
-
-    // validate the input
-    if (!isNaN(value) && value >= this.minCount && value <= this.maxCount) {
+    // validate the range
+    if (value < this.minCount || value > this.maxCount) {
       this.customCount = value;
       this.selectedCount = value;
       this.isCustom = true;
+      this.isValid = false;
+      this.errorMessage = `Number must be between ${this.minCount} and ${this.maxCount}`;
+      this.validChange.emit(false);
+    } else {
+      this.customCount = value;
+      this.selectedCount = value;
+      this.isCustom = true;
+      this.isValid = true;
+      this.errorMessage = '';
       this.countChange.emit(value);
+      this.validChange.emit(true);
     }
   }
 

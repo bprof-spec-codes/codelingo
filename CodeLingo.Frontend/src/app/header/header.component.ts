@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
-import { Observable } from 'rxjs';
+import { ProfileService } from '../services/profile.service';
+import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap, delay, retry, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navigation-header',
@@ -10,14 +12,54 @@ import { Observable } from 'rxjs';
 })
 export class HeaderComponent {
   isLoggedIn$!: Observable<boolean>;
+  isAdmin$!: Observable<boolean>;
+  profilePictureUrl$!: Observable<string | null>;
+  isMobileMenuOpen = false;
 
-  constructor(private auth: AuthService) {}
+  constructor(
+    private auth: AuthService,
+    private profileService: ProfileService
+  ) { }
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.auth.isLoggedIn$;
+    this.isAdmin$ = this.auth.isAdmin$;
+
+    // Fetch profile picture when user is logged in
+    this.profilePictureUrl$ = this.isLoggedIn$.pipe(
+      delay(0),
+      switchMap(isLoggedIn => {
+        if (isLoggedIn) {
+          return this.profileService.profileUpdated$.pipe(
+            startWith(null),
+            switchMap(() => this.profileService.getProfile().pipe(
+              map(user => user.profilePictureUrl || null),
+              retry(1),
+              catchError(() => of(null))
+            ))
+          );
+        }
+        return of(null);
+      })
+    );
   }
 
   logout() {
     this.auth.logout();
+  }
+
+  handlePracticeClick(event: Event) {
+    if (!this.auth.hasValidToken()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
   }
 }

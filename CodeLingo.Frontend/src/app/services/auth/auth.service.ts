@@ -18,15 +18,25 @@ export class AuthService {
 
   private storage: Storage = localStorage;
 
-  private isLoggedInSubject = new BehaviorSubject<boolean>(
-    this.hasValidToken()
-  );
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
+  private isAdminSubject = new BehaviorSubject<boolean>(this.hasValidToken() && this.hasAdminRole());
+  isAdmin$ = this.isAdminSubject.asObservable();
 
   private refreshTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private http: HttpClient, private router: Router) {
-    if (this.hasValidToken()) {
+    if (sessionStorage.getItem('accessToken')) {
+      this.storage = sessionStorage;
+    } else {
+      this.storage = localStorage;
+    }
+
+    const loggedIn = this.hasValidToken();
+    this.isLoggedInSubject.next(loggedIn);
+
+    if (loggedIn) {
       this.scheduleTokenRefresh();
     }
   }
@@ -48,6 +58,7 @@ export class AuthService {
   logout(): void {
     this.clearAuthData();
     this.isLoggedInSubject.next(false);
+    this.isAdminSubject.next(false);
     this.router.navigate(['/login']);
   }
 
@@ -70,18 +81,32 @@ export class AuthService {
   }
 
   setRememberMe(remember: boolean): void {
-    this.storage = remember ? this.storage : sessionStorage;
+    this.storage = remember ? localStorage : sessionStorage;
   }
 
   private handleAuthSuccess(response: AuthResponse, updateLogin = true): void {
-    const { accessToken, refreshToken, expiresIn } = response;
+    const { accessToken, refreshToken, expiresIn, isAdmin } = response;
     const expiryTime = Date.now() + expiresIn * 1000;
+
+    // Clear both storages to prevent conflicts
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenExpiry');
+    localStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('tokenExpiry');
+    sessionStorage.removeItem('isAdmin');
 
     this.storage.setItem('accessToken', accessToken);
     if (refreshToken) this.storage.setItem('refreshToken', refreshToken);
     this.storage.setItem('tokenExpiry', expiryTime.toString());
+    this.storage.setItem('isAdmin', String(isAdmin));
 
-    if (updateLogin) this.isLoggedInSubject.next(true);
+    if (updateLogin) {
+      this.isLoggedInSubject.next(true);
+      this.isAdminSubject.next(isAdmin);
+    }
     this.scheduleTokenRefresh();
   }
 
@@ -105,30 +130,45 @@ export class AuthService {
   private autoLogout(redirect: boolean = true): void {
     this.clearAuthData();
     this.isLoggedInSubject.next(false);
+    this.isAdminSubject.next(false);
+
     if (redirect) {
       this.router.navigate(['/login']);
     }
   }
 
   private clearAuthData(): void {
-    this.storage.removeItem('accessToken');
-    this.storage.removeItem('refreshToken');
-    this.storage.removeItem('tokenExpiry');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenExpiry');
+    localStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('tokenExpiry');
+    sessionStorage.removeItem('isAdmin');
     clearTimeout(this.refreshTimer);
   }
 
   getAccessToken(): string | null {
-    return this.storage.getItem('accessToken');
+    return (
+      localStorage.getItem('accessToken') ??
+      sessionStorage.getItem('accessToken')
+    );
   }
 
   private getRefreshToken(): string | null {
     return this.storage.getItem('refreshToken');
   }
 
-  private hasValidToken(): boolean {
+  public hasValidToken(): boolean {
     const token = this.getAccessToken();
     const expiry = Number(this.storage.getItem('tokenExpiry'));
     return !!token && expiry > Date.now();
+  }
+
+  public hasAdminRole(): boolean {
+    if (!this.hasValidToken()) return false;
+    return this.storage.getItem('isAdmin') === 'true';
   }
 
   private handleError(error: HttpErrorResponse) {

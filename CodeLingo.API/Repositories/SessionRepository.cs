@@ -29,7 +29,7 @@ namespace CodeLingo.API.Repositories
             return this.DbContext.Sessions.Where(s => s.Status == Enums.SessionStatus.Active && s.CreatedAt < yestterday).ToList();
         }
 
-        public Session Read(string id)
+        public Session? Read(string id)
         {
             return this.DbContext.Sessions.Where(s => s.Id == id).SingleOrDefault();
         }
@@ -37,6 +37,25 @@ namespace CodeLingo.API.Repositories
         public List<Session> ReadAll()
         {
             return this.DbContext.Sessions.ToList();
+        }
+
+        public async Task<int> CountSessionsAsync(DateTime? since = null)
+        {
+            var query = this.DbContext.Sessions.AsQueryable();
+            if (since.HasValue)
+            {
+                query = query.Where(s => s.CreatedAt >= since.Value);
+            }
+            return await query.CountAsync();
+        }
+
+        public async Task<List<Session>> GetSessionsByUserId(string userId)
+        {
+            return await this.DbContext.Sessions
+                .Include(s => s.SessionQuestions)
+                .ThenInclude(sq => sq.Question)
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
         }
 
         public void SaveChanges()

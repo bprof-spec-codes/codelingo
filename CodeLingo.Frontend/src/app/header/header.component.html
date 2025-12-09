@@ -1,80 +1,73 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
   <div class="container">
     <!-- Logo left -->
-    <a class="navbar-brand" routerLink="/">
-      <img
-        src="/assets/brand/codelingo_logo_black.svg"
-        alt="Logo"
-        width="256"
-      />
+    <a class="navbar-brand" routerLink="/" (click)="closeMobileMenu()">
+      <img src="/assets/brand/codelingo_logo_black.svg" alt="Logo" width="256" />
     </a>
 
     <!-- Hamburger menu for mobile -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarContent"
-      aria-controls="navbarContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler custom-toggler" type="button" (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle navigation">
+      <img src="assets/brand/menu.svg" [class.rotated]="isMobileMenuOpen" alt="Menü" class="cl-burger-img">
     </button>
 
     <!-- Menu items and buttons -->
-    <div class="collapse navbar-collapse position-relative" id="navbarContent">
+    <div class="collapse navbar-collapse position-relative cl-mobile-menu" [class.show]="isMobileMenuOpen" id="navbarContent">
       <!-- Centered menu links -->
       <ul class="navbar-nav mx-auto d-flex gap-4">
         <li class="nav-item">
-          <a class="nav-link active" routerLink="/">
+          <a class="nav-link active" routerLink="/" (click)="closeMobileMenu()">
             <i class="bi bi-house-door-fill"></i>
             Home
           </a>
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link"
-            routerLink="/practice/start"
-            [class.disabled]="!(isLoggedIn$ | async)"
-            [attr.aria-disabled]="!(isLoggedIn$ | async)"
-          >
+          <a class="nav-link" routerLink="/practice/start" [class.disabled-link]="!(isLoggedIn$ | async)"
+            [appTooltip]="(isLoggedIn$ | async) ? '' : 'Please log in to start practicing!'"
+            (click)="handlePracticeClick($event); closeMobileMenu()">
             <i class="bi bi-arrow-right-circle-fill"></i>
             Practice
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/leaderboard">
+          <a class="nav-link" routerLink="/leaderboard" (click)="closeMobileMenu()">
             <i class="bi bi-star-fill"></i>
             Leaderboard
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isAdmin$ | async">
+          <a class="nav-link" routerLink="/admin" (click)="closeMobileMenu()">
+            <i class="bi bi-speedometer2"></i>
+            Admin
           </a>
         </li>
       </ul>
 
       <!-- Right side buttons -->
-      <div class="d-flex">
-        <button
-          class="btn btn-outline-dark me-2"
-          routerLink="login"
-          *ngIf="!(isLoggedIn$ | async)"
-        >
-          Login
-        </button>
-        <button
-          class="btn btn-outline-dark me-2"
-          routerLink="logout"
-          *ngIf="isLoggedIn$ | async"
-          (click)="logout()"
-        >
-          Logout
-        </button>
-        <button
-          class="btn btn-secondary text-white me-2"
-          routerLink="register"
-          *ngIf="!(isLoggedIn$ | async)"
-        >
-          Registration
-        </button>
+      <div class="d-flex align-items-center gap-2">
+        <ng-container *ngIf="!(isLoggedIn$ | async)">
+          <button class="btn btn-outline-dark" routerLink="/login" (click)="closeMobileMenu()">
+            Login
+          </button>
+          <button class="btn btn-secondary text-white reg-link" routerLink="/register" (click)="closeMobileMenu()">
+            Registration
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn$ | async">
+          <a routerLink="/profile" class="text-decoration-none text-dark profile-link justify-content-center" title="Profile"
+            (click)="closeMobileMenu()">
+            <ng-container *ngIf="profilePictureUrl$ | async as profilePicture; else defaultIcon">
+              <img [src]="profilePicture" alt="Profile" class="profile-picture"/> 
+            </ng-container>
+            <ng-template #defaultIcon>
+              <i class="bi bi-person-circle fs-3"></i>
+            </ng-template>
+          </a>
+          <button class="btn btn-outline-dark" (click)="logout(); closeMobileMenu()">
+            Logout
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>

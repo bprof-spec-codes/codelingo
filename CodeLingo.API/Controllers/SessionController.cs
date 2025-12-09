@@ -6,8 +6,6 @@ using System.Security.Claims;
 using System.Text.Json;
 using static CodeLingo.API.DTOs.Session.SessionDtos;
 
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 namespace CodeLingo.API.Controllers
 {
@@ -41,6 +39,15 @@ namespace CodeLingo.API.Controllers
                 StartSessionResponseDto response = sessionLogic.Create(session);
                 _logger.LogInformation("Session created");
                 return Ok(response);
+            }
+            catch (CodeLingo.API.DTOs.Exceptions.NotSufficientQuestionsException ex)
+            {
+                _logger.LogWarning(ex, "Not enough questions available");
+                return BadRequest(new { 
+                    error = ex.Message,
+                    availableCount = ex.AvailableCount,
+                    requestedCount = ex.RequestedCount
+                });
             }
             catch (Exception ex)
             {

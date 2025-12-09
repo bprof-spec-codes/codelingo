@@ -8,16 +8,20 @@ import { RegisterComponent } from './register/register.component';
 import { QuestionContainerComponent } from './question-container/question-container.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './guards/admin.guard';
+import { ProfileComponent } from './profile/profile.component';
+import { guestGuard } from './guards/guest.guard';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing-page', pathMatch: 'full' },
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
-  { path: 'practice/start', component: PracticeStarterComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'session/:id/questions', component: QuestionContainerComponent },
+  { path: 'practice/start', component: PracticeStarterComponent, canActivate: [authGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
+  { path: 'session/:id/questions', component: QuestionContainerComponent, canActivate: [authGuard] },
   { path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'landing-page', pathMatch: 'full' },
 ];
 
@@ -25,4 +29,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

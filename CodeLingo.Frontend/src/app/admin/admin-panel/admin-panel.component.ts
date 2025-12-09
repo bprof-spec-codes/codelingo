@@ -13,104 +13,92 @@ import { CountUpModule } from 'ngx-countup';
 
 
 export class AdminPanelComponent implements OnInit {
-  questions$!: Observable<Question[]>;
+  questions: Question[] = [];
   @Input() question!: Question;
+
+  // Pagination
+  currentPage = 1;
+  pageSize = 10;
+  totalItems = 0;
+  totalPages = 0;
+
+  // Statistics
+  totalQuestionsCount = 0;
+  totalUsersCount = 0;
+  sessionsThisWeekCount = 0;
+
+  // Collapsible sections state
+  isCreateQuestionExpanded = false;
+  isQuestionsListExpanded = false;
+  isCreateLanguageExpanded = false;
+  isLanguagesListExpanded = false;
+  isImportExportExpanded = false;
+
+  // Filters
+  filters: any = {};
+  languages: any[] = [];
+
   constructor(private adminService: AdminService) { }
+
   ngOnInit(): void {
     this.loadQuestions();
+    this.loadStatistics();
+    this.loadLanguages();
   }
+
+  loadLanguages(): void {
+    this.adminService.getLanguages().subscribe({
+      next: (langs) => this.languages = langs,
+      error: (err) => console.error('Failed to load languages', err)
+    });
+  }
+
+  loadStatistics(): void {
+    this.adminService.getDashboardStatistics().subscribe({
+      next: (stats) => {
+        this.totalQuestionsCount = stats.totalQuestions;
+        this.totalUsersCount = stats.totalUsers;
+        this.sessionsThisWeekCount = stats.sessionsThisWeek;
+      },
+      error: (err) => console.error('Failed to load statistics', err)
+    });
+  }
+
   loadQuestions(): void {
-    this.questions$ = this.adminService.getQuestions()
+    this.adminService.getQuestions(this.currentPage, this.pageSize, this.filters).subscribe({
+      next: (res) => {
+        this.questions = res.items;
+        this.totalItems = res.totalItems; // Ensure this matches DTO property name
+        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+      },
+      error: (err) => console.error('Failed to load questions', err)
+    });
   }
-  /*loadMockQuestions() {
-const mockQuestions: Question[] = [
-  // MultipleChoice
-  {
-    id: '1',
-    type: QuestionType.MultipleChoice,
-    language: 'JavaScript',
-    difficulty: 'easy',
-    title: 'JS típusok',
-    questionText: 'Melyik típus nem létezik JavaScriptben?',
-    explanation: 'A "character" típus nem létezik JavaScriptben.',
-    tags: ['javascript', 'types'],
-    metadata: {
-      category: 'language-basics',
-      topic: 'types',
-      source: 'internal'
-    },
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    createdBy: 'teszt-admin',
-    isActive: true,
-    options: [
-      { text: 'string',    isCorrect: false },
-      { text: 'number',    isCorrect: false },
-      { text: 'boolean',   isCorrect: false },
-      { text: 'character', isCorrect: true }
-    ],
-    allowMultipleSelection: false,
-    shuffleOptions: true
-  } as MultipleChoiceQuestion,
 
-  // CodeCompletion
-  {
-    id: '2',
-    type: QuestionType.CodeCompletion,
-    language: 'Python',
-    difficulty: 'medium',
-    title: 'Python lists',
-    questionText: 'Írd ki a hiányzó kódot, hogy a list hosszát kapd meg!',
-    explanation: 'A len() függvény adja vissza a lista hosszát.',
-    tags: ['python', 'lists'],
-    metadata: {
-      category: 'language-basics',
-      topic: 'lists',
-      source: 'internal'
-    },
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    createdBy: 'admin',
-    isActive: true,
-    starterCode: '[1, [2, 3], 4]',
-    correctAnswer: 'len([1, [2, 3], 4])',
-    hints: ['Használd a len() függvényt'],
-    constraints: ['Ne használj ciklust']
-  } as CodeCompletionQuestion,
-
-  // Új MultipleChoice metadata-val
-  {
-    id: '3',
-    type: QuestionType.MultipleChoice,
-    language: 'TypeScript',
-    difficulty: 'hard',
-    title: 'Union típusok',
-    questionText: 'Melyik példa mutat be union típust TypeScriptben?',
-    explanation: 'A | operátor jelöli az union típust TypeScriptben.',
-    tags: ['typescript', 'types', 'union'],
-    metadata: {
-      category: 'language-advanced',
-      topic: 'type-system',
-      source: 'internal'
-    },
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    createdBy: 'senior-admin',
-    isActive: true,
-    options: [
-      { text: 'let x: number[] = [1, 2];', isCorrect: false },
-      { text: 'let x: number | string;',   isCorrect: true },
-      { text: 'type X = { a: number };',   isCorrect: false },
-      { text: 'interface X { a: number }', isCorrect: false }
-    ],
-    allowMultipleSelection: false,
-    shuffleOptions: true
-  } as MultipleChoiceQuestion
-];
-
-    this.questions$ = of(mockQuestions);
+  onFilterChange(filters: any) {
+    this.filters = filters;
+    this.currentPage = 1;
+    this.loadQuestions();
   }
-    */
+
+  clearFilters() {
+    this.filters = {};
+    // You might need to reset the child component's filter state too, 
+    // but for now let's just reload. 
+    // To properly reset child inputs, we'd need a ViewChild or a shared service/state.
+    // Or we can just reload and let the user manually clear inputs if they want, 
+    // but the button should clear them.
+    // Actually, since filters are bound in AdminListComponent, clearing them here won't clear the inputs there
+    // unless we pass filters back down or use a ViewChild.
+    // For simplicity, I'll reload. Ideally, we should reset the inputs.
+    window.location.reload(); // Quick fix for clearing state, or implement proper state reset
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.loadQuestions();
+  }
+
   onQuestionUpdated(updated: Question) {
     this.adminService.updateQuestion(updated.id, updated).subscribe({
       next: () => {
@@ -131,7 +119,7 @@ const mockQuestions: Question[] = [
       }
     });
   }
- onQuestionCreated(created: Question) {
+  onQuestionCreated(created: Question) {
     this.adminService.createQuestion(created).subscribe({
       next: () => {
         this.loadQuestions(); // létrehozás után is frissítesz

@@ -22,7 +22,7 @@ namespace CodeLingo.API.Repositories
             this.DbContext.MultipleChoiceQuestions.Remove(entity);
         }
 
-        public MultipleChoiceQuestion Read(string id)
+        public MultipleChoiceQuestion? Read(string id)
         {
             return this.DbContext.MultipleChoiceQuestions.Where(q => q.QuestionId == id).SingleOrDefault();
         }

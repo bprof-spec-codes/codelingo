@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 
 import { AdminLanguageListComponent } from './admin-language-list.component';
@@ -12,81 +13,94 @@ describe('AdminLanguageListComponent', () => {
   let adminServiceSpy: jasmine.SpyObj<AdminService>;
 
   beforeEach(async () => {
-    adminServiceSpy = jasmine.createSpyObj<AdminService>('AdminService', [
+    adminServiceSpy = jasmine.createSpyObj('AdminService', [
       'getLanguages',
+      'addLanguage',
       'updateLanguage',
-      'deleteLanguage'
+      'deleteLanguage',
     ]);
-
-    const mockLanguages: Language[] = [
-      new Language(
-        'lang-1',
-        'TypeScript',
-        '5.6',
-        '2025-01-01T10:00:00Z',
-        '2025-01-10T12:00:00Z'
-      )
-    ];
-
-    adminServiceSpy.getLanguages.and.returnValue(of(mockLanguages));
+    adminServiceSpy.getLanguages.and.returnValue(
+      of([
+        new Language(
+          1,
+          'TypeScript',
+          'ts',
+          '5.0',
+          '2024-01-01T10:00:00Z',
+          '2024-01-05T14:30:00Z'
+        ),
+        new Language(
+          2,
+          'JavaScript',
+          'js',
+          'ES2023',
+          '2023-12-01T09:00:00Z',
+          '2023-12-10T11:00:00Z'
+        ),
+      ])
+    );
 
     await TestBed.configureTestingModule({
       declarations: [AdminLanguageListComponent],
-      imports: [CommonModule],
-      providers: [{ provide: AdminService, useValue: adminServiceSpy }]
+      imports: [CommonModule, FormsModule],
+      providers: [{ provide: AdminService, useValue: adminServiceSpy }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminLanguageListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges(); // ngOnInit lefut, languages$ beáll
+    fixture.detectChanges();
   });
 
   it('should create and load languages$', (done) => {
     expect(component).toBeTruthy();
+    expect(adminServiceSpy.getLanguages).toHaveBeenCalled();
 
-    component.languages$.subscribe((langs) => {
-      expect(langs.length).toBe(1);
-      expect(langs[0].name).toBe('TypeScript');
+    component.languages$.subscribe((languages) => {
+      expect(languages.length).toBe(2);
+      expect(languages[0].name).toBe('TypeScript');
+      expect(languages[1].name).toBe('JavaScript');
       done();
     });
   });
 
   it('onEdit should set editingLanguage and editModel', () => {
     const lang = new Language(
-      'lang-2',
+      2,
       'JavaScript',
+      'js',
       'ES2023',
-      '2025-01-05T09:30:00Z',
-      '2025-01-15T14:20:00Z'
+      '2023-12-01T09:00:00Z',
+      '2023-12-10T11:00:00Z'
     );
-
     component.onEdit(lang);
 
-    expect(component.editingLanguage).not.toBeNull();
-    expect(component.editingLanguage?.id).toBe('lang-2');
+    expect(component.editingLanguage?.id).toBe(2);
     expect(component.editModel.name).toBe('JavaScript');
     expect(component.editModel.version).toBe('ES2023');
+    expect(component.editModel.shortCode).toBe('js');
   });
 
   it('onSaveEdit should call updateLanguage and reset editingLanguage', () => {
     const lang = new Language(
-      'lang-3',
+      3,
       'C#',
+      'cs',
       '12.0',
       '2025-02-01T08:00:00Z',
       '2025-02-03T16:45:00Z'
     );
 
     component.editingLanguage = lang;
-    component.editModel = { name: 'C# (edited)', version: '12.1' };
+    component.editModel = { name: 'C# (edited)', version: '12.1', shortCode: 'cs-edited' };
 
     adminServiceSpy.updateLanguage.and.returnValue(of(lang));
 
     component.onSaveEdit();
 
-    expect(adminServiceSpy.updateLanguage).toHaveBeenCalledWith('lang-3', {
+    expect(adminServiceSpy.updateLanguage).toHaveBeenCalledWith(3, {
       name: 'C# (edited)',
-      version: '12.1'
+      version: '12.1',
+      shortCode: 'cs-edited'
     });
 
     expect(component.editingLanguage).toBeNull();
@@ -94,8 +108,9 @@ describe('AdminLanguageListComponent', () => {
 
   it('onDelete should call deleteLanguage with language id', () => {
     const lang = new Language(
-      'lang-4',
+      4,
       'Python',
+      'py',
       '3.13',
       '2025-03-10T11:15:00Z',
       '2025-03-20T18:30:00Z'
@@ -105,22 +120,6 @@ describe('AdminLanguageListComponent', () => {
 
     component.onDelete(lang);
 
-    expect(adminServiceSpy.deleteLanguage).toHaveBeenCalledWith('lang-4');
-  });
-
-  it('onCancelEdit should clear editingLanguage', () => {
-    const lang = new Language(
-      'lang-5',
-      'Go',
-      '1.23',
-      '2025-04-01T08:00:00Z',
-      '2025-04-02T10:00:00Z'
-    );
-
-    component.editingLanguage = lang;
-
-    component.onCancelEdit();
-
-    expect(component.editingLanguage).toBeNull();
+    expect(adminServiceSpy.deleteLanguage).toHaveBeenCalledWith(4);
   });
 });

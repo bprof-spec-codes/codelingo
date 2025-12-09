@@ -45,7 +45,7 @@ export class AdminEditComponent implements OnInit {
     this.questionForm = this.fb.group({
       type: [QuestionType.MultipleChoice, Validators.required],
       language: ['', Validators.required],
-      difficulty: ['Medium', Validators.required], 
+      difficulty: ['Medium', Validators.required],
       title: ['', Validators.required],
       questionText: ['', Validators.required],
       explanation: [''],
@@ -62,14 +62,12 @@ export class AdminEditComponent implements OnInit {
 
       // Multiple choice
       options: this.fb.array([]),
-      correctAnswerIds: this.fb.array([]),
+      correctAnswerIds: this.fb.array([]), // Not used for MC in this form structure, but kept for compatibility if needed
       shuffleOptions: [false],
 
       // Code completion
-      starterCode: [''],
-      correctAnswer: [''],
-      hints: this.fb.array([]),
-      constraints: this.fb.array([])
+      codeSnippet: [''],
+      acceptedAnswers: this.fb.array([])
     });
   }
 
@@ -91,14 +89,10 @@ export class AdminEditComponent implements OnInit {
     });
 
     const optionsFa = this.options;
-    const correctFa = this.correctAnswerIds;
-    const hintsFa = this.hints;
-    const constraintsFa = this.constraints;
+    const acceptedAnswersFa = this.acceptedAnswers;
 
     optionsFa.clear();
-    correctFa.clear();
-    hintsFa.clear();
-    constraintsFa.clear();
+    acceptedAnswersFa.clear();
 
     if (q.type === QuestionType.MultipleChoice) {
       const mc = q as MultipleChoiceQuestion;
@@ -123,15 +117,10 @@ export class AdminEditComponent implements OnInit {
       const cc = q as CodeCompletionQuestion;
 
       this.questionForm.patchValue({
-        starterCode: cc.starterCode ?? '',
-        correctAnswer: cc.correctAnswer ?? ''
+        codeSnippet: cc.codeSnippet ?? ''
       });
 
-      (cc.hints ?? []).forEach(h => hintsFa.push(new FormControl(h)));
-
-      const constraints: CodeConstraints | undefined = (cc as any).constraints;
-      const forbidden = constraints?.forbiddenKeywords ?? [];
-      forbidden.forEach((c: string) => constraintsFa.push(new FormControl(c)));
+      (cc.acceptedAnswers ?? []).forEach((a: string) => acceptedAnswersFa.push(new FormControl(a)));
     }
   }
 
@@ -150,8 +139,7 @@ export class AdminEditComponent implements OnInit {
 
   get options() { return this.questionForm.get('options') as FormArray; }
   get correctAnswerIds() { return this.questionForm.get('correctAnswerIds') as FormArray; }
-  get hints() { return this.questionForm.get('hints') as FormArray; }
-  get constraints() { return this.questionForm.get('constraints') as FormArray; }
+  get acceptedAnswers() { return this.questionForm.get('acceptedAnswers') as FormArray; }
 
   addOption() {
     this.options.push(
@@ -164,10 +152,8 @@ export class AdminEditComponent implements OnInit {
   removeOption(i: number) { this.options.removeAt(i); }
   addCorrectAnswer() { this.correctAnswerIds.push(this.fb.control('')); }
   removeCorrectAnswer(i: number) { this.correctAnswerIds.removeAt(i); }
-  addHint() { this.hints.push(this.fb.control('')); }
-  removeHint(i: number) { this.hints.removeAt(i); }
-  addConstraint() { this.constraints.push(this.fb.control('')); }
-  removeConstraint(i: number) { this.constraints.removeAt(i); }
+  addAcceptedAnswer() { this.acceptedAnswers.push(this.fb.control('')); }
+  removeAcceptedAnswer(i: number) { this.acceptedAnswers.removeAt(i); }
 
   saveQuestion() {
     const raw = this.questionForm.value;
@@ -219,17 +205,6 @@ export class AdminEditComponent implements OnInit {
         createdBy: this.question?.createdBy || 'admin'
       } as MultipleChoiceQuestion;
     } else {
-      const forbiddenKeywords: string[] = (raw.constraints || []) as string[];
-
-      const constraints: CodeConstraints | undefined =
-        forbiddenKeywords.length > 0
-          ? {
-            maxLines: 999,       
-            maxCharacters: 9999,
-            forbiddenKeywords
-          }
-          : undefined;
-
       q = {
         ...(this.question ?? {}),
         type: QuestionType.CodeCompletion,
@@ -242,10 +217,8 @@ export class AdminEditComponent implements OnInit {
         metadata,
         isActive: raw.isActive,
 
-        starterCode: raw.starterCode,
-        correctAnswer: raw.correctAnswer,
-        hints: raw.hints || [],
-        constraints,
+        codeSnippet: raw.codeSnippet,
+        acceptedAnswers: raw.acceptedAnswers || [],
 
         createdAt: this.question?.createdAt || new Date(),
         updatedAt: new Date(),

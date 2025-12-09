@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace CodeLingo.API.Controllers
 {
-    [Route("admin/questions")]
+    [Route("api/admin/questions")]
     [ApiController]
     [Authorize(Roles = "Admin")]
     public class AdminQuestionsController : ControllerBase
@@ -26,10 +26,12 @@ namespace CodeLingo.API.Controllers
             [FromQuery] string? language,
             [FromQuery] string? difficulty,
             [FromQuery] string? type,
+            [FromQuery] string? title,
+            [FromQuery] string? questionText,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
-            var result = await _questionService.GetQuestionsAsync(language, difficulty, type, page, pageSize);
+            var result = await _questionService.GetQuestionsAsync(language, difficulty, type, title, questionText, page, pageSize);
             return Ok(result);
         }
 

@@ -4,6 +4,7 @@ export interface AuthResponse {
   expiresIn: number;
   message?: string;
   userId?: string;
+  isAdmin: boolean;
 }
 
 export interface LoginRequest {
