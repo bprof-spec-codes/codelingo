@@ -115,8 +115,8 @@ jobs:
             tar -xzf /tmp/frontend_artifact.tar.gz -C $FRONTEND_REL
             
             # --- CONFIGURE BACKEND (Inject Secrets) ---
-            # Overwrite appsettings.Production.json
-            cat <<EOF > $BACKEND_REL/appsettings.Production.json
+            # Overwrite appsettings.Development.json because the service runs in Development mode
+            cat <<EOF > $BACKEND_REL/appsettings.Development.json
             {
               "AllowedOrigins": "${{ env.APP_DOMAIN }}",
               "ConnectionStrings": {
@@ -144,7 +144,14 @@ jobs:
             # --- ACTIVATE ---
             # Update permissions
             chmod +x $BACKEND_REL/CodeLingo.API
+            
+            # Ensure parent directory is accessible
+            chmod 755 ${{ env.FRONTEND_BASE_PATH }}
+
+            # Frontend permissions: Owner www-data, Folders 755, Files 644
             chown -R www-data:www-data $FRONTEND_REL
+            find $FRONTEND_REL -type d -exec chmod 755 {} \;
+            find $FRONTEND_REL -type f -exec chmod 644 {} \;
 
             # Switch Symlinks (Atomic-ish)
             ln -sfn $BACKEND_REL ${{ env.BACKEND_BASE_PATH }}/current

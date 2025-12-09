@@ -144,7 +144,14 @@ jobs:
             # --- ACTIVATE ---
             # Update permissions
             chmod +x $BACKEND_REL/CodeLingo.API
+            
+            # Ensure parent directory is accessible
+            chmod 755 ${{ env.FRONTEND_BASE_PATH }}
+
+            # Frontend permissions: Owner www-data, Folders 755, Files 644
             chown -R www-data:www-data $FRONTEND_REL
+            find $FRONTEND_REL -type d -exec chmod 755 {} \;
+            find $FRONTEND_REL -type f -exec chmod 644 {} \;
 
             # Switch Symlinks (Atomic-ish)
             ln -sfn $BACKEND_REL ${{ env.BACKEND_BASE_PATH }}/current
