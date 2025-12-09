@@ -70,37 +70,72 @@
       <div class="tab-content">
         <!-- Overview Tab -->
         <div *ngIf="activeTab === 'overview'" class="tab-pane fade show active">
-          <div class="row g-4">
-            <div class="col-md-4">
-              <div class="stat-card">
-                <div class="stat-icon">
-                  <i class="bi bi-star-fill"></i>
+          <div class="row g-4 mb-4">
+            <!-- Level & XP Card -->
+            <div class="col-lg-6">
+              <div class="level-card">
+                <div class="level-display">
+                  <i class="bi bi-award-fill level-icon"></i>
+                  <div class="level-number">{{ currentLevel }}</div>
+                  <div class="level-label">LEVEL</div>
                 </div>
-                <div class="stat-content">
-                  <h3 class="stat-value">{{ userStats.totalScore }}</h3>
-                  <p class="stat-label">Total Score</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="stat-card">
-                <div class="stat-icon">
-                  <i class="bi bi-bullseye"></i>
-                </div>
-                <div class="stat-content">
-                  <h3 class="stat-value">{{ userStats.accuracyPercentage | number:'1.1-1' }}%</h3>
-                  <p class="stat-label">Accuracy</p>
+                <div class="xp-info">
+                  <h3 class="xp-value">{{ userStats.totalScore }} XP</h3>
+                  <p class="xp-progress">{{ nextLevelMinXP - userStats.totalScore }} XP to Level {{ currentLevel + 1 }}</p>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill" [style.width.%]="progressPercentage"></div>
+                  </div>
+                  <div class="progress-text">{{ progressPercentage | number:'1.0-0' }}%</div>
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="stat-card">
-                <div class="stat-icon">
-                  <i class="bi bi-list-check"></i>
+
+            <!-- Other Stats -->
+            <div class="col-lg-6">
+              <div class="row g-4 h-100">
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-bullseye"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStats.accuracyPercentage | number:'1.1-1' }}%</h3>
+                      <p class="stat-label">Accuracy</p>
+                    </div>
+                  </div>
                 </div>
-                <div class="stat-content">
-                  <h3 class="stat-value">{{ userStats.sessionCount }}</h3>
-                  <p class="stat-label">Sessions Completed</p>
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-list-check"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStats.sessionCount }}</h3>
+                      <p class="stat-label">Sessions Completed</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-question-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStatistics?.totalQuestionsAnswered || 0 }}</h3>
+                      <p class="stat-label">Questions Answered</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <div class="stat-icon">
+                      <i class="bi bi-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                      <h3 class="stat-value">{{ userStatistics?.currentStreak || 0 }}</h3>
+                      <p class="stat-label">Day Streak</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -124,7 +159,7 @@
                 <tr *ngFor="let session of userStats.historicalProgress.sessions">
                   <td>{{ session.date | date:'short' }}</td>
                   <td>
-                    <span class="badge bg-primary">{{ session.language }}</span>
+                    <span class="badge bg-secondary">{{ session.language }}</span>
                   </td>
                   <td>
                     <span class="badge" 
