@@ -1,1 +1,193 @@
-<p>leaderboard works!</p>
+<div class="leaderboard-container">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="leaderboard-title text-center mb-4">
+          <i class="bi bi-trophy-fill me-2"></i>
+          Leaderboard
+        </h1>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+      <div class="col-md-6 col-lg-4 mx-auto">
+        <div class="filters-card">
+          <div class="row g-3">
+            <div class="col-6">
+              <label for="languageFilter" class="form-label">Language</label>
+              <select 
+                id="languageFilter" 
+                class="form-select" 
+                [(ngModel)]="selectedLanguage"
+                (change)="onFilterChange()">
+                <option [ngValue]="undefined">All Languages</option>
+                <option *ngFor="let language of languages" [value]="language.name">
+                  {{ language.name }}
+                </option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label for="difficultyFilter" class="form-label">Difficulty</label>
+              <select 
+                id="difficultyFilter" 
+                class="form-select" 
+                [(ngModel)]="selectedDifficulty"
+                (change)="onFilterChange()">
+                <option [ngValue]="undefined">All Difficulties</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 text-muted">Loading leaderboard...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ error }}
+    </div>
+
+    <!-- Current User Context -->
+    <div *ngIf="leaderboard && leaderboard.currentUserContext && !loading" class="row mb-4">
+      <div class="col-12">
+        <div class="current-user-card">
+          <h5 class="mb-3">
+            <i class="bi bi-person-circle me-2"></i>
+            Your Ranking
+          </h5>
+          <div class="row g-3">
+            <div class="col-6 col-md-3">
+              <div class="stat-item">
+                <div class="stat-label">Rank</div>
+                <div class="stat-value">
+                  <i [class]="getRankIcon(leaderboard.currentUserContext.rank)" class="me-1"></i>
+                  #{{ leaderboard.currentUserContext.rank }}
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-item">
+                <div class="stat-label">Score</div>
+                <div class="stat-value">{{ leaderboard.currentUserContext.score }}</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-item">
+                <div class="stat-label">Accuracy</div>
+                <div class="stat-value">{{ leaderboard.currentUserContext.accuracyPercentage | number:'1.1-1' }}%</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-item">
+                <div class="stat-label">Sessions</div>
+                <div class="stat-value">{{ leaderboard.currentUserContext.sessionCount }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div *ngIf="leaderboard && !loading" class="row">
+      <div class="col-12">
+        <div class="leaderboard-table-container">
+          <table class="table leaderboard-table">
+            <thead>
+              <tr>
+                <th class="rank-column">Rank</th>
+                <th>Player</th>
+                <th class="text-center">Score</th>
+                <th class="text-center">Accuracy</th>
+                <th class="text-center d-none d-lg-table-cell">Sessions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr 
+                *ngFor="let entry of leaderboard.entries" 
+                [class.current-user-row]="entry.isCurrentUser"
+                [class.top-rank]="entry.rank <= 3">
+                <td class="rank-column">
+                  <span [class]="getRankBadgeClass(entry.rank) + ' rank-badge'">
+                    <i *ngIf="getRankIcon(entry.rank)!=''" [class]="getRankIcon(entry.rank)"></i>
+                    {{ entry.rank }}
+                  </span>
+                </td>
+                <td class="username-column">
+                  <span class="username">{{ entry.username }}</span>
+                  <span *ngIf="entry.isCurrentUser" class="badge bg-secondary ms-2">You</span>
+                </td>
+                <td class="text-center score-column">
+                  <strong>{{ entry.score }}</strong>
+                </td>
+                <td class="text-center">
+                  {{ entry.accuracyPercentage | number:'1.1-1' }}%
+                </td>
+                <td class="text-center d-none d-lg-table-cell">
+                  {{ entry.sessionCount }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container" *ngIf="leaderboard.totalPages > 1">
+          <nav aria-label="Leaderboard pagination">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <button class="page-link" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+              </li>
+              
+              <li *ngFor="let page of pages" 
+                  class="page-item" 
+                  [class.active]="page === currentPage"
+                  [class.disabled]="page === -1">
+                <button 
+                  *ngIf="page !== -1" 
+                  class="page-link" 
+                  (click)="onPageChange(page)">
+                  {{ page }}
+                </button>
+                <span *ngIf="page === -1" class="page-link">...</span>
+              </li>
+
+              <li class="page-item" [class.disabled]="currentPage === leaderboard.totalPages">
+                <button class="page-link" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === leaderboard.totalPages">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Ranking Rules -->
+        <div *ngIf="leaderboard.rankingRules" class="ranking-rules-card mt-4">
+          <h6 class="mb-2">
+            <i class="bi bi-info-circle me-2"></i>
+            Ranking System
+          </h6>
+          <p class="mb-0">
+            <strong>Primary:</strong> {{ leaderboard.rankingRules.primary }} |
+            <strong>Secondary:</strong> {{ leaderboard.rankingRules.secondary }} |
+            <strong>Tie Break:</strong> {{ leaderboard.rankingRules.tieBreak }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

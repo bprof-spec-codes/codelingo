@@ -1,10 +1,12 @@
+using CodeLingo.API.DTOs.User;
+using CodeLingo.API.Logics;
 using CodeLingo.API.Models;
 using CodeLingo.API.Repositories;
-using CodeLingo.API.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static CodeLingo.API.DTOs.Stats.StatsDtos;
 using static CodeLingo.API.DTOs.User.UserDtos;
 
 namespace CodeLingo.API.Controllers
@@ -16,11 +18,14 @@ namespace CodeLingo.API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ISessionRepository _sessionRepository;
+        private readonly UserStatsLogic _userStatsLogic;
 
-        public UsersController(UserManager<User> userManager, ISessionRepository sessionRepository)
+
+        public UsersController(UserManager<User> userManager, ISessionRepository sessionRepository, UserStatsLogic userStatsLogic)
         {
             _userManager = userManager;
             _sessionRepository = sessionRepository;
+            _userStatsLogic = userStatsLogic;
         }
 
         /// <summary>
@@ -192,6 +197,46 @@ namespace CodeLingo.API.Controllers
             };
 
             return Ok(stats);
+        }
+
+        /// <summary>
+        /// Get user statistics by ID
+        /// </summary>
+        [HttpGet("{id}/stats")]
+        public async Task<ActionResult<UserStatsDto>> GetUserStats(string id)
+        {
+            try
+            {
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    return Unauthorized(new { error = "Missing or invalid authentication token" });
+                }
+
+                var targetUser = await _userManager.FindByIdAsync(id);
+                if (targetUser == null)
+                {
+                    return NotFound(new { error = "User not found" });
+                }
+
+                // users can only view their own stats unless admin
+                if (currentUserId != id && !User.IsInRole(AppRoles.Admin))
+                {
+                    return StatusCode(403, new { error = "Not authorized to access this user's stats" });
+                }
+
+                var stats = await _userStatsLogic.GetUserStatsAsync(id);
+                return Ok(stats);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Internal server error" });
+            }
         }
     }
 }
