@@ -39,21 +39,21 @@
 ---
 
 ## 🖥️ Usage
-The software can be run locally after the following steps:  
-1. Start backend and frontend
-2. The frontend is available at: TODO
+
+1. Start backend and frontend.
+2. Backend default URL: http://localhost:7107 (Swagger enabled)
+3. Frontend URL: http://localhost:4200
 
 ### User Features
-- User registration and login  
-- Practice answering questions (with options)  
-- Collecting points and levels  
-- Viewing leaderboard  
+- Register/login
+- Practice answering questions
+- Collect points and levels
+- Profile page
+- Admin panel
 
----
-
-## 👥 Default User Credentials TODO (example only)
-- `admin <> admin123`  
-- `user <> user123`  
+### Default Users
+- Admin user
+    - username: `admin` password: `Codelingo123!`
 
 ---
 
