@@ -20,7 +20,21 @@
 ---
 
 ## 📖 Developer Guide
-TODO
+
+- Tech stack: ASP.NET 8 backend, Angular frontend, Bootstrap UI.
+- Branching: GitFlow (master, develop, feature/*, hotfix/*).
+- Tasks: GitHub Projects board per sprint columns.
+- Meetings: Weekly per coc.md.
+
+### Local setup
+- Prerequisites: .NET 8 SDK, Node.js LTS, Angular CLI.
+- Backend:
+  - Open solution: CodeLingo.sln
+  - Run API: `dotnet run --launch-profile https`
+- Frontend:
+  - Open CodeLingo.Frontend
+  - Install: `npm install`
+  - Run: `ng serve -o`
 
 ---
 
