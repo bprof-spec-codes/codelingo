@@ -25,9 +25,7 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       working-directory: ./CodeLingo.API
-      with:
-        name: ${{ env.BACKEND_ARTIFACT_NAME }}
-        path: backend_artifact.tar.gz
+      run: dotnet restore
 
   # --- BUILD FRONTEND ---
   build-frontend:
