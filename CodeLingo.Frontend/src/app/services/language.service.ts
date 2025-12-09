@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { ConfigService } from './config.service';
 
 export interface Language {
   id: number;
@@ -14,9 +14,9 @@ export interface Language {
   providedIn: 'root'
 })
 export class LanguageService {
-  private baseUrl = `${environment.apiUrl}/admin/languages`;
+  private get baseUrl() { return `${this.configService.apiUrl}/admin/languages`; }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { }
 
   getLanguages(): Observable<Language[]> {
     return this.http.get<Language[]>(this.baseUrl);

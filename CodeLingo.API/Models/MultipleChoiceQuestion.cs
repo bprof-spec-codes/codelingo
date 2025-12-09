@@ -10,11 +10,11 @@ namespace CodeLingo.API.Models
         public string QuestionId { get; set; }
 
         [Required]
-        [Column(TypeName = "json")]
+        [Column(TypeName = "nvarchar(max)")]
         public string Options { get; set; } // JSON array of AnswerOption
 
         [Required]
-        [Column(TypeName = "json")]
+        [Column(TypeName = "nvarchar(max)")]
         public string CorrectAnswerIds { get; set; } // JSON array of strings
 
         public bool AllowMultipleSelection { get; set; } = false;

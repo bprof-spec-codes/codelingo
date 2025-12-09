@@ -1,0 +1,169 @@
+name: Dev Deployment
+
+on:
+  push:
+    branches: [ "dev" ]
+
+env:
+  BACKEND_BASE_PATH: /var/backend/test
+  FRONTEND_BASE_PATH: /var/frontend/test
+  SERVICE_NAME: codelingo-test
+  APP_DOMAIN: https://test.codelingo.hu
+  API_URL: https://test.api.codelingo.hu/api
+  BACKEND_ARTIFACT_NAME: backend_pkg_dev
+  FRONTEND_ARTIFACT_NAME: frontend_pkg_dev
+
+jobs:
+  # --- BUILD BACKEND ---
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: restore dependencies
+      working-directory: ./CodeLingo.API
+      run: dotnet restore
+    - name: Build
+      working-directory: ./CodeLingo.API
+      run: dotnet build --no-restore -c Release
+    - name: Publish
+      working-directory: ./CodeLingo.API
+      run: dotnet publish -c Release -o ./publish -r linux-x64 --self-contained true -p:PublishSingleFile=true
+    # Compress
+    - name: Compress Backend
+      working-directory: ./CodeLingo.API/publish
+      run: tar -czf ../../backend_artifact.tar.gz .
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.BACKEND_ARTIFACT_NAME }}
+        path: backend_artifact.tar.gz
+
+  # --- BUILD FRONTEND ---
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Install dependencies
+      working-directory: ./CodeLingo.Frontend
+      run: npm install
+    - name: Build
+      working-directory: ./CodeLingo.Frontend
+      run: npm run build
+    # Compress
+    - name: Compress Frontend
+      working-directory: ./CodeLingo.Frontend/dist/code-lingo.frontend/browser
+      run: tar -czf ../../../../frontend_artifact.tar.gz .
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.FRONTEND_ARTIFACT_NAME }}
+        path: frontend_artifact.tar.gz
+
+  # --- DEPLOY ---
+  deploy:
+    needs: [build-backend, build-frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Backend Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.BACKEND_ARTIFACT_NAME }}
+      - name: Download Frontend Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.FRONTEND_ARTIFACT_NAME }}
+
+      # 1. Upload files to /tmp via SCP
+      - name: Copy files via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASS }}
+          source: "backend_artifact.tar.gz,frontend_artifact.tar.gz"
+          target: "/tmp/"
+
+      # 2. Execute SSH Commands (Extract, Config, Switch)
+      - name: Execute Remote SSH Commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASS }}
+          script: |
+            # --- PREPARE ---
+            TIMESTAMP=$(date +%Y%m%d%H%M%S)
+            BACKEND_REL="${{ env.BACKEND_BASE_PATH }}/releases/$TIMESTAMP"
+            FRONTEND_REL="${{ env.FRONTEND_BASE_PATH }}/releases/$TIMESTAMP"
+            
+            # Create directories
+            mkdir -p $BACKEND_REL
+            mkdir -p $FRONTEND_REL
+
+            # Extract Artifacts
+            tar -xzf /tmp/backend_artifact.tar.gz -C $BACKEND_REL
+            tar -xzf /tmp/frontend_artifact.tar.gz -C $FRONTEND_REL
+            
+            # --- CONFIGURE BACKEND (Inject Secrets) ---
+            # Overwrite appsettings.Development.json because the service runs in Development mode
+            cat <<EOF > $BACKEND_REL/appsettings.Development.json
+            {
+              "AllowedOrigins": "${{ env.APP_DOMAIN }}",
+              "ConnectionStrings": {
+                "DefaultConnection": "${{ secrets.DB_CONN_TEST }}"
+              },
+              "UseInMemoryDatabase": false,
+              "Logging": {
+                "LogLevel": {
+                  "Default": "Information",
+                  "Microsoft.AspNetCore": "Warning"
+                }
+              },
+              "JwtSettings": {
+                "SecretKey": "${{ secrets.JWT_SECRET }}",
+                "Issuer": "CodeLingoAPI",
+                "Audience": "CodeLingoClient",
+                "ExpiresInMinutes": "60"
+              }
+            }
+            EOF
+
+            # --- CONFIGURE FRONTEND (Inject Secrets) ---
+            echo '{ "apiUrl": "${{ env.API_URL }}" }' > $FRONTEND_REL/assets/config.json
+
+            # --- ACTIVATE ---
+            # Update permissions
+            chmod +x $BACKEND_REL/CodeLingo.API
+            
+            # Ensure parent directory is accessible
+            chmod 755 ${{ env.FRONTEND_BASE_PATH }}
+
+            # Frontend permissions: Owner www-data, Folders 755, Files 644
+            chown -R www-data:www-data $FRONTEND_REL
+            find $FRONTEND_REL -type d -exec chmod 755 {} \;
+            find $FRONTEND_REL -type f -exec chmod 644 {} \;
+
+            # Switch Symlinks (Atomic-ish)
+            ln -sfn $BACKEND_REL ${{ env.BACKEND_BASE_PATH }}/current
+            ln -sfn $FRONTEND_REL ${{ env.FRONTEND_BASE_PATH }}/current
+
+            # Restart Service
+            systemctl restart ${{ env.SERVICE_NAME }}
+
+            # Cleanup
+            cd ${{ env.BACKEND_BASE_PATH }}/releases && ls -t | tail -n +6 | xargs -I {} rm -rf {}
+            cd ${{ env.FRONTEND_BASE_PATH }}/releases && ls -t | tail -n +6 | xargs -I {} rm -rf {}
+
+            # Clear temp
+            rm /tmp/backend_artifact.tar.gz
+            rm /tmp/frontend_artifact.tar.gz

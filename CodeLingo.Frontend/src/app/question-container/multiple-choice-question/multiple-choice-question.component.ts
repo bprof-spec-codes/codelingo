@@ -17,6 +17,7 @@ import { AnswerOption } from '../../models/answer-option';
 export class MultipleChoiceQuestionComponent implements OnChanges {
   @Input() question!: MultipleChoiceQuestion;
   @Input() isSubmitted: boolean = false;
+  @Input() wasCorrect: boolean | null = null;
 
   @Output() answerSubmitted = new EventEmitter<string[]>();
 

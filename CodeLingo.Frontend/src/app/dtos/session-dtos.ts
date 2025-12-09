@@ -33,3 +33,17 @@ export interface SubmitAnswerResponseDto {
     totalQuestions: number;
     isCompleted: boolean;
 }
+
+export interface CloseSessionResponseDto {
+    sessionId: string;
+    userId: string;
+    language: string;
+    difficulty: string;
+    status: 'completed' | 'terminated';
+    totalQuestions: number;
+    answeredQuestions: number;
+    correctAnswers: number;
+    totalScore: number;
+    accuracyPercentage: number;
+    closedAt: string;
+}

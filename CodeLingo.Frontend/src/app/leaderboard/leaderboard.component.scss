@@ -1,0 +1,288 @@
+@import "../../variables";
+
+.leaderboard-container {
+  background: linear-gradient(135deg, $dark 0%, #2d2d2d 50%, $secondary-700 100%);
+  min-height: 100vh;
+  color: $light;
+  padding-top: $space-4;
+}
+
+.leaderboard-title {
+  color: $primary;
+  font-weight: $font-weight-extrabold;
+  font-size: 2.5rem;
+  
+  i {
+    color: $primary;
+  }
+}
+
+// Filters Card
+.filters-card {
+  background: $dark-800;
+  border-radius: 0.5rem;
+  border: 1px solid $secondary-400;
+  padding: $space-3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  .form-label {
+    color: $primary-400;
+    font-weight: $font-weight-semibold;
+    font-size: 0.875rem;
+    margin-bottom: $space-1;
+  }
+
+  .form-select {
+    background: $dark-900;
+    border: 1px solid $dark-700;
+    color: $light;
+    border-radius: 0.25rem;
+    
+    &:focus {
+      border-color: $secondary-400;
+      box-shadow: 0 0 0 0.2rem rgba($secondary-700, 0.25);
+      background: $dark-800;
+      color: $light;
+    }
+
+    option {
+      background: $dark-800;
+      color: $light;
+    }
+  }
+}
+
+// Current User Card
+.current-user-card {
+  background: $dark-800;
+  border: 2px solid $secondary-400;
+  border-radius: 0.5rem;
+  padding: $space-3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  h5 {
+    color: $primary;
+    font-weight: $font-weight-bold;
+  }
+
+  .stat-item {
+    text-align: center;
+    
+    .stat-label {
+      color: $primary-300;
+      font-size: 0.875rem;
+      font-weight: $font-weight-semibold;
+      margin-bottom: $space-1;
+    }
+
+    .stat-value {
+      color: $light;
+      font-size: 1.5rem;
+      font-weight: $font-weight-bold;
+      
+      i {
+        color: $primary;
+      }
+    }
+  }
+}
+
+// Leaderboard Table
+.leaderboard-table-container {
+  background: transparent;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.leaderboard-table {
+  margin-bottom: 0;
+  background: transparent;
+  color: $light;
+
+  thead {
+    background: $dark-800;
+    
+    th {
+      color: $primary;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid $secondary-400;
+      padding: $space-3;
+      background: $dark-900;
+    }
+  }
+
+  tbody {
+    tr {
+      background: $dark-700;
+      border-bottom: 1px solid $dark-800;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background: rgba($primary, 0.1);
+      }
+
+      &.current-user-row {
+        background: rgba($primary, 0.15);
+        border-left: 4px solid $primary;
+        
+        &:hover {
+          background: rgba($primary, 0.2);
+        }
+      }
+
+      &.top-rank {
+        font-weight: $font-weight-semibold;
+      }
+
+      td {
+        color: $light;
+        padding: $space-3;
+        vertical-align: middle;
+        background: transparent;
+        border-color: $dark-800;
+      }
+    }
+  }
+
+  .rank-column {
+    width: 80px;
+  }
+
+  .username-column {
+    .username {
+      font-weight: $font-weight-semibold;
+      font-size: 1rem;
+    }
+  }
+
+  .score-column {
+    font-weight: $font-weight-bold;
+    color: $primary-200;
+  }
+}
+
+// Rank Badges
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  padding: $space-1 $space-2;
+  border-radius: 50rem;
+  font-weight: $font-weight-bold;
+  font-size: 0.875rem;
+
+  &.rank-gold {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: $dark;
+  }
+
+  &.rank-silver {
+    background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+    color: $dark;
+  }
+
+  &.rank-bronze {
+    background: linear-gradient(135deg, #cd7f32 0%, #e6a055 100%);
+    color: $dark;
+  }
+
+  &.rank-default {
+    background: $secondary-300;
+    color: $dark;
+  }
+}
+
+// Pagination
+.pagination-container {
+  margin-top: $space-4;
+
+  .pagination {
+    gap: $space-1;
+
+    .page-item {
+      .page-link {
+        background: $dark-700;
+        border: 1px solid $dark-700;
+        color: $light;
+        border-radius: 0.25rem;
+        padding: $space-2 $space-3;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+          background: $primary;
+          border-color: $secondary;
+          color: $dark;
+        }
+      }
+
+      &.active .page-link {
+        background: $primary;
+        border-color: $secondary;
+        color: $dark;
+        font-weight: $font-weight-bold;
+      }
+
+      &.disabled .page-link {
+        background: $dark-800;
+        border-color: $dark-700;
+        color: $dark-700;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Ranking Rules Card
+.ranking-rules-card {
+  background: $dark-800;
+  border-radius: 0.5rem;
+  padding: $space-3;
+  font-size: 0.875rem;
+  color: $primary-400;
+
+  h6 {
+    color: $primary;
+    font-weight: $font-weight-semibold;
+    
+    i {
+      color: $primary;
+    }
+  }
+
+  strong {
+    color: $light;
+  }
+}
+
+// Responsive
+@media (max-width: 767.98px) {
+  .leaderboard-title {
+    font-size: 2rem;
+  }
+
+  .leaderboard-table {
+    font-size: 0.875rem;
+
+    thead th,
+    tbody td {
+      padding: $space-2;
+    }
+
+    .rank-column {
+      width: 60px;
+    }
+  }
+
+  .rank-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem $space-1;
+  }
+
+  .pagination .page-item .page-link {
+    padding: $space-1 $space-2;
+    font-size: 0.875rem;
+  }
+}

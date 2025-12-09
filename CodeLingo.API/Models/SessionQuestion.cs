@@ -9,12 +9,12 @@ namespace CodeLingo.API.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        [StringLength(36)]
+        [StringLength(450)]
         [ForeignKey("Session")]
         public string SessionId { get; set; }
 
         [Required]
-        [StringLength(36)]
+        [StringLength(450)]
         [ForeignKey("Question")]
         public string QuestionId { get; set; }
 

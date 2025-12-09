@@ -36,8 +36,13 @@ import { QuestionContainerComponent } from './question-container/question-contai
 import { QuestionProgressComponent } from './question-container/question-progress/question-progress.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './jwt.interceptor';
+import { ResultSummaryComponent } from './question-container/result-summary/result-summary.component';
 import { TooltipDirective } from './shared/directives/tooltip.directive';
+import { APP_INITIALIZER } from '@angular/core';
+import { ConfigService } from './services/config.service';
 import { provideToastr } from 'ngx-toastr';
+import { ProgressDashboardComponent } from './profile/components/progress-dashboard/progress-dashboard.component';
+
 
 @NgModule({
   declarations: [
@@ -71,7 +76,9 @@ import { provideToastr } from 'ngx-toastr';
     CodeCompletionQuestionComponent,
     QuestionContainerComponent,
     QuestionProgressComponent,
+    ResultSummaryComponent,
     TooltipDirective,
+    ProgressDashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,9 +89,14 @@ import { provideToastr } from 'ngx-toastr';
   ],
   providers: [
     provideHttpClient(withInterceptors([jwtInterceptor])),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (configService: ConfigService) => () => configService.loadConfig(),
+      deps: [ConfigService],
+      multi: true
+    },
     provideAnimations(),
     provideToastr()
-
   ],
   bootstrap: [AppComponent],
 })

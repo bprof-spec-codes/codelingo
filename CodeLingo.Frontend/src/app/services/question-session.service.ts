@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { ConfigService } from './config.service';
 import { SessionConfig } from '../models/session-config';
 import {
   StartSessionRequestDto,
   StartSessionResponseDto,
   NextQuestionResponseDto,
   SubmitAnswerResponseDto,
+  CloseSessionResponseDto,
 } from '../dtos/session-dtos';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionSessionService {
-  private baseUrl = `${environment.apiUrl}/session`;
+  private get baseUrl() { return `${this.configService.apiUrl}/session`; }
   private config: SessionConfig | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private configService: ConfigService) { }
 
   setConfig(config: SessionConfig) {
     this.config = config;
@@ -42,5 +43,10 @@ export class QuestionSessionService {
 
   submitAnswer(sessionId: string, answerPayload: any): Observable<SubmitAnswerResponseDto> {
     return this.http.post<SubmitAnswerResponseDto>(`${this.baseUrl}/${sessionId}/answer`, answerPayload);
+  }
+
+  closeSession(sessionId: string, forceClose: boolean): Observable<CloseSessionResponseDto> {
+    const request = { forceClose };
+    return this.http.post<CloseSessionResponseDto>(`${this.baseUrl}/${sessionId}/close`, request);
   }
 }
