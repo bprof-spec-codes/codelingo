@@ -2,6 +2,7 @@
 using CodeLingo.API.Repositories;
 using System.Text.Json;
 using static CodeLingo.API.DTOs.Question.QuestionDtos;
+using static CodeLingo.API.Models.Enums;
 
 namespace CodeLingo.API.Logics
 {
@@ -57,19 +58,22 @@ namespace CodeLingo.API.Logics
 
                 bool isCorrect = acceptedAnswers.Any(a => a.Trim().Equals(userCode.Trim(), StringComparison.OrdinalIgnoreCase));
 
+                const int basePoints = 15;
+                int pointsEarned = CalculatePoints(basePoints, question.Difficulty, isCorrect, isPartialCredit: false);
+
                 var sessionQuestion = sessionQuestionRepository.Read(sessionId, questionId);
                 if (sessionQuestion != null)
                 {
                     sessionQuestion.Answered = true;
                     sessionQuestion.Correct = isCorrect;
-                    sessionQuestion.PointsEarned = isCorrect ? 1 : 0;
+                    sessionQuestion.PointsEarned = pointsEarned;
                     sessionQuestionRepository.SaveChanges();
                 }
 
                 AnswerDto answerDto = new AnswerDto();
                 answerDto.IsCorrect = isCorrect;
                 answerDto.Feedback = isCorrect ? "Correct!" : "Incorrect. Please try again.";
-                answerDto.Score = isCorrect ? 1 : 0;
+                answerDto.Score = pointsEarned;
                 answerDto.TotalQuestions = 1;
                 answerDto.IsCompleted = false;
                 answerDto.CurrentIndex = "";
@@ -89,32 +93,33 @@ namespace CodeLingo.API.Logics
                     .Select(answerId => answerId.ToString())
                     .ToList();
 
+                var question = questionRepository.Read(questionId);
+                if (question == null)
+                {
+                    throw new Exception("Question not found");
+                }
+
                 MultipleChoiceQuestion multipleChoiceQuestion = multipleChoiceQuestionRepository.Read(questionId);
                 List<string> correctAnswers = JsonSerializer.Deserialize<List<string>>(multipleChoiceQuestion.CorrectAnswerIds);
 
-                int score = 0;
-                foreach (string answerId in answerIds)
-                {
-                    if (correctAnswers.Contains(answerId))
-                    {
-                        score++;
-                    }
-                }
+                bool isCorrect = answerIds.Count == correctAnswers.Count &&
+                                answerIds.All(a => correctAnswers.Contains(a));
 
-                bool isCorrect = score == correctAnswers.Count && answerIds.Count == correctAnswers.Count;
+                const int basePoints = 10;
+                int pointsEarned = CalculatePoints(basePoints, question.Difficulty, isCorrect, isPartialCredit: false);
 
                 var sessionQuestion = sessionQuestionRepository.Read(sessionId, questionId);
                 if (sessionQuestion != null)
                 {
                     sessionQuestion.Answered = true;
                     sessionQuestion.Correct = isCorrect;
-                    sessionQuestion.PointsEarned = score;
+                    sessionQuestion.PointsEarned = pointsEarned;
                     sessionQuestionRepository.SaveChanges();
                 }
                 AnswerDto answerDto = new AnswerDto();
                 answerDto.IsCorrect = isCorrect;
                 answerDto.Feedback = answerDto.IsCorrect ? "Correct!" : "Incorrect. Please try again.";
-                answerDto.Score = score;
+                answerDto.Score = pointsEarned;
                 answerDto.TotalQuestions = 1; // This seems to be used as "Total Correct Answers" in this context? Or just 1 question?
                 answerDto.IsCompleted = false;
                 answerDto.CurrentIndex = "";
@@ -124,6 +129,31 @@ namespace CodeLingo.API.Logics
             }
 
             throw new Exception("There is no questionId or answerIds field");
+        }
+
+        private int CalculatePoints(int basePoints, DifficultyLevel difficulty, bool isCorrect, bool isPartialCredit = false)
+        {
+            if (!isCorrect)
+            {
+                return 0;
+            }
+
+            float multiplier = difficulty switch
+            {
+                DifficultyLevel.Easy => 1.0f,
+                DifficultyLevel.Medium => 1.5f,
+                DifficultyLevel.Hard => 2.0f,
+                _ => 1.0f
+            };
+
+            int finalPoints = (int)Math.Round(basePoints * multiplier);
+
+            if (isPartialCredit)
+            {
+                finalPoints = (int)Math.Round(finalPoints * 0.8f);
+            }
+
+            return finalPoints;
         }
     }
 }
