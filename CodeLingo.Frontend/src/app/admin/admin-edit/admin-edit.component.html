@@ -5,6 +5,16 @@
     Fill the form below to create a new question.
   </p>
 
+  <div *ngIf="question" class="mb-3 p-3 bg-secondary bg-opacity-10 rounded border border-secondary">
+    <small class="text-secondary d-block mb-1">METADATA (Read-only)</small>
+    <div class="row g-2 text-white-50 small">
+      <div class="col-md-4"><strong>ID:</strong> {{ question.id }}</div>
+      <div class="col-md-4"><strong>Created:</strong> {{ question.createdAt | date:'medium' }}</div>
+      <div class="col-md-4"><strong>Updated:</strong> {{ question.updatedAt | date:'medium' }}</div>
+      <div class="col-md-4"><strong>Created By:</strong> {{ question.createdBy }}</div>
+    </div>
+  </div>
+
   <form [formGroup]="questionForm" (ngSubmit)="saveQuestion()">
 
     <div class="row g-3 mb-3">
@@ -96,9 +106,10 @@
               [placeholder]="'Option ' + (i + 1) + ' text'" />
           </div>
 
-          <div class="col-auto form-check ms-2">
-            <input type="checkbox" formControlName="isCorrect" class="form-check-input" [id]="'opt-correct-' + i" />
-            <label class="form-check-label" [for]="'opt-correct-' + i">Correct</label>
+          <div class="col-auto form-check form-switch ms-2">
+            <input type="checkbox" formControlName="isCorrect" class="form-check-input"
+              [id]="uniqueId + '-opt-correct-' + i" role="switch" />
+            <label class="form-check-label" [for]="uniqueId + '-opt-correct-' + i">Correct</label>
           </div>
 
           <div class="col-auto">

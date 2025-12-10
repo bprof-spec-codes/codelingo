@@ -10,11 +10,15 @@ import {
 } from 'rxjs';
 import { Router } from '@angular/router';
 import { RegisterRequest, AuthResponse, LoginRequest } from '../../models/auth';
+import { ConfigService } from '../config.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API_URL = 'https://localhost:7107/api/auth';
   private readonly REFRESH_MARGIN = 30; // seconds
+
+  private get API_URL(): string {
+    return `${this.configService.apiUrl}/auth`;
+  }
 
   private storage: Storage = localStorage;
 
@@ -26,7 +30,7 @@ export class AuthService {
 
   private refreshTimer?: ReturnType<typeof setTimeout>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private configService: ConfigService) {
     if (sessionStorage.getItem('accessToken')) {
       this.storage = sessionStorage;
     } else {

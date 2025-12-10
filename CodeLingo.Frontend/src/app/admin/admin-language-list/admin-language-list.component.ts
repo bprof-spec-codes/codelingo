@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Language } from '../../models/language';
 import { AdminService } from '../../services/admin.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-language-list',
@@ -13,11 +14,12 @@ export class AdminLanguageListComponent {
   languages$!: Observable<Language[]>;
   editingLanguage: Language | null = null;
   editModel: { name: string; version: string; shortCode: string } = { name: '', version: '', shortCode: '' };
-  constructor(private service: AdminService) {
+  constructor(private service: AdminService, private toastr: ToastrService) {
 
   }
   ngOnInit(): void {
-    this.languages$ = this.service.getLanguages()
+    this.languages$ = this.service.languages$;
+    this.service.getLanguages().subscribe(); // Ensure initial load
   }
   onEdit(lang: Language) {
     this.editingLanguage = { ...lang };
@@ -40,10 +42,12 @@ export class AdminLanguageListComponent {
 
     this.service.updateLanguage(id, payload).subscribe({
       next: (updated) => {
+        this.toastr.success("Success", "Updated language successfully");
         console.log('Language updated:', updated)
         this.editingLanguage = null
       },
       error: (err) => {
+        this.toastr.error("Failed", "Updated language failed");
         console.error('Language update failed', err)
       },
       complete: () => {
@@ -57,6 +61,13 @@ export class AdminLanguageListComponent {
   }
   onDelete(lang: Language) {
     console.log('Delete language:', lang)
-    this.service.deleteLanguage(lang.id).subscribe()
+    this.service.deleteLanguage(lang.id).subscribe({
+      next: () => {
+        this.toastr.success("Success", "Deleted language successfully");
+      },
+      error: () => {
+        this.toastr.error("Failed", "Deleted language failed");
+      },
+    })
   }
 }

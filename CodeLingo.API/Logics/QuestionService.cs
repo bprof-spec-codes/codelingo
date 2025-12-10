@@ -1,10 +1,12 @@
-using CodeLingo.API.DTOs;
+﻿using CodeLingo.API.DTOs;
 using CodeLingo.API.DTOs.Exceptions; // Assuming standard exceptions exist or I'll use generic ones
 using CodeLingo.API.Models;
-using static CodeLingo.API.Models.Enums;
 using CodeLingo.API.Repositories;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using static CodeLingo.API.DTOs.Admin.QuestionImportExportDtos;
+using static CodeLingo.API.Models.Enums;
 
 namespace CodeLingo.API.Logics
 {
@@ -151,23 +153,62 @@ namespace CodeLingo.API.Logics
             _repository.SaveChanges();
         }
 
+        public Task<IReadOnlyList<QuestionResponseDto>> GetAllQuestionsAsync()
+        {
+            var questions = _repository.ReadAll();
+            IReadOnlyList<QuestionResponseDto> result = questions.Select(MapToDto).ToList();
+            return Task.FromResult(result);
+        }
         public async Task<QuestionResponseDto> GetQuestionAsync(string id)
         {
             var question = await _repository.GetByIdAsync(id);
-            if (question == null) throw new KeyNotFoundException($"Question with ID {id} not found.");
+            if (question == null)
+            {
+                throw new KeyNotFoundException($"Question with ID {id} not found.");
+            }
+
             return MapToDto(question);
         }
-
-        public async Task<QuestionListResponseDto> GetQuestionsAsync(string? language, string? difficulty, string? type, string? title, string? questionText, int page, int pageSize)
+        public async Task<QuestionListResponseDto> GetQuestionsAsync(
+            string? language,
+            string? difficulty,
+            string? type,
+            int page,
+            int pageSize)
         {
             DifficultyLevel? diffEnum = null;
-            if (!string.IsNullOrEmpty(difficulty) && Enum.TryParse<DifficultyLevel>(difficulty, true, out var d)) diffEnum = d;
+            if (!string.IsNullOrEmpty(difficulty) &&
+                Enum.TryParse<DifficultyLevel>(difficulty, true, out var d))
+            {
+                diffEnum = d;
+            }
 
             QuestionType? typeEnum = null;
-            if (!string.IsNullOrEmpty(type) && Enum.TryParse<QuestionType>(type, true, out var t)) typeEnum = t;
+            if (!string.IsNullOrEmpty(type) &&
+                Enum.TryParse<QuestionType>(type, true, out var t))
+            {
+                typeEnum = t;
+            }
 
-            var questions = await _repository.GetQuestionsAsync(language, diffEnum, typeEnum, title, questionText, page, pageSize);
-            var totalItems = await _repository.CountQuestionsAsync(language, diffEnum, typeEnum, title, questionText);
+            // most nem szűrünk title / questionText szerint, ezért null
+            string? titleFilter = null;
+            string? questionTextFilter = null;
+
+            var questions = await _repository.GetQuestionsAsync(
+                language,
+                diffEnum,
+                typeEnum,
+                titleFilter,
+                questionTextFilter,
+                page,
+                pageSize);
+
+            var totalItems = await _repository.CountQuestionsAsync(
+                language,
+                diffEnum,
+                typeEnum,
+                titleFilter,
+                questionTextFilter);
 
             return new QuestionListResponseDto
             {
@@ -194,7 +235,167 @@ namespace CodeLingo.API.Logics
             }
             // Add CodeCompletion validation if needed (e.g. StarterCode required?)
         }
+        public async Task<QuestionImportReportDto> ImportFromCsvAsync(Stream csvStream, string userId)
+        {
+            var errors = new List<QuestionImportErrorDto>();
+            int imported = 0;
+            int totalRows = 0;
+            int rowNumber = 0;
 
+            using var reader = new StreamReader(csvStream, Encoding.UTF8);
+
+            // header átugrása
+            var header = await reader.ReadLineAsync();
+            rowNumber++;
+
+            while (!reader.EndOfStream)
+            {
+                var line = await reader.ReadLineAsync();
+                rowNumber++;
+
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                totalRows++;
+
+                // EZT már jól csinálod:
+                var parts = ParseCsvLine(line);
+
+                if (parts.Count < 5)
+                {
+                    errors.Add(new QuestionImportErrorDto
+                    {
+                        RowNumber = rowNumber,
+                        Message = "Invalid column count, expected at least 5 (type,language,difficulty,title,questionText)"
+                    });
+                    continue;
+                }
+
+                var typeStr = parts[0].Trim();
+                var language = parts[1].Trim();
+                var difficultyStr = parts[2].Trim();
+                var title = parts[3].Trim();
+                var questionText = parts[4].Trim();
+                var explanation = parts.Count > 5 ? parts[5].Trim() : string.Empty;
+                var optionsJson = parts.Count > 6 ? parts[6].Trim() : string.Empty;
+                var starterCode = parts.Count > 7 ? parts[7].Trim() : string.Empty;
+                var correctAnswer = parts.Count > 8 ? parts[8].Trim() : string.Empty;
+
+                if (string.IsNullOrEmpty(typeStr) ||
+                    string.IsNullOrEmpty(language) ||
+                    string.IsNullOrEmpty(difficultyStr) ||
+                    string.IsNullOrEmpty(title) ||
+                    string.IsNullOrEmpty(questionText))
+                {
+                    errors.Add(new QuestionImportErrorDto
+                    {
+                        RowNumber = rowNumber,
+                        Message = "Missing required fields (type, language, difficulty, title, questionText)"
+                    });
+                    continue;
+                }
+
+                var createDto = new QuestionCreateDto
+                {
+                    Type = typeStr,
+                    Language = language,
+                    Difficulty = difficultyStr,
+                    Title = title,
+                    QuestionText = questionText,
+                    Explanation = string.IsNullOrWhiteSpace(explanation) ? null : explanation,
+                    Tags = new List<string>(),
+                    Metadata = null
+                };
+
+                // MultipleChoice: options JSON → dto.Options
+                if (string.Equals(typeStr, "MultipleChoice", StringComparison.OrdinalIgnoreCase) &&
+                    !string.IsNullOrWhiteSpace(optionsJson))
+                {
+                    try
+                    {
+                        var options = JsonSerializer.Deserialize<List<QuestionOptionDto>>(optionsJson);
+                        if (options != null && options.Count > 0)
+                        {
+                            createDto.Options = options;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        errors.Add(new QuestionImportErrorDto
+                        {
+                            RowNumber = rowNumber,
+                            Message = $"Invalid options JSON: {ex.Message}"
+                        });
+                        continue;
+                    }
+                }
+
+                // CodeCompletion: starterCode + correctAnswer (|-del elválasztva)
+                if (string.Equals(typeStr, "CodeCompletion", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!string.IsNullOrWhiteSpace(starterCode))
+                    {
+                        createDto.CodeSnippet = starterCode;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(correctAnswer))
+                    {
+                        createDto.AcceptedAnswers = correctAnswer
+                            .Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                            .ToList();
+                    }
+                }
+
+                try
+                {
+                    await CreateQuestionAsync(createDto, userId);
+                    imported++;
+                }
+                catch (Exception ex)
+                {
+                    errors.Add(new QuestionImportErrorDto
+                    {
+                        RowNumber = rowNumber,
+                        Message = $"Error while creating question: {ex.Message}"
+                    });
+                }
+            }
+
+            var status = errors.Any()
+                ? (imported > 0 ? "completed_with_errors" : "validation_failed")
+                : "completed";
+
+            return new QuestionImportReportDto
+            {
+                Status = status,
+                TotalRows = totalRows,
+                ImportedCount = imported,
+                FailedCount = errors.Count,
+                Errors = errors
+            };
+        }
+        public async Task<QuestionImportReportDto> ImportFromAikenAsync(
+    Stream aikenStream,
+    string userId,
+    string language,
+    string difficulty)
+        {
+            return new QuestionImportReportDto
+            {
+                Status = "validation_failed",
+                TotalRows = 0,
+                ImportedCount = 0,
+                FailedCount = 1,
+                Errors = new List<QuestionImportErrorDto>
+        {
+            new QuestionImportErrorDto
+            {
+                RowNumber = 0,
+                Message = "AIKEN import is not supported in this version."
+            }
+        }
+            };
+        }
         private QuestionResponseDto MapToDto(Question q)
         {
             var dto = new QuestionResponseDto
@@ -214,18 +415,59 @@ namespace CodeLingo.API.Logics
                 IsActive = q.IsActive
             };
 
+            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
             // Extract Options from MC entity
             if (q.Type == QuestionType.MultipleChoice && q.MultipleChoiceQuestion != null)
             {
-                try {
-                    dto.Options = JsonSerializer.Deserialize<List<QuestionOptionDto>>(q.MultipleChoiceQuestion.Options);
-                } catch {}
+                try 
+                {
+                    var finalOptions = new List<QuestionOptionDto>();
+                    var optionsNode = JsonNode.Parse(q.MultipleChoiceQuestion.Options);
+                    var correctIds = JsonSerializer.Deserialize<List<string>>(q.MultipleChoiceQuestion.CorrectAnswerIds ?? "[]", jsonOptions) ?? new List<string>();
+
+                    if (optionsNode is JsonArray optArray)
+                    {
+                        foreach (var node in optArray)
+                        {
+                            var text = node["Text"]?.ToString() ?? node["text"]?.ToString() ?? "";
+                            var id = node["Id"]?.ToString() ?? node["id"]?.ToString();
+                            
+                            var isCorrectNode = node["IsCorrect"] ?? node["isCorrect"];
+                            bool isCorrect = isCorrectNode?.GetValue<bool>() ?? false;
+
+                            if (!isCorrect && id != null && correctIds.Contains(id))
+                            {
+                                isCorrect = true;
+                            }
+                            // Fallback: Check Text against CorrectAnswerIds (legacy/simple format)
+                            if (!isCorrect && correctIds.Contains(text))
+                            {
+                                isCorrect = true;
+                            }
+
+                            finalOptions.Add(new QuestionOptionDto
+                            {
+                                Text = text,
+                                IsCorrect = isCorrect
+                            });
+                        }
+                    }
+                    dto.Options = finalOptions;
+                } 
+                catch 
+                {
+                    // Fallback to direct deserialization if manual parsing fails
+                    try {
+                        dto.Options = JsonSerializer.Deserialize<List<QuestionOptionDto>>(q.MultipleChoiceQuestion.Options, jsonOptions);
+                    } catch {}
+                }
             }
             // Fallback to Metadata if entity is missing (backward compatibility or if seeded differently)
             else if (q.Type == QuestionType.MultipleChoice && dto.Metadata != null && dto.Metadata.ContainsKey("options"))
             {
                  try {
-                    dto.Options = dto.Metadata["options"]?.Deserialize<List<QuestionOptionDto>>();
+                    dto.Options = dto.Metadata["options"]?.Deserialize<List<QuestionOptionDto>>(jsonOptions);
                 } catch {}
             }
 
@@ -238,6 +480,60 @@ namespace CodeLingo.API.Logics
             }
 
             return dto;
+        }
+        private static List<string> ParseCsvLine(string line)
+        {
+            var result = new List<string>();
+            if (line == null)
+                return result;
+
+            var sb = new StringBuilder();
+            bool inQuotes = false;
+
+            for (int i = 0; i < line.Length; i++)
+            {
+                char c = line[i];
+
+                if (inQuotes)
+                {
+                    if (c == '"')
+                    {
+                        // escaped idézőjel: ""
+                        if (i + 1 < line.Length && line[i + 1] == '"')
+                        {
+                            sb.Append('"');
+                            i++;
+                        }
+                        else
+                        {
+                            inQuotes = false;
+                        }
+                    }
+                    else
+                    {
+                        sb.Append(c);
+                    }
+                }
+                else
+                {
+                    if (c == '"')
+                    {
+                        inQuotes = true;
+                    }
+                    else if (c == ',')
+                    {
+                        result.Add(sb.ToString());
+                        sb.Clear();
+                    }
+                    else
+                    {
+                        sb.Append(c);
+                    }
+                }
+            }
+
+            result.Add(sb.ToString());
+            return result;
         }
     }
 }
