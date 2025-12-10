@@ -17,19 +17,47 @@ export class AdminService {
   languages$ = this.languagesSubject.asObservable();
 
   getLanguages(): Observable<Language[]> {
-    return this.http.get<Language[]>(`${this.baseUrl}/languages`);
+    return this.http.get<Language[]>(`${this.baseUrl}/languages`).pipe(
+      map(languages => {
+        this.languagesSubject.next(languages);
+        return languages;
+      })
+    );
   }
 
   addLanguage(data: { name: string; version: string; shortCode: string }): Observable<Language> {
-    return this.http.post<Language>(`${this.baseUrl}/languages`, data);
+    return this.http.post<Language>(`${this.baseUrl}/languages`, data).pipe(
+      map(newLanguage => {
+        const currentLanguages = this.languagesSubject.value;
+        this.languagesSubject.next([...currentLanguages, newLanguage]);
+        return newLanguage;
+      })
+    );
   }
 
   updateLanguage(id: number, data: { name?: string; version?: string; shortCode?: string }): Observable<Language> {
-    return this.http.put<Language>(`${this.baseUrl}/languages/${id}`, data);
+    return this.http.put<Language>(`${this.baseUrl}/languages/${id}`, data).pipe(
+      map(updatedLanguage => {
+        const currentLanguages = this.languagesSubject.value;
+        const index = currentLanguages.findIndex(l => l.id === id);
+        if (index !== -1) {
+          const updatedLanguages = [...currentLanguages];
+          updatedLanguages[index] = updatedLanguage;
+          this.languagesSubject.next(updatedLanguages);
+        }
+        return updatedLanguage;
+      })
+    );
   }
 
   deleteLanguage(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/languages/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/languages/${id}`).pipe(
+      map(() => {
+        const currentLanguages = this.languagesSubject.value;
+        const updatedLanguages = currentLanguages.filter(l => l.id !== id);
+        this.languagesSubject.next(updatedLanguages);
+      })
+    );
   }
 
   // Questions
