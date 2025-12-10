@@ -18,7 +18,8 @@ export class AdminLanguageListComponent {
 
   }
   ngOnInit(): void {
-    this.languages$ = this.service.getLanguages()
+    this.languages$ = this.service.languages$;
+    this.service.getLanguages().subscribe(); // Ensure initial load
   }
   onEdit(lang: Language) {
     this.editingLanguage = { ...lang };

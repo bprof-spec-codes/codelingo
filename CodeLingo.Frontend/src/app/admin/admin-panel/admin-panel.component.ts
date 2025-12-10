@@ -48,12 +48,13 @@ export class AdminPanelComponent implements OnInit {
   }
 
   loadLanguages(): void {
+    this.adminService.languages$.subscribe(langs => {
+      this.languages = langs;
+    });
     this.adminService.getLanguages().subscribe({
-      next: (langs) => this.languages = langs,
       error: (err) => console.error('Failed to load languages', err)
     });
   }
-
   loadStatistics(): void {
     this.adminService.getDashboardStatistics().subscribe({
       next: (stats) => {
@@ -107,7 +108,7 @@ export class AdminPanelComponent implements OnInit {
         this.loadQuestions(); // lista újratöltése
       },
       error: err => {
-         this.toastr.error("Failed", "Updated question failed");
+        this.toastr.error("Failed", "Updated question failed");
         console.error('Update failed', err);
       }
     });
@@ -127,7 +128,7 @@ export class AdminPanelComponent implements OnInit {
   onQuestionCreated(created: Question) {
     this.adminService.createQuestion(created).subscribe({
       next: () => {
-         this.toastr.success("Success", "Created question successfully");
+        this.toastr.success("Success", "Created question successfully");
         this.loadQuestions(); // létrehozás után is frissítesz
       },
       error: err => {
