@@ -415,18 +415,59 @@ namespace CodeLingo.API.Logics
                 IsActive = q.IsActive
             };
 
+            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
             // Extract Options from MC entity
             if (q.Type == QuestionType.MultipleChoice && q.MultipleChoiceQuestion != null)
             {
-                try {
-                    dto.Options = JsonSerializer.Deserialize<List<QuestionOptionDto>>(q.MultipleChoiceQuestion.Options);
-                } catch {}
+                try 
+                {
+                    var finalOptions = new List<QuestionOptionDto>();
+                    var optionsNode = JsonNode.Parse(q.MultipleChoiceQuestion.Options);
+                    var correctIds = JsonSerializer.Deserialize<List<string>>(q.MultipleChoiceQuestion.CorrectAnswerIds ?? "[]", jsonOptions) ?? new List<string>();
+
+                    if (optionsNode is JsonArray optArray)
+                    {
+                        foreach (var node in optArray)
+                        {
+                            var text = node["Text"]?.ToString() ?? node["text"]?.ToString() ?? "";
+                            var id = node["Id"]?.ToString() ?? node["id"]?.ToString();
+                            
+                            var isCorrectNode = node["IsCorrect"] ?? node["isCorrect"];
+                            bool isCorrect = isCorrectNode?.GetValue<bool>() ?? false;
+
+                            if (!isCorrect && id != null && correctIds.Contains(id))
+                            {
+                                isCorrect = true;
+                            }
+                            // Fallback: Check Text against CorrectAnswerIds (legacy/simple format)
+                            if (!isCorrect && correctIds.Contains(text))
+                            {
+                                isCorrect = true;
+                            }
+
+                            finalOptions.Add(new QuestionOptionDto
+                            {
+                                Text = text,
+                                IsCorrect = isCorrect
+                            });
+                        }
+                    }
+                    dto.Options = finalOptions;
+                } 
+                catch 
+                {
+                    // Fallback to direct deserialization if manual parsing fails
+                    try {
+                        dto.Options = JsonSerializer.Deserialize<List<QuestionOptionDto>>(q.MultipleChoiceQuestion.Options, jsonOptions);
+                    } catch {}
+                }
             }
             // Fallback to Metadata if entity is missing (backward compatibility or if seeded differently)
             else if (q.Type == QuestionType.MultipleChoice && dto.Metadata != null && dto.Metadata.ContainsKey("options"))
             {
                  try {
-                    dto.Options = dto.Metadata["options"]?.Deserialize<List<QuestionOptionDto>>();
+                    dto.Options = dto.Metadata["options"]?.Deserialize<List<QuestionOptionDto>>(jsonOptions);
                 } catch {}
             }
 

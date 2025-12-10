@@ -28,6 +28,8 @@ export class AdminEditComponent implements OnInit {
   QuestionType = QuestionType;
   questionForm!: FormGroup;
 
+  uniqueId = Math.random().toString(36).substring(2, 9);
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -101,13 +103,15 @@ export class AdminEditComponent implements OnInit {
         shuffleOptions: mc.shuffleOptions ?? false
       });
 
-      const options: MultipleChoiceOption[] = mc.options ?? [];
+      const options: any[] = mc.options ?? [];
 
       options.forEach(opt => {
+        // Robust check for isCorrect due to potential PascalCase serialization
+        const isCorrectVal = opt.isCorrect !== undefined ? opt.isCorrect : (opt.IsCorrect !== undefined ? opt.IsCorrect : false);
         optionsFa.push(
           this.fb.group({
             text: [opt.text ?? '', Validators.required],
-            isCorrect: [!!opt.isCorrect]
+            isCorrect: [!!isCorrectVal]
           })
         );
       });
