@@ -110,7 +110,17 @@ namespace CodeLingo.API
             });
 
             // CORS
-            var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
+            var configuredOrigins = builder.Configuration["AllowedOrigins"]?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
+            var fallbackOrigins = new[]
+            {
+                "https://codelingo.hu",
+                "https://www.codelingo.hu",
+                "http://codelingo.hu"
+            };
+            var allowedOrigins = configuredOrigins
+                .Concat(fallbackOrigins)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>

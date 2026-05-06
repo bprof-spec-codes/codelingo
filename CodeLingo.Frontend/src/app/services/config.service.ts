@@ -19,11 +19,11 @@ export class ConfigService {
             this.config = await lastValueFrom(this.http.get<AppConfig>('/assets/config.json'));
         } catch (error) {
             console.error('Could not load configuration', error);
-            // Fallback for development if config.json fails/missing? 
-            // Or explicitly throw to stop app startup?
-            // For now, let's allow fallback or empty to avoid complete crash if not critical
-            console.warn('Using default empty configuration');
-            this.config = { apiUrl: '' };
+            console.warn('Using built-in configuration fallback');
+            const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+            this.config = {
+                apiUrl: isLocalhost ? 'http://localhost:5062/api' : 'https://api.codelingo.hu/api'
+            };
         }
     }
 
