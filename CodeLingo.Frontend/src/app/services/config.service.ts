@@ -16,7 +16,7 @@ export class ConfigService {
 
     async loadConfig(): Promise<void> {
         try {
-            this.config = await lastValueFrom(this.http.get<AppConfig>('assets/config.json'));
+            this.config = await lastValueFrom(this.http.get<AppConfig>('/assets/config.json'));
         } catch (error) {
             console.error('Could not load configuration', error);
             // Fallback for development if config.json fails/missing? 
