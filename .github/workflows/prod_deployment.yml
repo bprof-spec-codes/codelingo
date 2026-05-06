@@ -118,7 +118,7 @@ jobs:
             # Overwrite appsettings.Production.json
             cat <<EOF > $BACKEND_REL/appsettings.Production.json
             {
-              "AllowedOrigins": "${{ env.APP_DOMAIN }}",
+              "AllowedOrigins": "${{ env.APP_DOMAIN }},https://www.codelingo.hu",
               "ConnectionStrings": {
                 "DefaultConnection": "${{ secrets.DB_CONN_PROD }}"
               },
